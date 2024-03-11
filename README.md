@@ -10,7 +10,7 @@ The code within this repository can be installed via Pip by running `pip install
 
 ## Architecture
 
-Todo: this section needs a picture
+Todo: this section needs a nice picture
 
 This package is best thought of as a _framework_ rather than a ready-to-use package. To generate an artificial dataset, each field (column) must be associated with a _backend_. A _backend_ is an abstraction coupling a data type with a statistical distribution. The following 4 _core backends_ are included within the framework. 
 - `BoundedNumerical` - Sample ints or floats from a statistical distribution scaled and shifted to a particular range. 
