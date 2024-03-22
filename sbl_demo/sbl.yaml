@@ -11,15 +11,99 @@ app_method:
       "2": 2 # telephone
       "3": 5 # online is the most common
       "4": 1 # via mail
+app_recipient:
+  WeightedDiscrete:
+    population:
+      "1": 1 #Directly to financial institution
+      "2": 1 #Indirectly to financial institution through third party
+ct_credit_product:
+  WeightedDiscrete:
+    population:
+      "1": 1 # term loan unsecured
+      "2": 2 # term loan secured
+      "3": 5 # line of credit - unsecured
+      "4": 1 # line of credit - secrured
+      "5": 5 # credit card account, not private-label
+      "6": 6 # Private-label credit card account
+      "7": 7 # Merchant cash advance	
+      "8": 8 # Other sales-based financing transaction
+      "977": 1 # other. This requires filer to specify credit line
+      "988": 1 # undetermined -not provided
+ct_credit_product_ff:
+  LoremIpsumText:
+    blank_probability: 0.75 #why are these blank?
 ct_guarantee:
   MultipleResponse:
     codes: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+#	Code 1 - Personal guarantee - owner(s)	
+#	Code 2 - Personal guarantee - non-owner(s)	
+#	Code 3 - SBA guarantee - 7(a) program	
+#	Code 4 - SBA guarantee - 504 program	
+#	Code 5 - SBA guarantee - other	
+#	Code 6 - USDA guarantee	
+#	Code 7 - FHA insurance	
+#	Code 8 - Bureau of Indian Affairs guarantee	
+#	Code 9 - Other Federal guarantee	
+#	Code 10 - State government guarantee	
+#	Code 11 - Local government guarantee	
+#	Code 977 - Other	When this code is entered, also specify the type of guarantee in the associated free-form text field.
+#	Code 999 - No guarantee
     single_selection_codes:
       - 999
       - 977
     single_selection_probability: 0.2
-ct_guarantee_ff:
-  LoremIpsumText:
-    blank_probability: 0.75 # 75% of these will be blank
-
-
+#ct_guarantee_ff:
+#  LoremIpsumText:
+#    blank_probability: 0.75 # 75% of these will be blank
+#ct_loan_term_flag:
+#  WeightedDiscrete:
+#    "900": 1 # applicable and reported
+#    "988": 1 #applicable but not provided
+#    "999": 1 #not applicable
+#ct_loan_term_flag:
+#  WeightedDiscrete:
+#    "900": 1 # applicable and reported
+#    "988": 1 #applicable but not provided
+#    "999": 1 #not applicable
+ct_loan_term:
+  BoundedNumerical:
+    distribution: norm
+    lower_bound: 1 #months
+    upper_bound: 1200 #100 years will be the longest loan term
+credit_purpose:
+  MultipleResponse:
+    codes: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+#   Code 1 - Purchase, construction/improvement, or refinance of non-owner-occupied real property	
+#	Code 2 - Purchase, construction/improvement, or refinance of owner-occupied real property	
+#	Code 3 - Purchase, refinance, or rehabilitation/repair of motor vehicle(s) (including light and heavy trucks)	
+#	Code 4 - Purchase, refinance, or rehabilitation/repair of equipment	
+#	Code 5 - Working capital (includes inventory or floor planning)	
+#	Code 6 - Business start-up	
+#	Code 7 - Business expansion	
+#	Code 8 - Business acquisition	
+#	Code 9 - Refinance existing debt (other than refinancings listed above)
+#	Code 10 - Line increase	
+#	Code 11 - Overdraft
+    single_selection_codes:
+      - 999
+      - 977
+    single_selection_probability: 0.2
+#credi_purpose_ff:
+#  LoremIpsumText: 0.75 #more fakes? Might need to adjust based on above. 
+#amount_applied_for_flag:
+#  WeightedDiscrete:
+#    "900": 1 # applicable and reported
+#    "988": 1 #applicable but not provided
+#    "999": 1 #not applicable
+amount_applied_for:
+  BoundedNumerical:
+    distribution: chi2
+    lower_bound: 0
+    upper_bound: 1000
+    df: 10
+amount_approved: 
+  BoundedNumerical:
+    distribution: chi2
+    lower_bound: 0
+    upper_bound: 1000
+    df: 10
