@@ -3,6 +3,7 @@ from typing import Dict
 
 import pandas as pd
 import yaml
+import os
 
 from .backends import _CORE_BACKENDS, AbstractBackendInterface
 
@@ -99,6 +100,7 @@ class MockDataset:
         spec_dict = {}
 
         for field, field_spec in raw_spec.items():
+            logger.debug(f'read_yaml_spec: {field}')
             for _, (backend, backend_kwargs) in enumerate(field_spec.items()):
                 # make sure only one backend has been supplied per field
                 if _ > 0:

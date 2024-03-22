@@ -12,7 +12,7 @@ import random
 from typing import List
 
 from mock_data.backends import AbstractBackendInterface, BoundedNumerical
-
+from mock_data.backends.Correlation import Correlation
 
 class MultipleResponse(AbstractBackendInterface):
     def __init__(
@@ -24,6 +24,7 @@ class MultipleResponse(AbstractBackendInterface):
         duplicates_allowed: bool = False,
         single_selection_codes: List[int] = [],
         single_selection_probability: float = 0,
+        correlation: str = Correlation.INDEPENDENT.name,
         **distribution_kwargs,
     ) -> None:
         """Facilitates generation of multiple response fields. These are fields within
@@ -72,6 +73,8 @@ class MultipleResponse(AbstractBackendInterface):
             ValueError: if max_selections is greater than
         """
 
+        super().__init__(correlation)
+
         # TODO: perform validation on input arguments
 
         # casting codes to strings to facilitate string concatenation
@@ -94,7 +97,7 @@ class MultipleResponse(AbstractBackendInterface):
         )
 
     # TODO: go over this docstring and make it clearer
-    def generate_samples(self, size: int) -> List[str]:
+    def generate_samples(self, size: int, directive: List = None) -> List[str]:
         """Generates a list of semicolon delimited strings with `size` elements. If
         self.duplicates_allowed == True, the elements may contain duplicates. Otherwise,
         they will not. If the set of codes is [1,2,3], outputs would look something
