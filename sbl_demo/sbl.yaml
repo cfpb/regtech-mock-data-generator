@@ -38,7 +38,7 @@ ct_credit_product_ff:
     upper_bound: 300
     correlation: "dependent"
     dep_field: "ct_credit_product"
-    dep_values: "977"
+    dep_values: ["977"]
 ct_guarantee:
   MultipleResponse:
     codes: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 977]
