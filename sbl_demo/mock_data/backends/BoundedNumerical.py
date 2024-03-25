@@ -68,7 +68,7 @@ class BoundedNumerical(AbstractBackendInterface):
                 distributions available within scipy.stats.
         """
 
-        super().__init__()
+        super().__init__(correlation=correlation, dep_field=dep_field, dep_values=dep_values)
         if not isinstance(distribution, str):
             raise TypeError(
                 "The supplied value of dist should be a string specifying the name."
@@ -201,6 +201,12 @@ class BoundedNumerical(AbstractBackendInterface):
         ) + self._lower_bound
 
         if self._coerce_to_int:
-            return output.astype(int)
-        else:
-            return output
+            output = output.astype(int)
+
+        if (directive):
+            output = output.tolist()
+            for c in range(len(output)):
+                if not self.directive_requires_value(directive[c]):
+                    output[c] = ""
+
+        return output

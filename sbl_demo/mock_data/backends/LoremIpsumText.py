@@ -89,7 +89,7 @@ class LoremIpsumText(BoundedNumerical):
 
         for c in range(len(sample_lengths)):
             length = sample_lengths[c]
-            if ((directive and self.directive_requires_blank(directive[c])) or 
+            if ((directive and not self.directive_requires_value(directive[c])) or
                 (random.uniform() < self.blank_probability)):
                 samples.append("")
             else:
@@ -99,11 +99,6 @@ class LoremIpsumText(BoundedNumerical):
                     )
                 )
         return samples
-
-
-    def directive_requires_blank(self, directive_val: any):
-        ((type(directive_val) == str and directive_val in self.dep_values) or
-         (type(directive_val) == List) and (set(directive_val) & set(self.dep_values)))
 
 
     @classmethod

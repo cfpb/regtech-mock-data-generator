@@ -17,6 +17,11 @@ class AbstractBackendInterface(ABC):
         self.dep_values = dep_values
 
 
+    def directive_requires_value(self, directive_val: any):
+        return ((type(directive_val) == str and directive_val in self.dep_values) or
+                ((type(directive_val) == List) and (set(directive_val) & set(self.dep_values))))
+
+
     @abstractmethod
     def generate_samples(self, size: int, directive: List) -> Iterable:
         """This method must be implemented by each sampling engine. The method should

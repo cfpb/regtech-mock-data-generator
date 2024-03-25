@@ -6,11 +6,13 @@ from custom_backends import MultipleResponse
 
 from mock_data import MockDataset
 
-logging.basicConfig(level=logging.DEBUG)
-
 parser = argparse.ArgumentParser('datagen')
 parser.add_argument('-n', '--nrows', type=int, default=10)
+parser.add_argument('-v', '--verbose', action='store_true')
 args = parser.parse_args()
+
+loglevel = logging.DEBUG if args.verbose else logging.INFO
+logging.basicConfig(level=loglevel)
 
 # set the working directory to the folder containing this script
 os.chdir(os.path.dirname(__file__))
