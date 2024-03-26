@@ -1,6 +1,7 @@
 import logging
 import os
 import argparse
+import random
 
 from custom_backends import MultipleResponse
 
@@ -16,6 +17,8 @@ logging.basicConfig(level=loglevel)
 
 # set the working directory to the folder containing this script
 os.chdir(os.path.dirname(__file__))
+
+random.seed()
 
 # register the MultipleResponse backend
 MockDataset.register_backend(MultipleResponse)

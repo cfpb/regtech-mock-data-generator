@@ -271,8 +271,10 @@ census_tract_adr_type:
       "2": 1 # Address of borrower's main office
       "3": 1 # Other associated address
       "998": 1 # Not provided
-# TODO Create REST, DB or file backend
-# census_tract_number:
+census_tract_number:
+  FileRandom:
+    file: "ExcelCensusTractReference2010.csv"
+    field: "tract_fips"
 gross_annual_revenue_flag:
   WeightedDiscrete:
     population:
@@ -289,8 +291,10 @@ naics_code_flag:
     population:
       "900": 1 # Reported
       "988": 1 # Not provided
-# TODO Create REST, DB or file backend
-# naics_code:
+naics_code:
+  FileRandom:
+    file: "NAICS_3_digit_2022_Codes.csv"
+    field: "2022 NAICS US Code"
 number_of_workers:
   WeightedDiscrete:
     population:
