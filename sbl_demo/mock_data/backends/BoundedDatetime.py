@@ -63,7 +63,7 @@ class BoundedDatetime(BoundedNumerical):
         date = datetime.strptime(datetime_str, format)
         return time.mktime(date.timetuple())
 
-    def generate_samples(self, size: int) -> List[str]:
+    def generate_samples(self, size: int, directive: List = None) -> List[str]:
         """Generates `size` date strings with the format YYYYMMDD by sampling epoch
         timestamps and then converting those back to date strings.
 

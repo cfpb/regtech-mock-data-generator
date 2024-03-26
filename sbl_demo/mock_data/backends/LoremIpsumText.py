@@ -12,7 +12,8 @@ from typing import List
 import numpy as np
 from numpy import random
 
-from .BoundedNumerical import BoundedNumerical
+from mock_data.backends import BoundedNumerical
+from mock_data.backends.Correlation import Correlation
 
 # read from resources/loremipsum.txt and create a list of ipsum words
 with open(
@@ -35,6 +36,9 @@ class LoremIpsumText(BoundedNumerical):
         lower_bound: Number = 5,
         upper_bound: Number = 100,
         blank_probability: float = 0,
+        correlation: str = Correlation.INDEPENDENT.name,
+        dep_field: str = None,
+        dep_values: List[str] = None,
         **distribution_kwargs,
     ) -> None:
         """Supplies all arguments to the constructor of ContinousRandom with the
@@ -61,9 +65,10 @@ class LoremIpsumText(BoundedNumerical):
                 "The blank_probability arg must be between 0 and 1, inclusive."
             )
         self.blank_probability = blank_probability
-        super().__init__(distribution, lower_bound, upper_bound, **distribution_kwargs)
+        super().__init__(distribution, lower_bound, upper_bound, **distribution_kwargs,
+                         correlation=correlation, dep_field=dep_field, dep_values=dep_values)
 
-    def generate_samples(self, size: int = 1) -> List[str]:
+    def generate_samples(self, size: int = 1, directive: List = None) -> List[str]:
         """Generates a list of `size` elements containing Lorem Ipsum text.
 
         The length of the text is sampled from super().generate_samples. There is a
@@ -82,8 +87,10 @@ class LoremIpsumText(BoundedNumerical):
 
         samples = []
 
-        for length in sample_lengths:
-            if random.uniform() < self.blank_probability:
+        for c in range(len(sample_lengths)):
+            length = sample_lengths[c]
+            if ((directive and not self.directive_requires_value(directive[c])) or
+                (random.uniform() < self.blank_probability)):
                 samples.append("")
             else:
                 samples.append(
@@ -92,6 +99,7 @@ class LoremIpsumText(BoundedNumerical):
                     )
                 )
         return samples
+
 
     @classmethod
     def _generate_lorem_ipsum_text_of_given_length(cls, length: int) -> str:

@@ -18,12 +18,13 @@ to the appropriate scipy class prior to calling the constructor for the backend 
 import importlib
 import logging
 from numbers import Number
-from typing import Iterable
+from typing import Iterable, List
 
 import numpy as np
 from scipy.stats.distributions import rv_continuous
 
 from .AbstractBackendInterface import AbstractBackendInterface
+from mock_data.backends.Correlation import Correlation
 
 logger = logging.getLogger(__name__)
 
@@ -38,6 +39,9 @@ class BoundedNumerical(AbstractBackendInterface):
         lower_bound: Number = 0,
         upper_bound: Number = 1,
         coerce_to_int: bool = False,
+        correlation: str = Correlation.INDEPENDENT.name,
+        dep_field: str = None,
+        dep_values: List[str] = None,
         **distribution_kwargs,
     ) -> None:
         """Samples will be drawn from `distribution` and placed on the interval of
@@ -64,6 +68,7 @@ class BoundedNumerical(AbstractBackendInterface):
                 distributions available within scipy.stats.
         """
 
+        super().__init__(correlation=correlation, dep_field=dep_field, dep_values=dep_values)
         if not isinstance(distribution, str):
             raise TypeError(
                 "The supplied value of dist should be a string specifying the name."
@@ -159,7 +164,7 @@ class BoundedNumerical(AbstractBackendInterface):
 
         self._dist_width = right_bound - left_bound
 
-    def generate_samples(self, size: int) -> Iterable[Number]:
+    def generate_samples(self, size: int, directive: List = None) -> Iterable[Number]:
         """Samples `size` samples from self.distribution. Each sample is scaled and
         shifted to ensure that samples fall within the range
         [self.lower_bound, self.upper_bound]. Any sample generated from
@@ -196,6 +201,12 @@ class BoundedNumerical(AbstractBackendInterface):
         ) + self._lower_bound
 
         if self._coerce_to_int:
-            return output.astype(int)
-        else:
-            return output
+            output = output.astype(int)
+
+        if (directive):
+            output = output.tolist()
+            for c in range(len(output)):
+                if not self.directive_requires_value(directive[c]):
+                    output[c] = ""
+
+        return output

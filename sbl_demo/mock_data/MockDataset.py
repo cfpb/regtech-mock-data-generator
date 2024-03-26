@@ -3,8 +3,10 @@ from typing import Dict
 
 import pandas as pd
 import yaml
+import os
 
 from .backends import _CORE_BACKENDS, AbstractBackendInterface
+from mock_data.backends.Correlation import Correlation
 
 logger = logging.getLogger(__name__)
 
@@ -41,8 +43,18 @@ class MockDataset:
     def generate_mock_data(self, nrows: int) -> pd.DataFrame:
         holder = {}
 
+        dependent_fields = []
+
         for field, backend in self.spec.items():
+            if backend.correlation == Correlation.DEPENDENT:
+                dependent_fields.append((field, backend))
+                continue
             holder[field] = backend.generate_samples(size=nrows)
+            logger.debug(f'generate_mock_data: {field}: {holder[field]}')
+
+        for field, backend in dependent_fields:
+            holder[field] = backend.generate_samples(nrows, holder[backend.dep_field])
+            logger.debug(f'generate_mock_data: {field}: {holder[field]}')
 
         return pd.DataFrame(holder)
 
@@ -99,6 +111,7 @@ class MockDataset:
         spec_dict = {}
 
         for field, field_spec in raw_spec.items():
+            logger.debug(f'read_yaml_spec: {field}')
             for _, (backend, backend_kwargs) in enumerate(field_spec.items()):
                 # make sure only one backend has been supplied per field
                 if _ > 0:

@@ -33,12 +33,13 @@ import random
 from numbers import Number
 from typing import Dict, Hashable, List, Union
 
-from .AbstractBackendInterface import AbstractBackendInterface
-
+from mock_data.backends import AbstractBackendInterface
+from mock_data.backends.Correlation import Correlation
 
 class WeightedDiscrete(AbstractBackendInterface):
     def __init__(
-        self, population: Union[List[Hashable], Dict[Hashable, Number]]
+        self, population: Union[List[Hashable], Dict[Hashable, Number]],
+        correlation: str = Correlation.INDEPENDENT.name,
     ) -> None:
         """Enables sampling from the supplied population dict or list. If a list is
         supplied, each entry is given a weight of 1. Otherwise, the supplied dictionary
@@ -57,6 +58,7 @@ class WeightedDiscrete(AbstractBackendInterface):
                 should be drawn. Each element is equally likely to be drawn.
         """
 
+        super().__init__(correlation)
         if isinstance(population, list):
             # change to a dictionary representation with weights of 1
             population = {element: 1 for element in population}
@@ -100,7 +102,7 @@ class WeightedDiscrete(AbstractBackendInterface):
         frequency_distribution = dict(zip(self._population, self._weights))
         return f"WeightedDiscrete with sampling distribution {frequency_distribution}"
 
-    def generate_samples(self, size: int) -> List[Hashable]:
+    def generate_samples(self, size: int, directive: List = None) -> List[Hashable]:
         """Uses random.choices to select `size` samples from self._population with
         weights specified by self._weights. random.choices utilizes sampling with
         replacement so this method can be repeated an arbitrary number of times as
