@@ -1,4 +1,5 @@
 
+from importlib.resources import files
 import os
 import pandas as pd
 import random
@@ -8,7 +9,7 @@ from mock_data.backends import AbstractBackendInterface
 from mock_data.backends.Correlation import Correlation
 
 file_readers = { '.csv': pd.read_csv }
-file_resource_dir = '../src/main/resources'
+file_resource_dir = files('mock_data.backends.resources')
 
 class FileRandom(AbstractBackendInterface):
     """Provides random values read from a csv or other formatted file."""
@@ -21,7 +22,7 @@ class FileRandom(AbstractBackendInterface):
 
 
     def generate_samples(self, size: int, directive: List = None) -> Iterable:
-        file_path = f'{file_resource_dir}/{self.file}'
+        file_path = file_resource_dir.joinpath(self.file)
         _, ext = os.path.splitext(file_path)
         fr = file_readers.get(ext)
         df = fr(file_path, comment='#')
