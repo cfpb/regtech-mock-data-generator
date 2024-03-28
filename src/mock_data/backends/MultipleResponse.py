@@ -99,12 +99,6 @@ class MultipleResponse(AbstractBackendInterface):
         )
 
 
-    def _normalize_vals(self, directive):
-        if  not directive: return directive
-        return [v.split(';') if type(v) == str and ';' in v else str(v)
-                for v in directive]
-
-
     # TODO: go over this docstring and make it clearer
     def generate_samples(self, size: int, directive: List = None) -> List[str]:
         """Generates a list of semicolon delimited strings with `size` elements. If
@@ -150,4 +144,4 @@ class MultipleResponse(AbstractBackendInterface):
                     # https://docs.python.org/3/library/random.html#random.sample
                     sample_holder.append(";".join(random.sample(self.codes, k=length)))
 
-        return self.blanks_where_directed(sample_holder, self._normalize_vals(directive))
+        return self.blanks_where_directed(sample_holder, directive)

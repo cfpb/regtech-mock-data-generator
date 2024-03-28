@@ -391,15 +391,16 @@ num_principal_owners_flag:
       "988": 1 # Not provided
     correlation: "directive"
 num_principal_owners:
-  BoundedNumerical:
-    distribution: norm
-    lower_bound: 0
-    upper_bound: 4
-    coerce_to_int: True
-    correlation: "cascading"
+  WeightedDiscrete:
+    population:
+      "0": 1
+      "1": 2
+      "2": 2
+      "3": 1
+      "4": 1
+    correlation: "cascading_l1"
     dep_field: "num_principal_owners_flag"
     dep_values: ["900"]
-# TODO Correlates w/num_principal_owners; conditional null value
 po_1_ethnicity:
   MultipleResponse:
     codes: [1, 11, 12, 13, 14, 2, 977]
@@ -417,64 +418,66 @@ po_1_ethnicity:
       - 966
       - 988
     single_selection_probability: 0.2
-    correlation: "dependent"
+    correlation: "cascading_l2"
     dep_field: "num_principal_owners"
     dep_values: ["1", "2", "3", "4"]
-# TODO Correlates w/po_1_ethnicity; conditional null value
 po_1_ethnicity_ff:
   LoremIpsumText:
-    blank_probability: 0.75
-    lower_bound: 1
     upper_bound: 300
-# TODO Correlates w/num_principal_owners; conditional null value
+    correlation: "dependent"
+    dep_field: "po_1_ethnicity"
+    dep_values: ["977"]
 po_1_race:
   MultipleResponse:
+    # See doc for code descriptions
     codes: [1, 2, 21, 22, 23, 24, 25, 26, 27, 3, 31, 32, 33, 34, 35, 36, 37, 4, 41, 42, 43, 44, 5, 971, 972, 973, 974]
     max_selections: 27
-# Code xxx - see doc
     single_selection_codes:
       - 966
       - 988
     single_selection_probability: 0.2
-# TODO Correlates w/po_1_race; conditional null value
+    correlation: "cascading_l2"
+    dep_field: "num_principal_owners"
+    dep_values: ["1", "2", "3", "4"]
 po_1_race_anai_ff:
   LoremIpsumText:
-    blank_probability: 0.75
-    lower_bound: 1
     upper_bound: 300
-# TODO Correlates w/po_1_race; conditional null value
+    correlation: "dependent"
+    dep_field: "po_1_race"
+    dep_values: ["971"]
 po_1_race_asian_ff:
   LoremIpsumText:
-    blank_probability: 0.75
-    lower_bound: 1
     upper_bound: 300
-# TODO Correlates w/po_1_race; conditional null value
+    correlation: "dependent"
+    dep_field: "po_1_race"
+    dep_values: ["972"]
 po_1_race_baa_ff:
   LoremIpsumText:
-    blank_probability: 0.75
-    lower_bound: 1
     upper_bound: 300
-# TODO Correlates w/po_1_race; conditional null value
+    correlation: "dependent"
+    dep_field: "po_1_race"
+    dep_values: ["973"]
 po_1_race_pi_ff:
   LoremIpsumText:
-    blank_probability: 0.75
-    lower_bound: 1
     upper_bound: 300
-# TODO Correlates w/num_principal_owners; conditional null value
-po_1_gender:
+    correlation: "dependent"
+    dep_field: "po_1_race"
+    dep_values: ["974"]
+po_1_gender_flag:
   WeightedDiscrete:
     population:
       "1": 1 # Applicant responded in ff text field
       "966": 1 # Explicit wish not to provide
       "988": 1 # Not provided
-# TODO Correlates w/po_1_gender; conditional null value
+    correlation: "cascading_l2"
+    dep_field: "num_principal_owners"
+    dep_values: ["1", "2", "3", "4"]
 po_1_gender_ff:
   LoremIpsumText:
-    blank_probability: 0.75
-    lower_bound: 1
     upper_bound: 300
-
-# TODO Correlates w/num_principal_owners; conditional null value
+    correlation: "dependent"
+    dep_field: "po_1_gender_flag"
+    dep_values: ["1"]
 po_2_ethnicity:
   MultipleResponse:
     codes: [1, 11, 12, 13, 14, 2, 977]
@@ -492,61 +495,67 @@ po_2_ethnicity:
       - 966
       - 988
     single_selection_probability: 0.2
-# TODO Correlates w/po_2_ethnicity; conditional null value
+    correlation: "cascading_l2"
+    dep_field: "num_principal_owners"
+    dep_values: ["2", "3", "4"]
 po_2_ethnicity_ff:
   LoremIpsumText:
-    blank_probability: 0.75
-    lower_bound: 1
     upper_bound: 300
-# TODO Correlates w/num_principal_owners; conditional null value
+    correlation: "dependent"
+    dep_field: "po_2_ethnicity"
+    dep_values: ["977"]
 po_2_race:
   MultipleResponse:
     codes: [1, 2, 21, 22, 23, 24, 25, 26, 27, 3, 31, 32, 33, 34, 35, 36, 37, 4, 41, 42, 43, 44, 5, 971, 972, 973, 974]
     max_selections: 27
-# Code xxx - see doc
+    # See doc for code descriptions
     single_selection_codes:
       - 966
       - 988
     single_selection_probability: 0.2
-# TODO Correlates w/po_2_race; conditional null value
+    correlation: "cascading_l2"
+    dep_field: "num_principal_owners"
+    dep_values: ["2", "3", "4"]
 po_2_race_anai_ff:
   LoremIpsumText:
-    blank_probability: 0.75
-    lower_bound: 1
     upper_bound: 300
-# TODO Correlates w/po_2_race; conditional null value
+    correlation: "dependent"
+    dep_field: "po_2_race"
+    dep_values: ["971"]
 po_2_race_asian_ff:
   LoremIpsumText:
-    blank_probability: 0.75
-    lower_bound: 1
     upper_bound: 300
-# TODO Correlates w/po_2_race; conditional null value
+    correlation: "dependent"
+    dep_field: "po_2_race"
+    dep_values: ["972"]
 po_2_race_baa_ff:
   LoremIpsumText:
-    blank_probability: 0.75
-    lower_bound: 1
     upper_bound: 300
-# TODO Correlates w/po_2_race; conditional null value
+    correlation: "dependent"
+    dep_field: "po_2_race"
+    dep_values: ["973"]
 po_2_race_pi_ff:
   LoremIpsumText:
-    blank_probability: 0.75
-    lower_bound: 1
     upper_bound: 300
-# TODO Correlates w/num_principal_owners; conditional null value
-po_2_gender:
+    correlation: "dependent"
+    dep_field: "po_2_race"
+    dep_values: ["974"]
+po_2_gender_flag:
   WeightedDiscrete:
     population:
       "1": 1 # Applicant responded in ff text field
       "966": 1 # Explicit wish not to provide
       "988": 1 # Not provided
+    correlation: "cascading_l2"
+    dep_field: "num_principal_owners"
+    dep_values: ["2", "3", "4"]
 # TODO Correlates w/po_2_gender; conditional null value
 po_2_gender_ff:
   LoremIpsumText:
-    blank_probability: 0.75
-    lower_bound: 1
     upper_bound: 300
-
-# TODO Correlates w/num_principal_owners; conditional null value
+    correlation: "dependent"
+    dep_field: "po_2_gender_flag"
+    dep_values: ["1"]
 po_3_ethnicity:
   MultipleResponse:
     codes: [1, 11, 12, 13, 14, 2, 977]
@@ -564,61 +573,66 @@ po_3_ethnicity:
       - 966
       - 988
     single_selection_probability: 0.2
-# TODO Correlates w/po_3_ethnicity; conditional null value
+    correlation: "cascading_l2"
+    dep_field: "num_principal_owners"
+    dep_values: ["3", "4"]
 po_3_ethnicity_ff:
   LoremIpsumText:
-    blank_probability: 0.75
-    lower_bound: 1
     upper_bound: 300
-# TODO Correlates w/num_principal_owners; conditional null value
+    correlation: "dependent"
+    dep_field: "po_3_ethnicity"
+    dep_values: ["977"]
 po_3_race:
   MultipleResponse:
     codes: [1, 2, 21, 22, 23, 24, 25, 26, 27, 3, 31, 32, 33, 34, 35, 36, 37, 4, 41, 42, 43, 44, 5, 971, 972, 973, 974]
     max_selections: 27
-# Code xxx - see doc
+    # See doc for code descriptions
     single_selection_codes:
       - 966
       - 988
     single_selection_probability: 0.2
-# TODO Correlates w/po_3_race; conditional null value
+    correlation: "cascading_l2"
+    dep_field: "num_principal_owners"
+    dep_values: ["3", "4"]
 po_3_race_anai_ff:
   LoremIpsumText:
-    blank_probability: 0.75
-    lower_bound: 1
     upper_bound: 300
-# TODO Correlates w/po_3_race; conditional null value
+    correlation: "dependent"
+    dep_field: "po_3_race"
+    dep_values: ["971"]
 po_3_race_asian_ff:
   LoremIpsumText:
-    blank_probability: 0.75
-    lower_bound: 1
     upper_bound: 300
-# TODO Correlates w/po_3_race; conditional null value
+    correlation: "dependent"
+    dep_field: "po_3_race"
+    dep_values: ["972"]
 po_3_race_baa_ff:
   LoremIpsumText:
-    blank_probability: 0.75
-    lower_bound: 1
     upper_bound: 300
-# TODO Correlates w/po_3_race; conditional null value
+    correlation: "dependent"
+    dep_field: "po_3_race"
+    dep_values: ["973"]
 po_3_race_pi_ff:
   LoremIpsumText:
-    blank_probability: 0.75
-    lower_bound: 1
     upper_bound: 300
-# TODO Correlates w/num_principal_owners; conditional null value
-po_3_gender:
+    correlation: "dependent"
+    dep_field: "po_3_race"
+    dep_values: ["974"]
+po_3_gender_flag:
   WeightedDiscrete:
     population:
       "1": 1 # Applicant responded in ff text field
       "966": 1 # Explicit wish not to provide
       "988": 1 # Not provided
-# TODO Correlates w/po_3_gender; conditional null value
+    correlation: "cascading_l2"
+    dep_field: "num_principal_owners"
+    dep_values: ["3", "4"]
 po_3_gender_ff:
   LoremIpsumText:
-    blank_probability: 0.75
-    lower_bound: 1
     upper_bound: 300
-
-# TODO Correlates w/num_principal_owners; conditional null value
+    correlation: "dependent"
+    dep_field: "po_3_gender_flag"
+    dep_values: ["1"]
 po_4_ethnicity:
   MultipleResponse:
     codes: [1, 11, 12, 13, 14, 2, 977]
@@ -636,56 +650,63 @@ po_4_ethnicity:
       - 966
       - 988
     single_selection_probability: 0.2
-# TODO Correlates w/po_4_ethnicity; conditional null value
+    correlation: "cascading_l2"
+    dep_field: "num_principal_owners"
+    dep_values: ["4"]
 po_4_ethnicity_ff:
   LoremIpsumText:
-    blank_probability: 0.75
-    lower_bound: 1
     upper_bound: 300
-# TODO Correlates w/num_principal_owners; conditional null value
+    correlation: "dependent"
+    dep_field: "po_4_ethnicity"
+    dep_values: ["977"]
 po_4_race:
   MultipleResponse:
     codes: [1, 2, 21, 22, 23, 24, 25, 26, 27, 3, 31, 32, 33, 34, 35, 36, 37, 4, 41, 42, 43, 44, 5, 971, 972, 973, 974]
     max_selections: 27
-# Code xxx - see doc
+    # See doc for code descriptions
     single_selection_codes:
       - 966
       - 988
     single_selection_probability: 0.2
-# TODO Correlates w/po_4_race; conditional null value
+    correlation: "cascading_l2"
+    dep_field: "num_principal_owners"
+    dep_values: ["4"]
 po_4_race_anai_ff:
   LoremIpsumText:
-    blank_probability: 0.75
-    lower_bound: 1
     upper_bound: 300
-# TODO Correlates w/po_4_race; conditional null value
+    correlation: "dependent"
+    dep_field: "po_4_race"
+    dep_values: ["971"]
 po_4_race_asian_ff:
   LoremIpsumText:
-    blank_probability: 0.75
-    lower_bound: 1
     upper_bound: 300
-# TODO Correlates w/po_4_race; conditional null value
+    correlation: "dependent"
+    dep_field: "po_4_race"
+    dep_values: ["972"]
 po_4_race_baa_ff:
   LoremIpsumText:
-    blank_probability: 0.75
-    lower_bound: 1
     upper_bound: 300
-# TODO Correlates w/po_4_race; conditional null value
+    correlation: "dependent"
+    dep_field: "po_4_race"
+    dep_values: ["973"]
 po_4_race_pi_ff:
   LoremIpsumText:
-    blank_probability: 0.75
-    lower_bound: 1
     upper_bound: 300
-# TODO Correlates w/num_principal_owners; conditional null value
-po_4_gender:
+    correlation: "dependent"
+    dep_field: "po_4_race"
+    dep_values: ["974"]
+po_4_gender_flag:
   WeightedDiscrete:
     population:
       "1": 1 # Applicant responded in ff text field
       "966": 1 # Explicit wish not to provide
       "988": 1 # Not provided
-# TODO Correlates w/po_4_gender; conditional null value
+    correlation: "cascading_l2"
+    dep_field: "num_principal_owners"
+    dep_values: ["4"]
 po_4_gender_ff:
   LoremIpsumText:
-    blank_probability: 0.75
-    lower_bound: 1
     upper_bound: 300
+    correlation: "dependent"
+    dep_field: "po_4_gender_flag"
+    dep_values: ["1"]

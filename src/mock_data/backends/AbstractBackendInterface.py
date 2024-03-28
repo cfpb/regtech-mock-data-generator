@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from enum import Enum
 from typing import Iterable, List
 from mock_data.backends.Correlation import Correlation
 
@@ -17,10 +16,10 @@ class AbstractBackendInterface(ABC):
         self.dep_values = dep_values
 
 
-    def directive_requires_value(self, directive_val: any):
-        return ((type(directive_val) == str and directive_val in self.dep_values) or
-                ((type(directive_val) != str) and (isinstance(directive_val, Iterable)) and
-                 (set(directive_val) & set(self.dep_values))))
+    def directive_requires_value(self, dval: any):
+        dval = dval.split(';') if type(dval) == str and ';' in dval else str(dval)
+        return ((type(dval) == str and dval in self.dep_values) or
+                (type(dval) == list and (set(dval) & set(self.dep_values))))
 
 
     def blanks_where_directed(self, vals, directive):
