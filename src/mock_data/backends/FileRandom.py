@@ -15,8 +15,10 @@ class FileRandom(AbstractBackendInterface):
     """Provides random values read from a csv or other formatted file."""
     
     def __init__(self, file: str, field: str,
-                 correlation: str = Correlation.INDEPENDENT.name) -> None:
-        super().__init__(correlation)
+                 correlation: str = Correlation.INDEPENDENT.name,
+                dep_field: str = None,
+                dep_values: List[str] = None) -> None:
+        super().__init__(correlation, dep_field, dep_values)
         self.file = file
         self.field = field
 
@@ -27,4 +29,6 @@ class FileRandom(AbstractBackendInterface):
         fr = file_readers.get(ext)
         df = fr(file_path, comment='#')
         values = df[self.field].values
-        return [values[random.randrange(len(values))] for c in range(size)]
+        return [values[random.randrange(len(values))]
+                if not directive or self.directive_requires_value(directive[c])
+                else "" for c in range(size)]

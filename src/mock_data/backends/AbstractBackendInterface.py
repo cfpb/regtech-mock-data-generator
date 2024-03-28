@@ -19,7 +19,13 @@ class AbstractBackendInterface(ABC):
 
     def directive_requires_value(self, directive_val: any):
         return ((type(directive_val) == str and directive_val in self.dep_values) or
-                ((type(directive_val) == List) and (set(directive_val) & set(self.dep_values))))
+                ((type(directive_val) != str) and (isinstance(directive_val, Iterable)) and
+                 (set(directive_val) & set(self.dep_values))))
+
+
+    def blanks_where_directed(self, vals, directive):
+        if not directive: return vals
+        return [v if self.directive_requires_value(directive[i]) else "" for i, v in enumerate(vals)]
 
 
     @abstractmethod
