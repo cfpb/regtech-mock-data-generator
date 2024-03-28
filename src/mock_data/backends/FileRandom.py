@@ -16,8 +16,8 @@ class FileRandom(AbstractBackendInterface):
     
     def __init__(self, file: str, field: str,
                  correlation: str = Correlation.INDEPENDENT.name,
-                dep_field: str = None,
-                dep_values: List[str] = None) -> None:
+                 dep_field: str = None,
+                 dep_values: List[str] = None) -> None:
         super().__init__(correlation, dep_field, dep_values)
         self.file = file
         self.field = field
