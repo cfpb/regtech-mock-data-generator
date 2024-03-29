@@ -310,7 +310,7 @@ census_tract_adr_type:
       "1": 1 # Address where loan proceeds will be applied
       "2": 1 # Address of borrower's main office
       "3": 1 # Other associated address
-      "998": 1 # Not provided
+      "988": 1 # Not provided
     correlation: "directive"
 census_tract_number:
   FileRandom:
