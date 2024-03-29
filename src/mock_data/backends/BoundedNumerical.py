@@ -39,6 +39,7 @@ class BoundedNumerical(AbstractBackendInterface):
         lower_bound: Number = 0,
         upper_bound: Number = 1,
         coerce_to_int: bool = False,
+        decimal: int = 3,
         correlation: str = Correlation.INDEPENDENT.name,
         dep_field: str = None,
         dep_values: List[str] = None,
@@ -68,7 +69,7 @@ class BoundedNumerical(AbstractBackendInterface):
                 distributions available within scipy.stats.
         """
 
-        super().__init__(correlation=correlation, dep_field=dep_field, dep_values=dep_values)
+        super().__init__(correlation, dep_field, dep_values)
         if not isinstance(distribution, str):
             raise TypeError(
                 "The supplied value of dist should be a string specifying the name."
@@ -86,6 +87,7 @@ class BoundedNumerical(AbstractBackendInterface):
         self._upper_bound = upper_bound
 
         self._coerce_to_int = coerce_to_int
+        self.decimal = decimal
 
         # calculate self._dist_lower_sampling_bound and self._dist_width
         self._calculate_distribution_lower_bound_and_width()
@@ -196,17 +198,11 @@ class BoundedNumerical(AbstractBackendInterface):
         # by the desired width (computed as upper bound - lower bound).
         # Then add lower_bound to place values on the scale of
         # [lower_bound, upper_bound].
-        output = (
+        output = np.round((
             shifted_samples / self._dist_width * (self._upper_bound - self._lower_bound)
-        ) + self._lower_bound
+        ) + self._lower_bound, decimals=self.decimal)
 
         if self._coerce_to_int:
             output = output.astype(int)
 
-        if (directive):
-            output = output.tolist()
-            for c in range(len(output)):
-                if not self.directive_requires_value(directive[c]):
-                    output[c] = ""
-
-        return output
+        return self.blanks_where_directed(output, directive)
