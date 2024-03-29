@@ -17,10 +17,10 @@ Collecting isort (from -r requirements.txt (line 2))
 Collecting pandas (from -r requirements.txt (line 3))
 ...
 (.venv) $ export PYTHONPATH=src
-$ python3 sbl_demo/main.py
+$ python3 src/main_sbl.py
 ```
 
-This generates the output file **sbl_demo/fake_data.csv**, replacing any pre-existing copy.
+This generates the output file **src/sbl.csv**, replacing any pre-existing copy.
 
 ## Architecture
 
