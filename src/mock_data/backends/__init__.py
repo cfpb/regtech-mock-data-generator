@@ -8,6 +8,7 @@ from .BoundedNumerical import BoundedNumerical
 from .FileRandom import FileRandom
 from .LoremIpsumText import LoremIpsumText
 from .MultipleResponse import MultipleResponse
+from .UniqueID import UniqueID
 from .WeightedDiscrete import WeightedDiscrete
 
 # used by the MockDataset class as a registry of backend names to classes
@@ -18,4 +19,5 @@ _CORE_BACKENDS = {
     LoremIpsumText.__name__: LoremIpsumText,
     FileRandom.__name__: FileRandom,
     MultipleResponse.__name__: MultipleResponse,
+    UniqueID.__name__: UniqueID,
 }
