@@ -9,28 +9,32 @@ class UniqueID(AbstractBackendInterface):
     def __init__(
         self,
         max_generate: int,
-        lei_first: int = 4, 
-        lei_middle: int = 14,
-        lei_last: int = 2,
+        lou: int = 4, 
+        entity: int = 12,
+        verification: int = 2,
         correlation: str = Correlation.INDEPENDENT.name,
         **distribution_kwargs,
     ) -> None:
-        """This will create an LEI with a random number of of digits following it as per FIG guidelines. """
+        """This will create an LEI with a random number of of digits following it as per FIG guidelines.
+        the names of the attributes above as well as numbers are structured based on LEI. Max_generate is 
+        simply the number of random characters following an LEI for the loan specific identifier. In our case, the 
+        most it can generate is 25 values. 
+          """
         super().__init__(correlation)
-        self.lei_first = lei_first
-        self.lei_middle = lei_middle
-        self.lei_last = lei_last
+        self.lou = lou 
+        self.entity = entity
+        self.verification = verification
         self.max_generate = max_generate
     
     def generate_samples(self, size: int, directive: List = None) -> Iterable:
         lei_ids = []
         for i in range(size):
             n = random.randint(1,self.max_generate)
-            first = ''.join(random.choices(string.digits, k=self.lei_first))
-            middle = ''.join(random.choices(string.ascii_uppercase + string.digits,k=self.lei_middle))
-            last = ''.join(random.choices(string.digits,k=self.lei_last))
-            final = ''.join(random.choices(string.digits, k=n))
-            lei_ids.append(''.join(first+middle+last+final))
+            first = ''.join(random.choices(string.digits, k=self.lou))
+            middle = ''.join(random.choices(string.ascii_uppercase + string.digits,k=self.entity))
+            last = ''.join(random.choices(string.digits,k=self.verification))
+            final = ''.join(random.choices(string.ascii_uppercase + string.digits, k=n))
+            lei_ids.append(''.join(first+'00'+middle+last+final))
         return lei_ids
     
 
