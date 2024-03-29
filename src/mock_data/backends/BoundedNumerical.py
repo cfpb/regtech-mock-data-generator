@@ -39,6 +39,7 @@ class BoundedNumerical(AbstractBackendInterface):
         lower_bound: Number = 0,
         upper_bound: Number = 1,
         coerce_to_int: bool = False,
+        decimal: int = 3,
         correlation: str = Correlation.INDEPENDENT.name,
         dep_field: str = None,
         dep_values: List[str] = None,
@@ -86,6 +87,7 @@ class BoundedNumerical(AbstractBackendInterface):
         self._upper_bound = upper_bound
 
         self._coerce_to_int = coerce_to_int
+        self.decimal = decimal
 
         # calculate self._dist_lower_sampling_bound and self._dist_width
         self._calculate_distribution_lower_bound_and_width()
@@ -198,7 +200,7 @@ class BoundedNumerical(AbstractBackendInterface):
         # [lower_bound, upper_bound].
         output = np.round((
             shifted_samples / self._dist_width * (self._upper_bound - self._lower_bound)
-        ) + self._lower_bound, decimals=3)
+        ) + self._lower_bound, decimals=self.decimal)
 
         if self._coerce_to_int:
             output = output.astype(int)
