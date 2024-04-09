@@ -8,6 +8,7 @@ app_date:
     min_datetime: "20200101"
     max_datetime: "21001231"
     distribution: norm
+    correlation: "directive"
 app_method:
   WeightedDiscrete:
     population:
@@ -147,10 +148,11 @@ action_taken:
     correlation: "directive"
 # TODO Decide if/how to validate "current reporting period" date
 action_taken_date:
-  BoundedDatetime:
+  MinDirectedDatetime:
     min_datetime: "20200101"
     max_datetime: "21001231"
-    distribution: norm
+    correlation: "dependent"
+    dep_field: "app_date"
 denial_reasons:
   MultipleResponse:
     codes: [1, 2, 3, 4, 5, 6, 7, 8, 9, 977]

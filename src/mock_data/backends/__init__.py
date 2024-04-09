@@ -4,6 +4,7 @@ from .AbstractBackendInterface import (
     AbstractBackendInterface as AbstractBackendInterface,
 )
 from .BoundedDatetime import BoundedDatetime
+from .MinDirectedDatetime import MinDirectedDatetime
 from .BoundedNumerical import BoundedNumerical
 from .FileRandom import FileRandom
 from .LoremIpsumText import LoremIpsumText
@@ -15,6 +16,7 @@ from .WeightedDiscrete import WeightedDiscrete
 _CORE_BACKENDS = {
     BoundedNumerical.__name__: BoundedNumerical,
     BoundedDatetime.__name__: BoundedDatetime,
+    MinDirectedDatetime.__name__: MinDirectedDatetime,
     WeightedDiscrete.__name__: WeightedDiscrete,
     LoremIpsumText.__name__: LoremIpsumText,
     FileRandom.__name__: FileRandom,
