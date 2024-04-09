@@ -18,9 +18,10 @@ returned date strings (formatted as %Y%m%d by default) to fall within the summer
 
 import time
 from datetime import datetime
-from typing import List
+from typing import List, Iterable
 
 from .BoundedNumerical import BoundedNumerical
+from mock_data.backends.Correlation import Correlation
 
 
 class BoundedDatetime(BoundedNumerical):
@@ -30,6 +31,8 @@ class BoundedDatetime(BoundedNumerical):
         max_datetime: str,
         distribution: str = "uniform",
         format: str = "%Y%m%d",
+        correlation: str = Correlation.INDEPENDENT.name,
+        dep_field: str = None,
         **distribution_kwargs,
     ) -> None:
         """Wraps BoundedNumerical.__init__(...) to facilitate the mapping of the date
@@ -43,7 +46,9 @@ class BoundedDatetime(BoundedNumerical):
 
         self.format = format
 
-        super().__init__(distribution, lower_bound, upper_bound, **distribution_kwargs)
+        super().__init__(distribution, lower_bound, upper_bound,
+                         correlation=correlation, dep_field=dep_field,
+                         **distribution_kwargs)
 
     @classmethod
     def _calculate_epoch_equivalent(cls, datetime_str: str, format: str) -> float:
@@ -61,7 +66,16 @@ class BoundedDatetime(BoundedNumerical):
 
         # this will raise a ValueError if conversion fails
         date = datetime.strptime(datetime_str, format)
-        return time.mktime(date.timetuple())
+        return int(time.mktime(date.timetuple()))
+
+
+    def nums_to_dates(self, nums: Iterable):
+        # convert these to datetime objects
+        dt_objects = [datetime.fromtimestamp(ts) for ts in nums]
+
+        # format each datetime object as a string and return
+        return [datetime.strftime(dt, self.format) for dt in dt_objects]
+
 
     def generate_samples(self, size: int, directive: List = None) -> List[str]:
         """Generates `size` date strings with the format YYYYMMDD by sampling epoch
@@ -74,11 +88,5 @@ class BoundedDatetime(BoundedNumerical):
             List[str]: A list of date strings with size elements.
         """
 
-        # generate epoch timestamps using the underlying sampling engine
-        epoch_timestamps = super().generate_samples(size)
-
-        # convert these to datetime objects
-        dt_objects = [datetime.fromtimestamp(ts) for ts in epoch_timestamps]
-
-        # format each datetime object as a string and return
-        return [datetime.strftime(dt, self.format) for dt in dt_objects]
+        # Generate epoch timestamps using the underlying sampling engine and return as dates
+        return self.nums_to_dates(super().generate_samples(size))
