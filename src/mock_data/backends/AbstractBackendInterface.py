@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Iterable, List
 from mock_data.backends.Correlation import Correlation
+import random 
 
 directiveColumns = {}
 
@@ -10,7 +11,7 @@ class AbstractBackendInterface(ABC):
     Each subclass must implement self.generate_samples(size)"""
 
     def __init__(self, correlation: str = Correlation.INDEPENDENT.name,
-                 dep_field: str = None, dep_values: List[str] = None) -> None:
+                 dep_field: str = None, dep_values: dict[str,List[str]] = None) -> None:
         self.correlation = Correlation[correlation.upper()]
         self.dep_field = dep_field
         self.dep_values = dep_values
@@ -23,8 +24,22 @@ class AbstractBackendInterface(ABC):
 
 
     def blanks_where_directed(self, vals, directive):
-        if not directive: return vals
-        return [v if self.directive_requires_value(directive[i]) else "" for i, v in enumerate(vals)]
+        if not directive:
+            return vals
+        else:
+            initial_list = []
+            for i in range(0,len(directive)):
+                if directive[i] in list(self.dep_values.keys()):
+                    initial_list.append(random.choice(self.dep_values[directive[i]]))
+                else: initial_list.append("")
+        return initial_list
+
+                               #[self.dep_values[x] if x in self.dep_values.keys
+        
+        #elif directive:
+        #    for x in directive:
+        #        self.dep_values[x]
+                                        
 
 
     @abstractmethod

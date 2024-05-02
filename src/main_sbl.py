@@ -6,7 +6,7 @@ import random
 from mock_data import MockDataset
 
 parser = argparse.ArgumentParser('datagen')
-parser.add_argument('-n', '--nrows', type=int, default=10)
+parser.add_argument('-n', '--nrows', type=int, default=100)
 parser.add_argument('-o', '--outputfile', default="sbl.csv")
 parser.add_argument('-v', '--verbose', action='store_true')
 args = parser.parse_args()
@@ -19,7 +19,7 @@ os.chdir(os.path.dirname(__file__))
 
 random.seed()
 
-mock = MockDataset.read_yaml_spec("sbl.yaml")
+mock = MockDataset.read_yaml_spec("sbl_fake.yaml")
 
 mock_df = mock.generate_mock_data(args.nrows)
 

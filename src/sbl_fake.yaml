@@ -1,0 +1,26 @@
+ct_credit_product:
+  WeightedDiscrete:
+    population:
+      "1": 1 # term loan unsecured
+      "2": 1 # term loan secured
+      "3": 1 # line of credit - unsecured
+      "4": 1 # line of credit - secrured
+      "5": 1 # credit card account, not private-label
+      "6": 1 # Private-label credit card account
+      "7": 1 # Merchant cash advance
+      "8": 1 # Other sales-based financing transaction
+      "977": 10 # other. This requires filer to specify credit line
+      "988": 1 # undetermined -not provided
+    correlation: "directive"
+
+ct_loan_term_flag:
+  WeightedDiscrete:
+    population:
+      "900": 1 # applicable and reported
+      "988": 1 #applicable but not provided
+      "999": 1 #not applicable
+    correlation: "dependent"
+    dep_field: "ct_credit_product"
+    dep_values: {"1":["900","988"],"2":["900","988"],"988":["999"], "3":["900","988","999"],
+    "4":["900","988","999"], "5":["900","988","999"], "6":["900","988","999"], "7":["900","988","999"],
+    "8":["900","988","999"], "977":["900","988","999"]}

@@ -6,7 +6,7 @@ uid:
 app_date:
   BoundedDatetime:
     min_datetime: "20200101"
-    max_datetime: "21001231"
+    max_datetime: "20231231"
     distribution: norm
     correlation: "directive"
 app_method:
@@ -150,7 +150,7 @@ action_taken:
 action_taken_date:
   MinDirectedDatetime:
     min_datetime: "20200101"
-    max_datetime: "21001231"
+    max_datetime: "20231231"
     correlation: "dependent"
     dep_field: "app_date"
 denial_reasons:

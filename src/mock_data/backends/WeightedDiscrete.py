@@ -41,7 +41,7 @@ class WeightedDiscrete(AbstractBackendInterface):
         self, population: Union[List[Hashable], Dict[Hashable, Number]],
         correlation: str = Correlation.INDEPENDENT.name,
         dep_field: str = None,
-        dep_values: List[str] = None,
+        dep_values: dict[str,List[str]] = None
     ) -> None:
         """Enables sampling from the supplied population dict or list. If a list is
         supplied, each entry is given a weight of 1. Otherwise, the supplied dictionary

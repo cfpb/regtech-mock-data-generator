@@ -46,7 +46,7 @@ class MockDataset:
         cascading_l1_fields = []
         cascading_l2_fields = []
         dependent_fields = []
-
+        print(self.spec.items())
         for field, backend in self.spec.items():
             if backend.correlation == Correlation.CASCADING_L1:
                 cascading_l1_fields.append((field, backend))
