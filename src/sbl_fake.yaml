@@ -19,8 +19,18 @@ ct_loan_term_flag:
       "900": 1 # applicable and reported
       "988": 1 #applicable but not provided
       "999": 1 #not applicable
-    correlation: "dependent"
+    correlation: "cascading_l1"
     dep_field: "ct_credit_product"
     dep_values: {"1":["900","988"],"2":["900","988"],"988":["999"], "3":["900","988","999"],
     "4":["900","988","999"], "5":["900","988","999"], "6":["900","988","999"], "7":["900","988","999"],
     "8":["900","988","999"], "977":["900","988","999"]}
+
+ct_loan_term:
+  BoundedNumerical:
+    distribution: norm
+    lower_bound: 1 #months
+    upper_bound: 1200 #100 years will be the longest loan term
+    coerce_to_int: True
+    correlation: "dependent"
+    dep_field: "ct_loan_term_flag"
+    dep_values: {"900": None}

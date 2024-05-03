@@ -23,15 +23,19 @@ class AbstractBackendInterface(ABC):
                 (type(dval) == list and (set(dval) & set(self.dep_values))))
 
 
-    def blanks_where_directed(self, vals, directive):
+    def values_where_directed(self, vals, directive):
         if not directive:
             return vals
         else:
             initial_list = []
             for i in range(0,len(directive)):
-                if directive[i] in list(self.dep_values.keys()):
-                    initial_list.append(random.choice(self.dep_values[directive[i]]))
-                else: initial_list.append("")
+                if (directive[i] in list(self.dep_values.keys())): #If directive value is a key in dictionary,
+                   if (self.dep_values[directive[i]] != None): #and non empty direction is given
+                       initial_list.append(random.choice(self.dep_values[directive[i]])) #produce direction
+                   if (self.dep_values[directive[i]] == None): #if no direction is given
+                        print(vals[i])
+                        initial_list.append(vals[i]) #produce what we would have anyway. 
+                else: initial_list.append("")  #If not in dictionary, then we dont produce anything. 
         return initial_list
 
                                #[self.dep_values[x] if x in self.dep_values.keys
