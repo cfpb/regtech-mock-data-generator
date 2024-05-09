@@ -33,4 +33,4 @@ ct_loan_term:
     coerce_to_int: True
     correlation: "dependent"
     dep_field: "ct_loan_term_flag"
-    dep_values: {"900": None}
+    dep_values: {"900": }

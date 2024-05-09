@@ -33,17 +33,9 @@ class AbstractBackendInterface(ABC):
                    if (self.dep_values[directive[i]] != None): #and non empty direction is given
                        initial_list.append(random.choice(self.dep_values[directive[i]])) #produce direction
                    if (self.dep_values[directive[i]] == None): #if no direction is given
-                        print(vals[i])
                         initial_list.append(vals[i]) #produce what we would have anyway. 
                 else: initial_list.append("")  #If not in dictionary, then we dont produce anything. 
         return initial_list
-
-                               #[self.dep_values[x] if x in self.dep_values.keys
-        
-        #elif directive:
-        #    for x in directive:
-        #        self.dep_values[x]
-                                        
 
 
     @abstractmethod

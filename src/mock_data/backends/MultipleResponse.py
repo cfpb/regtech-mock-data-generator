@@ -27,6 +27,7 @@ class MultipleResponse(AbstractBackendInterface):
         correlation: str = Correlation.INDEPENDENT.name,
         dep_field: str = None,
         dep_values: List[str] = None,
+        dep_outcomes: str = None,
         **distribution_kwargs,
     ) -> None:
         """Facilitates generation of multiple response fields. These are fields within
@@ -144,4 +145,4 @@ class MultipleResponse(AbstractBackendInterface):
                     # https://docs.python.org/3/library/random.html#random.sample
                     sample_holder.append(";".join(random.sample(self.codes, k=length)))
 
-        return self.blanks_where_directed(sample_holder, directive)
+        return self.values_where_directed(sample_holder, directive)

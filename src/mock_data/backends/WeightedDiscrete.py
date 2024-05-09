@@ -117,6 +117,6 @@ class WeightedDiscrete(AbstractBackendInterface):
             List[Hashable]: A list of size `size` containing one or more keys from
                 self._population.
         """
-        return self.blanks_where_directed(random.choices(
+        return self.values_where_directed(random.choices(
             population=self._population, weights=self._weights, k=size),
             directive)

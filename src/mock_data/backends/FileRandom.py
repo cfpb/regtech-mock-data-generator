@@ -27,7 +27,7 @@ class FileRandom(AbstractBackendInterface):
         file_path = file_resource_dir.joinpath(self.file)
         _, ext = os.path.splitext(file_path)
         fr = file_readers.get(ext)
-        df = fr(file_path, comment='#')
+        df = fr(file_path, comment='#',dtype='str')
         values = df[self.field].values
         return [values[random.randrange(len(values))]
                 if not directive or self.directive_requires_value(directive[c])

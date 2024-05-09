@@ -19,8 +19,10 @@ os.chdir(os.path.dirname(__file__))
 
 random.seed()
 
-mock = MockDataset.read_yaml_spec("sbl_fake.yaml")
+mock = MockDataset.read_yaml_spec("sbl.yaml")
 
 mock_df = mock.generate_mock_data(args.nrows)
 
 mock_df.to_csv(args.outputfile, index=False)
+
+mock_df.to_csv('/home/cfpb/mcbridem/regtech-data-validator/tests/data/sbl.csv', index=False)
