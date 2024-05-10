@@ -13,24 +13,21 @@ ct_credit_product:
       "988": 1 # undetermined -not provided
     correlation: "directive"
 
-ct_loan_term_flag:
+action_taken:
   WeightedDiscrete:
     population:
-      "900": 1 # applicable and reported
-      "988": 1 #applicable but not provided
-      "999": 1 #not applicable
-    correlation: "cascading_l1"
-    dep_field: "ct_credit_product"
-    dep_values: {"1":["900","988"],"2":["900","988"],"988":["999"], "3":["900","988","999"],
-    "4":["900","988","999"], "5":["900","988","999"], "6":["900","988","999"], "7":["900","988","999"],
-    "8":["900","988","999"], "977":["900","988","999"]}
+      "1": 1 # originated
+      "2": 1 # approved but not accepted
+      "3": 1 # denied
+      "4": 1 # withdrawn by the applicant
+      "5": 1 # incomplete
+    correlation: "directive"
 
-ct_loan_term:
-  BoundedNumerical:
-    distribution: norm
-    lower_bound: 1 #months
-    upper_bound: 1200 #100 years will be the longest loan term
-    coerce_to_int: True
-    correlation: "dependent"
-    dep_field: "ct_loan_term_flag"
-    dep_values: {"900": }
+pricing_mca_addcost_flag:
+  WeightedDiscrete:
+    population:
+      "900": 1 # Applicable
+    correlation: "cascading_l2"
+    dep_field: ["action_taken","ct_credit_product"]
+    dep_values: {"action_taken":{"1":['900'],"2":["900"],"3":["999"],"4":["999"],"5":["999"]},
+                 "ct_credit_product":{"1":['999'],"2":["999"],"3":["999"],"4":["999"],"5":["999"],"6":["999"],"7":,"8":,"977":}}

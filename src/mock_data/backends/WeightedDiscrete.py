@@ -118,5 +118,4 @@ class WeightedDiscrete(AbstractBackendInterface):
                 self._population.
         """
         return self.values_where_directed(random.choices(
-            population=self._population, weights=self._weights, k=size),
-            directive)
+            population=self._population, weights=self._weights, k=size), directive)

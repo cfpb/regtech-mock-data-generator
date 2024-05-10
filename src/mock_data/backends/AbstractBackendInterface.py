@@ -11,7 +11,7 @@ class AbstractBackendInterface(ABC):
     Each subclass must implement self.generate_samples(size)"""
 
     def __init__(self, correlation: str = Correlation.INDEPENDENT.name,
-                 dep_field: str = None, dep_values: dict[str,List[str]] = None) -> None:
+                 dep_field: List[str] = None, dep_values: dict[str, dict[str,List[str]]] = None) -> None:
         self.correlation = Correlation[correlation.upper()]
         self.dep_field = dep_field
         self.dep_values = dep_values
@@ -28,13 +28,20 @@ class AbstractBackendInterface(ABC):
             return vals
         else:
             initial_list = []
-            for i in range(0,len(directive)):
-                if (directive[i] in list(self.dep_values.keys())): #If directive value is a key in dictionary,
-                   if (self.dep_values[directive[i]] != None): #and non empty direction is given
-                       initial_list.append(random.choice(self.dep_values[directive[i]])) #produce direction
-                   if (self.dep_values[directive[i]] == None): #if no direction is given
-                        initial_list.append(vals[i]) #produce what we would have anyway. 
-                else: initial_list.append("")  #If not in dictionary, then we dont produce anything. 
+            for i in range(0,len(directive[0])):#fror any given row
+                options = [] #Lets make a bucket of options for us, informed by directing fields.
+                blank = 0
+                for j in range(0,len(self.dep_field)): #For every directing field
+                    if (directive[j][i] not in self.dep_values[self.dep_field[j]]): #if it is not in the dictionary
+                        blank = 1 # we want the field to be blank.
+                    elif (directive[j][i] in self.dep_values[self.dep_field[j]]) & (self.dep_values[self.dep_field[j]][directive[j][i]] != None): #If its in the dic and has specific values
+                        options.extend(self.dep_values[self.dep_field[j]][directive[j][i]]) #only give options of specific values
+                if len(options) != 0 & blank==0: #if specific values are directed to us and not blank
+                    initial_list.append(random.choice(options)) #choose from those
+                elif blank == 1: #if blank
+                    initial_list.append("") #be blank
+                else:
+                    initial_list.append(vals[i]) #If you do have directive fields with no specific values, then just accept whatever you populated.  
         return initial_list
 
 
