@@ -29,5 +29,17 @@ pricing_mca_addcost_flag:
       "900": 1 # Applicable
     correlation: "cascading_l2"
     dep_field: ["action_taken","ct_credit_product"]
-    dep_values: {"action_taken":{"1":['900'],"2":["900"],"3":["999"],"4":["999"],"5":["999"]},
-                 "ct_credit_product":{"1":['999'],"2":["999"],"3":["999"],"4":["999"],"5":["999"],"6":["999"],"7":,"8":,"977":}}
+    dep_values: {"action_taken":{"1":,"2":,"3":["999"],"4":["999"],"5":["999"]},
+                 "ct_credit_product":{"1":['999'],"2":["999"],"3":["999"],"4":["999"],"5":["999"],"6":["999"],"7":,"8":,"977":,"988":["999"]}}
+
+what_action_was_taken:
+  WeightedDiscrete:
+    population:
+      "originated": 1 # originated
+      "approved but not accepted": 1 # approved but not accepted
+      "denied": 1 # denied
+      "withdrawn by the applicant": 1 # withdrawn by the applicant
+      "incomplete": 1 # incomplete
+    correlation: "dependent"
+    dep_field: "action_taken"
+    dep_values: {"1":['originated'],"2":["approved but not accepted"],"3":["denied"],"4":["withdrawn by the applicant"],"5":["incomplete"]}

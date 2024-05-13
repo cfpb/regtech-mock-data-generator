@@ -61,10 +61,12 @@ class MockDataset:
             logger.debug(f'generate_mock_data: {field}: {holder[field]}')
 
         for field, backend in cascading_l1_fields + cascading_l2_fields + dependent_fields:
-            holder[field] = backend.generate_samples(nrows, [holder[x] for x in backend.dep_field]) #provides these list in order of dep_fields listed
-            logger.debug(f'generate_mock_data: {field}: {holder[field]}')
-
-        #return pd.DataFrame(holder)
+            if type(backend.dep_field) == list:
+                holder[field] = backend.generate_samples(nrows, [holder[x] for x in backend.dep_field]) #provides these list in order of dep_fields listed
+                logger.debug(f'generate_mock_data: {field}: {holder[field]}')
+            else: 
+                holder[field] = backend.generate_samples(nrows, holder[backend.dep_field]) #provides these list in order of dep_fields listed
+        return pd.DataFrame(holder)
 
     @classmethod
     def register_backend(cls, backend) -> None:
