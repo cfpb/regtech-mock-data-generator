@@ -30,11 +30,11 @@ class UniqueID(AbstractBackendInterface):
         lei_ids = []
         for i in range(size):
             n = random.randint(1,self.max_generate)
-            first = ''.join(random.choices(string.digits, k=self.lou))
-            middle = ''.join(random.choices(string.ascii_uppercase + string.digits,k=self.entity))
-            last = ''.join(random.choices(string.digits,k=self.verification))
-            final = ''.join(random.choices(string.ascii_uppercase + string.digits, k=n))
-            lei_ids.append(''.join(first+'00'+middle+last+final))
+            lou = ''.join(random.choices(string.digits, k=self.lou))
+            entity_id = ''.join(random.choices(string.ascii_uppercase + string.digits,k=self.entity))
+            verification_id = ''.join(random.choices(string.digits,k=self.verification))
+            loan_id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=n))
+            lei_ids.append(''.join(lou+'00'+entity_id+verification_id+loan_id))
         return lei_ids
     
 

@@ -205,4 +205,4 @@ class BoundedNumerical(AbstractBackendInterface):
         if self._coerce_to_int:
             output = output.astype(int)
 
-        return self.blanks_where_directed(output, directive)
+        return self.values_where_directed(output, directive)

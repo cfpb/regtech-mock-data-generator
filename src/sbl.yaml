@@ -5,8 +5,8 @@ uid:
     max_generate: 25
 app_date:
   BoundedDatetime:
-    min_datetime: "20200101"
-    max_datetime: "21001231"
+    min_datetime: "20241001"
+    max_datetime: "20241231"
     distribution: norm
     correlation: "directive"
 app_method:
@@ -40,7 +40,7 @@ ct_credit_product_ff:
     upper_bound: 300
     correlation: "dependent"
     dep_field: "ct_credit_product"
-    dep_values: ["977"]
+    dep_values: {"977":}
 ct_guarantee:
   MultipleResponse:
     codes: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 977]
@@ -67,23 +67,25 @@ ct_guarantee_ff:
     upper_bound: 300
     correlation: "dependent"
     dep_field: "ct_guarantee"
-    dep_values: ["977"]
+    dep_values: {"977":}
 ct_loan_term_flag:
   WeightedDiscrete:
     population:
       "900": 1 # applicable and reported
       "988": 1 #applicable but not provided
       "999": 1 #not applicable
-    correlation: "directive"
+    correlation: "cascading_l1"
+    dep_field: "ct_credit_product"
+    dep_values: {"1":["900","988"],"2":["900","988"],"988":["999"],"3":, "4":, "5":, "6":,"7":,"8":,"977":} 
 ct_loan_term:
   BoundedNumerical:
     distribution: norm
     lower_bound: 1 #months
-    upper_bound: 1200 #100 years will be the longest loan term
+    upper_bound: 120 #100 years will be the longest loan term
     coerce_to_int: True
     correlation: "dependent"
     dep_field: "ct_loan_term_flag"
-    dep_values: ["900"]
+    dep_values: {"900":}
 credit_purpose:
   MultipleResponse:
     codes: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 977]
@@ -109,7 +111,7 @@ credit_purpose_ff:
     upper_bound: 300
     correlation: "dependent"
     dep_field: "credit_purpose"
-    dep_values: ["977"]
+    dep_values: {"977":}
 amount_applied_for_flag:
   WeightedDiscrete:
     population:
@@ -126,7 +128,7 @@ amount_applied_for:
     df: 10
     correlation: "dependent"
     dep_field: "amount_applied_for_flag"
-    dep_values: ["900"]
+    dep_values: {"900":}
 amount_approved:
   BoundedNumerical:
     distribution: chi2
@@ -136,7 +138,7 @@ amount_approved:
     df: 10
     correlation: "dependent"
     dep_field: "action_taken"
-    dep_values: ["1", "2"]
+    dep_values: {"1":, "2":}
 action_taken:
   WeightedDiscrete:
     population:
@@ -149,8 +151,8 @@ action_taken:
 # TODO Decide if/how to validate "current reporting period" date
 action_taken_date:
   MinDirectedDatetime:
-    min_datetime: "20200101"
-    max_datetime: "21001231"
+    min_datetime: "20241001"
+    max_datetime: "20241231"
     correlation: "dependent"
     dep_field: "app_date"
 denial_reasons:
@@ -170,14 +172,16 @@ denial_reasons:
 #	Code 999 - Not applicable
     single_selection_codes:
       - 999
-    single_selection_probability: 0.2
-    correlation: "directive"
+    single_selection_probability: 0
+    correlation: "cascading_l1"
+    dep_field: "action_taken"
+    dep_values: {"1":["999"],"2":["999"],"3":,"4":["999"],"5":["999"]}
 denial_reasons_ff:
   LoremIpsumText:
     upper_bound: 300
     correlation: "dependent"
     dep_field: "denial_reasons"
-    dep_values: ["977"]
+    dep_values: {"977":}
 pricing_interest_rate_type:
   WeightedDiscrete:
     population:
@@ -187,8 +191,9 @@ pricing_interest_rate_type:
       "4": 1 # initial rate period > 12 mon, fixed during
       "5": 1 # initial rate period <= 12 mon, adjustable after
       "6": 1 # initial rate period <= 12 mon, fixed after
-      "999": 1 # Not applicable
-    correlation: "directive"
+    correlation: "cascading_l1"
+    dep_field: "action_taken"
+    dep_values: {"1":,"2":,"3":["999"],"4":["999"],"5":["999"]}
 pricing_init_rate_period:
   BoundedNumerical:
     distribution: chi2
@@ -198,7 +203,7 @@ pricing_init_rate_period:
     df: 10
     correlation: "dependent"
     dep_field: "pricing_interest_rate_type"
-    dep_values: ["3", "4", "5", "6"]
+    dep_values: {"3":, "4":, "5":, "6":}
 pricing_fixed_rate:
   BoundedNumerical:
     distribution: chi2
@@ -207,7 +212,7 @@ pricing_fixed_rate:
     df: 10
     correlation: "dependent"
     dep_field: "pricing_interest_rate_type"
-    dep_values: ["2", "4", "6"]
+    dep_values: {"2":, "4":, "6":}
 pricing_adj_margin:
   BoundedNumerical:
     distribution: chi2
@@ -216,7 +221,7 @@ pricing_adj_margin:
     df: 10
     correlation: "dependent"
     dep_field: "pricing_interest_rate_type"
-    dep_values: ["1", "3", "5"]
+    dep_values: {"1":, "3":, "5":}
 pricing_adj_index_name:
   WeightedDiscrete:
     population:
@@ -231,14 +236,15 @@ pricing_adj_index_name:
       "9": 1 # Constant Maturity Treasury
       "10": 1 # Internal Proprietary Index
       "977": 1 # Other
-      "999": 1 # Not applicable
-    correlation: "directive"
+    correlation: "cascading_l1"
+    dep_field: "pricing_interest_rate_type"
+    dep_values: {"1":,"3":,"5":,"2":["999"],"4":["999"],"6":["999"],"999":["999"]}
 pricing_adj_index_name_ff:
   LoremIpsumText:
     upper_bound: 300
     correlation: "dependent"
     dep_field: "pricing_adj_index_name"
-    dep_values: ["977"]
+    dep_values: {"977":}
 pricing_adj_index_value:
   BoundedNumerical:
     distribution: chi2
@@ -247,7 +253,7 @@ pricing_adj_index_value:
     df: 10
     correlation: "dependent"
     dep_field: "pricing_interest_rate_type"
-    dep_values: ["1", "3"]
+    dep_values: {"1":, "3":}
 pricing_origination_charges:
   BoundedNumerical:
     distribution: chi2
@@ -257,7 +263,7 @@ pricing_origination_charges:
     df: 10
     correlation: "dependent"
     dep_field: "action_taken"
-    dep_values: ["1", "2"]
+    dep_values: {"1":, "2":}
 pricing_broker_fees:
   BoundedNumerical:
     distribution: chi2
@@ -267,7 +273,7 @@ pricing_broker_fees:
     df: 10
     correlation: "dependent"
     dep_field: "action_taken"
-    dep_values: ["1", "2"]
+    dep_values: {"1":, "2":}
 pricing_initial_charges:
   BoundedNumerical:
     distribution: chi2
@@ -277,13 +283,15 @@ pricing_initial_charges:
     df: 10
     correlation: "dependent"
     dep_field: "action_taken"
-    dep_values: ["1", "2"]
+    dep_values: {"1":, "2":}
 pricing_mca_addcost_flag:
   WeightedDiscrete:
     population:
       "900": 1 # Applicable
-      "999": 1 # Not applicable
-    correlation: "directive"
+    correlation: "cascading_l2"
+    dep_field: ["action_taken","ct_credit_product"]
+    dep_values: {"action_taken":{"1":,"2":,"3":["999"],"4":["999"],"5":["999"]},
+                 "ct_credit_product":{"1":['999'],"2":["999"],"3":["999"],"4":["999"],"5":["999"],"6":["999"],"7":,"8":,"977":,"988":["999"]}}
 pricing_mca_addcost:
   BoundedNumerical:
     distribution: chi2
@@ -293,19 +301,23 @@ pricing_mca_addcost:
     decimal: 2
     correlation: "dependent"
     dep_field: "pricing_mca_addcost_flag"
-    dep_values: ["900"]
+    dep_values: {"900":}
 pricing_prepenalty_allowed:
   WeightedDiscrete:
     population:
       "1": 1 # Yes
       "2": 1 # No
-      "999": 1 # Not applicable
+    correlation: 'dependent'
+    dep_field: "action_taken"
+    dep_values: {"1":,"2":,"3":["999"],"4":["999"],"5":["999"]}
 pricing_prepenalty_exists:
   WeightedDiscrete:
     population:
       "1": 1 # Yes
       "2": 1 # No
-      "999": 1 # Not applicable
+    correlation: 'dependent'
+    dep_field: "action_taken"
+    dep_values: {"1":,"2":,"3":["999"],"4":["999"],"5":["999"]}
 census_tract_adr_type:
   WeightedDiscrete:
     population:
@@ -320,7 +332,7 @@ census_tract_number:
     field: "tract_fips"
     correlation: "dependent"
     dep_field: "census_tract_adr_type"
-    dep_values: ["1", "2", "3"]
+    dep_values: {"1":,"2":,"3":}
 gross_annual_revenue_flag:
   WeightedDiscrete:
     population:
@@ -336,7 +348,7 @@ gross_annual_revenue:
     decimal: 2
     correlation: "dependent"
     dep_field: "gross_annual_revenue_flag"
-    dep_values: ["900"]
+    dep_values: {"900":}
 naics_code_flag:
   WeightedDiscrete:
     population:
@@ -349,7 +361,7 @@ naics_code:
     field: "2022 NAICS US Code"
     correlation: "dependent"
     dep_field: "naics_code_flag"
-    dep_values: ["900"]
+    dep_values: {"900":}
 number_of_workers:
   WeightedDiscrete:
     population:
@@ -379,7 +391,7 @@ time_in_business:
     coerce_to_int: True
     correlation: "dependent"
     dep_field: "time_in_business_type"
-    dep_values: ["1"]
+    dep_values: {"1":}
 business_ownership_status:
   MultipleResponse:
     codes: [1, 2, 3, 955]
@@ -410,7 +422,7 @@ num_principal_owners:
       "4": 1
     correlation: "cascading_l1"
     dep_field: "num_principal_owners_flag"
-    dep_values: ["900"]
+    dep_values: {"900":}
 po_1_ethnicity:
   MultipleResponse:
     codes: [1, 11, 12, 13, 14, 2, 977]
@@ -430,13 +442,13 @@ po_1_ethnicity:
     single_selection_probability: 0.2
     correlation: "cascading_l2"
     dep_field: "num_principal_owners"
-    dep_values: ["1", "2", "3", "4"]
+    dep_values: {"1":,"2":,"3":,"4":}
 po_1_ethnicity_ff:
   LoremIpsumText:
     upper_bound: 300
     correlation: "dependent"
     dep_field: "po_1_ethnicity"
-    dep_values: ["977"]
+    dep_values: {"977":}
 po_1_race:
   MultipleResponse:
     # See doc for code descriptions
@@ -448,31 +460,31 @@ po_1_race:
     single_selection_probability: 0.2
     correlation: "cascading_l2"
     dep_field: "num_principal_owners"
-    dep_values: ["1", "2", "3", "4"]
+    dep_values: {"1":,"2":,"3":,"4":}
 po_1_race_anai_ff:
   LoremIpsumText:
     upper_bound: 300
     correlation: "dependent"
     dep_field: "po_1_race"
-    dep_values: ["971"]
+    dep_values: {"971":}
 po_1_race_asian_ff:
   LoremIpsumText:
     upper_bound: 300
     correlation: "dependent"
     dep_field: "po_1_race"
-    dep_values: ["972"]
+    dep_values: {"972":}
 po_1_race_baa_ff:
   LoremIpsumText:
     upper_bound: 300
     correlation: "dependent"
     dep_field: "po_1_race"
-    dep_values: ["973"]
+    dep_values: {"973":}
 po_1_race_pi_ff:
   LoremIpsumText:
     upper_bound: 300
     correlation: "dependent"
     dep_field: "po_1_race"
-    dep_values: ["974"]
+    dep_values: {"974":}
 po_1_gender_flag:
   WeightedDiscrete:
     population:
@@ -481,13 +493,13 @@ po_1_gender_flag:
       "988": 1 # Not provided
     correlation: "cascading_l2"
     dep_field: "num_principal_owners"
-    dep_values: ["1", "2", "3", "4"]
+    dep_values: {"1":,"2":,"3":,"4":}
 po_1_gender_ff:
   LoremIpsumText:
     upper_bound: 300
     correlation: "dependent"
     dep_field: "po_1_gender_flag"
-    dep_values: ["1"]
+    dep_values: {"1":}
 po_2_ethnicity:
   MultipleResponse:
     codes: [1, 11, 12, 13, 14, 2, 977]
@@ -507,13 +519,13 @@ po_2_ethnicity:
     single_selection_probability: 0.2
     correlation: "cascading_l2"
     dep_field: "num_principal_owners"
-    dep_values: ["2", "3", "4"]
+    dep_values: {"2":,"3":,"4":}
 po_2_ethnicity_ff:
   LoremIpsumText:
     upper_bound: 300
     correlation: "dependent"
     dep_field: "po_2_ethnicity"
-    dep_values: ["977"]
+    dep_values: {"977":}
 po_2_race:
   MultipleResponse:
     codes: [1, 2, 21, 22, 23, 24, 25, 26, 27, 3, 31, 32, 33, 34, 35, 36, 37, 4, 41, 42, 43, 44, 5, 971, 972, 973, 974]
@@ -525,31 +537,31 @@ po_2_race:
     single_selection_probability: 0.2
     correlation: "cascading_l2"
     dep_field: "num_principal_owners"
-    dep_values: ["2", "3", "4"]
+    dep_values: {"2":,"3":,"4":}
 po_2_race_anai_ff:
   LoremIpsumText:
     upper_bound: 300
     correlation: "dependent"
     dep_field: "po_2_race"
-    dep_values: ["971"]
+    dep_values: {"971":}
 po_2_race_asian_ff:
   LoremIpsumText:
     upper_bound: 300
     correlation: "dependent"
     dep_field: "po_2_race"
-    dep_values: ["972"]
+    dep_values: {"972":}
 po_2_race_baa_ff:
   LoremIpsumText:
     upper_bound: 300
     correlation: "dependent"
     dep_field: "po_2_race"
-    dep_values: ["973"]
+    dep_values: {"973":}
 po_2_race_pi_ff:
   LoremIpsumText:
     upper_bound: 300
     correlation: "dependent"
     dep_field: "po_2_race"
-    dep_values: ["974"]
+    dep_values: {"974":}
 po_2_gender_flag:
   WeightedDiscrete:
     population:
@@ -558,14 +570,14 @@ po_2_gender_flag:
       "988": 1 # Not provided
     correlation: "cascading_l2"
     dep_field: "num_principal_owners"
-    dep_values: ["2", "3", "4"]
+    dep_values: {"2":,"3":,"4":}
 # TODO Correlates w/po_2_gender; conditional null value
 po_2_gender_ff:
   LoremIpsumText:
     upper_bound: 300
     correlation: "dependent"
     dep_field: "po_2_gender_flag"
-    dep_values: ["1"]
+    dep_values: {"1":}
 po_3_ethnicity:
   MultipleResponse:
     codes: [1, 11, 12, 13, 14, 2, 977]
@@ -585,13 +597,13 @@ po_3_ethnicity:
     single_selection_probability: 0.2
     correlation: "cascading_l2"
     dep_field: "num_principal_owners"
-    dep_values: ["3", "4"]
+    dep_values: {3":,"4":}
 po_3_ethnicity_ff:
   LoremIpsumText:
     upper_bound: 300
     correlation: "dependent"
     dep_field: "po_3_ethnicity"
-    dep_values: ["977"]
+    dep_values: {"977":}
 po_3_race:
   MultipleResponse:
     codes: [1, 2, 21, 22, 23, 24, 25, 26, 27, 3, 31, 32, 33, 34, 35, 36, 37, 4, 41, 42, 43, 44, 5, 971, 972, 973, 974]
@@ -603,31 +615,31 @@ po_3_race:
     single_selection_probability: 0.2
     correlation: "cascading_l2"
     dep_field: "num_principal_owners"
-    dep_values: ["3", "4"]
+    dep_values: {3":,"4":}
 po_3_race_anai_ff:
   LoremIpsumText:
     upper_bound: 300
     correlation: "dependent"
     dep_field: "po_3_race"
-    dep_values: ["971"]
+    dep_values: {"971":}
 po_3_race_asian_ff:
   LoremIpsumText:
     upper_bound: 300
     correlation: "dependent"
     dep_field: "po_3_race"
-    dep_values: ["972"]
+    dep_values: {"972":}
 po_3_race_baa_ff:
   LoremIpsumText:
     upper_bound: 300
     correlation: "dependent"
     dep_field: "po_3_race"
-    dep_values: ["973"]
+    dep_values: {"973":}
 po_3_race_pi_ff:
   LoremIpsumText:
     upper_bound: 300
     correlation: "dependent"
     dep_field: "po_3_race"
-    dep_values: ["974"]
+    dep_values: {"974":}
 po_3_gender_flag:
   WeightedDiscrete:
     population:
@@ -636,13 +648,13 @@ po_3_gender_flag:
       "988": 1 # Not provided
     correlation: "cascading_l2"
     dep_field: "num_principal_owners"
-    dep_values: ["3", "4"]
+    dep_values: {3":,"4":}
 po_3_gender_ff:
   LoremIpsumText:
     upper_bound: 300
     correlation: "dependent"
     dep_field: "po_3_gender_flag"
-    dep_values: ["1"]
+    dep_values: {"1":}
 po_4_ethnicity:
   MultipleResponse:
     codes: [1, 11, 12, 13, 14, 2, 977]
@@ -662,13 +674,13 @@ po_4_ethnicity:
     single_selection_probability: 0.2
     correlation: "cascading_l2"
     dep_field: "num_principal_owners"
-    dep_values: ["4"]
+    dep_values: {"4":}
 po_4_ethnicity_ff:
   LoremIpsumText:
     upper_bound: 300
     correlation: "dependent"
     dep_field: "po_4_ethnicity"
-    dep_values: ["977"]
+    dep_values: {"977":}
 po_4_race:
   MultipleResponse:
     codes: [1, 2, 21, 22, 23, 24, 25, 26, 27, 3, 31, 32, 33, 34, 35, 36, 37, 4, 41, 42, 43, 44, 5, 971, 972, 973, 974]
@@ -680,31 +692,31 @@ po_4_race:
     single_selection_probability: 0.2
     correlation: "cascading_l2"
     dep_field: "num_principal_owners"
-    dep_values: ["4"]
+    dep_values: {"4":}
 po_4_race_anai_ff:
   LoremIpsumText:
     upper_bound: 300
     correlation: "dependent"
     dep_field: "po_4_race"
-    dep_values: ["971"]
+    dep_values: {"971":}
 po_4_race_asian_ff:
   LoremIpsumText:
     upper_bound: 300
     correlation: "dependent"
     dep_field: "po_4_race"
-    dep_values: ["972"]
+    dep_values: {"972":}
 po_4_race_baa_ff:
   LoremIpsumText:
     upper_bound: 300
     correlation: "dependent"
     dep_field: "po_4_race"
-    dep_values: ["973"]
+    dep_values: {"973":}
 po_4_race_pi_ff:
   LoremIpsumText:
     upper_bound: 300
     correlation: "dependent"
     dep_field: "po_4_race"
-    dep_values: ["974"]
+    dep_values: {"974":}
 po_4_gender_flag:
   WeightedDiscrete:
     population:
@@ -713,10 +725,10 @@ po_4_gender_flag:
       "988": 1 # Not provided
     correlation: "cascading_l2"
     dep_field: "num_principal_owners"
-    dep_values: ["4"]
+    dep_values: {"4":}
 po_4_gender_ff:
   LoremIpsumText:
     upper_bound: 300
     correlation: "dependent"
     dep_field: "po_4_gender_flag"
-    dep_values: ["1"]
+    dep_values: {"1":}

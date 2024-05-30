@@ -1,0 +1,45 @@
+ct_credit_product:
+  WeightedDiscrete:
+    population:
+      "1": 1 # term loan unsecured
+      "2": 1 # term loan secured
+      "3": 1 # line of credit - unsecured
+      "4": 1 # line of credit - secrured
+      "5": 1 # credit card account, not private-label
+      "6": 1 # Private-label credit card account
+      "7": 1 # Merchant cash advance
+      "8": 1 # Other sales-based financing transaction
+      "977": 10 # other. This requires filer to specify credit line
+      "988": 1 # undetermined -not provided
+    correlation: "directive"
+
+action_taken:
+  WeightedDiscrete:
+    population:
+      "1": 1 # originated
+      "2": 1 # approved but not accepted
+      "3": 1 # denied
+      "4": 1 # withdrawn by the applicant
+      "5": 1 # incomplete
+    correlation: "directive"
+
+pricing_mca_addcost_flag:
+  WeightedDiscrete:
+    population:
+      "900": 1 # Applicable
+    correlation: "cascading_l2"
+    dep_field: ["action_taken","ct_credit_product"]
+    dep_values: {"action_taken":{"1":,"2":,"3":["999"],"4":["999"],"5":["999"]},
+                 "ct_credit_product":{"1":['999'],"2":["999"],"3":["999"],"4":["999"],"5":["999"],"6":["999"],"7":,"8":,"977":,"988":["999"]}}
+
+what_action_was_taken:
+  WeightedDiscrete:
+    population:
+      "originated": 1 # originated
+      "approved but not accepted": 1 # approved but not accepted
+      "denied": 1 # denied
+      "withdrawn by the applicant": 1 # withdrawn by the applicant
+      "incomplete": 1 # incomplete
+    correlation: "dependent"
+    dep_field: "action_taken"
+    dep_values: {"1":['originated'],"2":["approved but not accepted"],"3":["denied"],"4":["withdrawn by the applicant"],"5":["incomplete"]}
