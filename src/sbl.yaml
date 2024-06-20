@@ -328,7 +328,7 @@ census_tract_adr_type:
     correlation: "directive"
 census_tract_number:
   FileRandom:
-    file: "ExcelCensusTractReference2010.csv"
+    file: "Census2022.processed.csv"
     field: "tract_fips"
     correlation: "dependent"
     dep_field: "census_tract_adr_type"
