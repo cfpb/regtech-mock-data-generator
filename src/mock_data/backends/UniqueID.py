@@ -9,6 +9,7 @@ class UniqueID(AbstractBackendInterface):
     def __init__(
         self,
         max_generate: int,
+        lei: str = '',
         lou: int = 4, 
         entity: int = 12,
         verification: int = 2,
@@ -25,17 +26,18 @@ class UniqueID(AbstractBackendInterface):
         self.entity = entity
         self.verification = verification
         self.max_generate = max_generate
-    
+        self.lei = lei
+
     def generate_samples(self, size: int, directive: List = None) -> Iterable:
-        lei_ids = []
+        uids = []
         for i in range(size):
             n = random.randint(1,self.max_generate)
-            lou = ''.join(random.choices(string.digits, k=self.lou))
-            entity_id = ''.join(random.choices(string.ascii_uppercase + string.digits,k=self.entity))
-            verification_id = ''.join(random.choices(string.digits,k=self.verification))
-            loan_id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=n))
-            lei_ids.append(''.join(lou+'00'+entity_id+verification_id+loan_id))
-        return lei_ids
+            if self.lei != '':
+                uid = self.lei + ''.join(random.choices(string.ascii_uppercase + string.digits, k=n))
+                uids.append(uid)
+            else:
+                uids.append(''.join(random.choices(string.ascii_uppercase + string.digits, k=n)))
+        return uids
     
 
         

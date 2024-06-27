@@ -40,7 +40,7 @@ class AbstractBackendInterface(ABC):
                             new_possible_options = set(self.dep_values[self.dep_field[j]][directive[j][i]]) #new set of directions
                             old_possible_options = set(options) #set of old directions. NOTE: if this is blank, we essentially have no given restrictions yet. If its not blank, we need intersection of old directions.
                             options = list(new_possible_options & old_possible_options if old_possible_options != set() else new_possible_options) #takes intersection of options if previous restrictions were given, otherwise 0.
-                    if len(options) != 0 & blank==0: #if specific values are directed to us and at no point, directed to be blank, take those.
+                    if len(options) != 0 & blank==0: #if specific values wqare directed to us and at no point, directed to be blank, take those.
                         col_values.append(random.choice(options)) #choose from those
                     elif blank == 1: #if blank
                         col_values.append("") #be blank

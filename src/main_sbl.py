@@ -25,4 +25,4 @@ mock_df = mock.generate_mock_data(args.nrows)
 
 mock_df.to_csv(args.outputfile, index=False)
 
-mock_df.to_csv('/home/cfpb/mcbridem/regtech-data-validator/tests/data/sbl.csv', index=False)
+mock_df.to_csv('/home/cfpb/mcbridem/regtech-test-files/sbl/clean_files/sbl_100_clean.csv', index=False)
