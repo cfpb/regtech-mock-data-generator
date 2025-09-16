@@ -289,6 +289,7 @@ pricing_mca_addcost_flag:
   WeightedDiscrete:
     population:
       "900": 1 # Applicable
+      "999": 1 # Not applicable
     correlation: "cascading_l2"
     dep_field: ["action_taken","ct_credit_product"]
     dep_values: {"action_taken":{"1":,"2":,"3":["999"],"4":["999"],"5":["999"]},
@@ -308,17 +309,19 @@ pricing_prepenalty_allowed:
     population:
       "1": 1 # Yes
       "2": 1 # No
+      "999": 1 # Not applicable 
     correlation: 'dependent'
     dep_field: "action_taken"
-    dep_values: {"1":,"2":,"3":["999"],"4":["999"],"5":["999"]}
+    dep_values: {"1":,"2":, "3":["999"], "4":["999"], "5":["999"]}
 pricing_prepenalty_exists:
   WeightedDiscrete:
     population:
       "1": 1 # Yes
       "2": 1 # No
+      "999": 1 # Not applicable 
     correlation: 'dependent'
     dep_field: "action_taken"
-    dep_values: {"1":,"2":,"3":["999"],"4":["999"],"5":["999"]}
+    dep_values: {"1":,"2":, "3":["999"], "4":["999"], "5":["999"]}
 census_tract_adr_type:
   WeightedDiscrete:
     population:

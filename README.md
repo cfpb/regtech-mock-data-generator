@@ -18,6 +18,7 @@ Collecting pandas (from -r requirements.txt (line 3))
 ...
 (.venv) $ export PYTHONPATH=src
 $ python3 src/main_sbl.py
+(.venv) $ pip install -e .
 ```
 
 This generates the output file **src/sbl.csv**, replacing any pre-existing copy.

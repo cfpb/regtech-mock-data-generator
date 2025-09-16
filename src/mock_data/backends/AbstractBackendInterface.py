@@ -29,8 +29,8 @@ class AbstractBackendInterface(ABC):
         else:
             col_values = []
             if type(self.dep_field) == list: #Behave different if list is given.
-                for i in range(0,len(directive[0])):#fror any given row
-                    options = [] #Lets make a bucket of options for us, informed by directing fields.
+                for i in range(0,len(directive[0])): #for any given row
+                    options = [] #Let's make a bucket of options for us, informed by directing fields.
                     blank = 0
                     for j in range(0,len(self.dep_field)): #For every directing field
                         if (directive[j][i] not in self.dep_values[self.dep_field[j]]): #if it is not in the dictionary

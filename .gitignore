@@ -2,4 +2,6 @@
 .env
 .venv/**
 .vscode/**
-src/sbl.csv
+notes.txt
+
+*.egg-info
