@@ -19,7 +19,7 @@ os.chdir(os.path.dirname(__file__))
 
 random.seed()
 
-mock = MockDataset.read_yaml_spec("sbl.yaml")
+mock = MockDataset.read_yaml_spec("config/sbl.yaml")
 
 mock_df = mock.generate_mock_data(args.nrows)
 

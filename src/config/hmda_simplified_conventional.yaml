@@ -1,0 +1,1475 @@
+#### This is a WIP that will work, but only for very specific cases. 
+# This config will generate the most simple of simple passing LAR 
+# All first lien conventional home purchases with a single owner and all information present.
+# Please compare with the hmda.yaml template for a generic but not-working example
+# I have taken the approach of commenting out the WeightedDiscrete population values that I don't want to consider because it's easier to see, but more properly one should adjust the frequency to 0 instead. 
+# The ranges and distribution of values for BoundedNumerical fields are unrealistic and solely there to generate fake data - play with them yourself if you are interested in making them accurate to your data. 
+# For the most part, this generation config file ignores the possibility of NA or Exempt alphanumeric strings in numeric fields. Those will be implemented further down the line. 
+
+id: 
+  WeightedDiscrete:
+    population:
+      "2": 1
+lei:
+  WeightedDiscrete:
+    population:
+      "BANK1LEIFORTEST12345": 1
+uli:
+  UniqueID:
+    lei: 'BANK1LEIFORTEST12345'
+    min_generate: 15
+    max_generate: 20
+application_date:
+  BoundedDatetime:
+    min_datetime: "20251001"
+    max_datetime: "20251231"
+    distribution: norm
+    correlation: "directive"
+loan_type:
+  WeightedDiscrete:
+    population:
+      "1": 1 # Conventional
+      # "2": 1 # FHA
+      # "3": 1 # VA
+      # "4": 1 # RHS/USDA
+loan_purpose:
+  WeightedDiscrete:
+    population:
+      "1": 1 # Home Purchase
+      # "2": 1 # Home Improvement
+      # "31": 1 # Refinancing
+      # "32": 1 # Cash-Out Refinancing
+      # "4": 1 # Other purpose
+      # "5": 1 # Not Applicable
+    # correlation: "directive" 
+preapproval:
+  WeightedDiscrete:
+    population:
+      "1": 1 # Preapproval Requested
+      # "2": 1 # Preapproval Not Requested
+    # correlation: "dependent" #### Maybe cascading because of loan purpose/action taken/ multifamily interact? See V612/613/614
+    # dep_field: ["action_taken", "loan_purpose", "reverse_mortgage", "open_end_line_of_credit"]
+    # dep_values: {"action_taken": {"1":, "2":, "3":["2"], "4":["2"], "5":["2"], "6":["2"], "7":["1"], "8":["1"]}, # V613
+    #              "loan_purpose": {"1":["1"], "2":["2"], "31":["2"], "32":["2"], "4":["2"], "5":["2"]}, # V612 / V614 - Not sure about this - might not be necessary
+    #              "reverse_mortgage": {"1":["2"], "2":, "1111":}, # V614
+    #              "open_end_line_of_credit": {"1":["2"], "2":, "1111":}}  # V614
+    #              #Something about V614.2) If Multifamily Affordable Units is a number, then Preapproval must equal 2.
+construction_method:
+  WeightedDiscrete:
+    population:
+      "1": 1 # Site-Built
+      # "2": 1 # Manufactured-Home
+    # correlation: "dependent"
+    # dep_field: ["manufactured_home_land_property_interest", "manufactured_home_secured_property_type"]
+    # dep_values: {"manufactured_home_land_property_interest": {"1":["1"], "2":["2"], "3":["2"], "4":["2"], "5":, "1111":}, # V615
+    #              "manufactured_home_secured_property_type": {"1":["2"], "2":["2"], "3":, "1111":}} # V615
+occupancy_type:
+  WeightedDiscrete:
+    population:
+      "1": 1 # Principal Residence
+      # "2": 1 # Second Residence
+      # "3": 1 # Investment Property
+loan_amount:
+  BoundedNumerical:
+    distribution: chi2
+    lower_bound:  10000
+    upper_bound:  10000000
+    coerce_to_int: True
+    df: 10
+    # correlation: "dependent" # See what needs to be done here if anything
+    # dep_field: "action_taken"
+    # dep_values: {"1":, "2":}
+action_taken:
+  WeightedDiscrete:
+    population:
+      "1": 1 # Loan originated
+      # "2": 1 # Application approved but not accepted
+      # "3": 1 # Application denied
+      # "4": 1 # Application withdrawn by applicant
+      # "5": 1 # File closed for incompleteness
+      # "6": 1 # Purchased loan
+      # "7": 1 # Preapproval request denied
+      # "8": 1 # Preapproval request approved but not accepted
+    # correlation: "directive"
+action_taken_date:
+  WeightedDiscrete:
+    population:
+      "20251231": 1 # Loan originated
+  # MinDirectedDatetime:
+  #   min_datetime: "20241001"
+  #   max_datetime: "20241231"
+  #   correlation: "dependent" # V619
+  #   dep_field: "application_date"
+
+# The address datapoints are complicated and for now we have set a placeholder of a specific state, zip, county, and tract to avoid triggering edits. 
+street:
+  LoremIpsumText:
+    upper_bound:  20
+    # correlation: "dependent"
+    # dep_field: "applicant_ethnicity_1" 
+    # dep_values: {"977":}
+city:
+  LoremIpsumText:
+    upper_bound:  20
+    # correlation: "dependent"
+    # dep_field: "applicant_ethnicity_1" 
+    # dep_values: {"977":}
+state_code:
+  WeightedDiscrete:
+    population:
+      # "AL": 1
+      # "AK": 1
+      # "AZ": 1
+      # "AR": 1
+      # "AS": 1
+      # "CA": 1
+      # "CO": 1
+      # "CT": 1
+      # "DE": 1
+      # "DC": 1
+      # "FL": 1
+      # "GA": 1
+      # "GU": 1
+      # "HI": 1
+      # "ID": 1
+      # "IL": 1
+      # "IN": 1
+      # "IA": 1
+      # "KS": 1
+      # "KY": 1
+      # "LA": 1
+      # "ME": 1
+      # "MD": 1
+      # "MA": 1
+      # "MI": 1
+      # "MN": 1
+      # "MS": 1
+      # "MO": 1
+      # "MT": 1
+      # "NE": 1
+      # "NV": 1
+      # "NJ": 1
+      # "NM": 1
+      # "NY": 1
+      # "NC": 1
+      # "ND": 1
+      # "MP": 1
+      # "OH": 1
+      "OK": 1
+      # "OR": 1
+      # "PA": 1
+      # "PR": 1
+      # "RI": 1
+      # "SC": 1
+      # "SD": 1
+      # "TN": 1
+      # "TX": 1
+      # "TT": 1
+      # "UT": 1
+      # "VT": 1
+      # "VA": 1
+      # "VI": 1
+      # "WA": 1
+      # "WV": 1
+      # "WI": 1
+      # "WY": 1
+    # correlation: "dependent"
+    # dep_field: "applicant_ethnicity_1" 
+    # dep_values: {"977":}
+zip_code:
+  WeightedDiscrete:
+    population:
+      "74136": 1
+  # FileRandom:
+    # file: "Census2023.processed.csv" # create ZIP code csv
+    # field: "geoid"
+    # correlation: "dependent"
+    # dep_field: "census_tract_adr_type" # Figure out dependent fields between zip and census tract
+    # dep_values: {"1":,"2":,"3":}
+county_code:
+  WeightedDiscrete:
+    population:
+      "40143": 1
+  # FileRandom:
+  #   file: "Census2023.processed.csv" # create list of county codes
+  #   field: "geoid"
+  #   correlation: "dependent"
+  #   # dep_field: "census_tract_adr_type" # figure out dependencies
+    # dep_values: {"1":,"2":,"3":}
+census_tract:
+  WeightedDiscrete:
+    population:
+      "40143007647": 1
+  # FileRandom:
+  #   file: "Census2023.processed.csv"
+  #   field: "geoid"
+  #   correlation: "dependent"
+  #   dep_field: "census_tract_adr_type"
+  #   dep_values: {"1":,"2":,"3":}
+applicant_ethnicity_1:
+  WeightedDiscrete:
+    population:
+      "1": 1 # Hispanic or Latino
+      "11": 1 # Mexican
+      "12": 1 # Puerto Rican
+      "13": 1 # Cuban
+      "14": 1 # Other Hispanic or Latino
+      "2": 1 # Not Hispanic or Latino
+      # "3": 1 # Information not provided by applicant in mail, internet, or telephone application
+      # "4": 1 # Not applicable
+    correlation: "directive"
+    # dep_field: "applicant_ethnicity_observed"
+    # dep_values: {"1":["1", "2"], "2":["1", "11", "12", "13", "14", "2", "3"]} # V629
+applicant_ethnicity_2:
+  WeightedDiscrete:
+    population:
+      # "1": 0 # Hispanic or Latino
+      # "11": 0 # Mexican
+      # "12": 0 # Puerto Rican
+      # "13": 0 # Cuban
+      # "14": 0 # Other Hispanic or Latino
+      # "2": 0 # Not Hispanic or Latino
+      "": 1 
+    # correlation: "dependent"
+    # dep_field: ["applicant_ethnicity_1", "applicant_ethnicity_observed"] # May need to take out VOS
+    # dep_values: {"applicant_ethnicity_1": {"1":, "11":, "12":, "13":, "14":, "2":, "3":[""], "4":[""]}, # V628
+    #              "applicant_ethnicity_observed": {"1":["1", "2", ""]}}  # V629
+applicant_ethnicity_3:
+  WeightedDiscrete:
+    population:
+      # "1": 0 # Hispanic or Latino
+      # "11": 0 # Mexican
+      # "12": 0 # Puerto Rican
+      # "13": 0 # Cuban
+      # "14": 0 # Other Hispanic or Latino
+      # "2": 0 # Not Hispanic or Latino
+      "": 1
+    # correlation: "dependent"
+    # dep_field: ["applicant_ethnicity_1", "applicant_ethnicity_observed"] # May need to take out VOS
+    # dep_values: {"applicant_ethnicity_1": {"1":, "11":, "12":, "13":, "14":, "2":, "3":[""], "4":[""]}, # V628
+    #              "applicant_ethnicity_observed": {"1":[""]}}  # V629
+applicant_ethnicity_4:
+  WeightedDiscrete:
+    population:
+      # "1": 0 # Hispanic or Latino
+      # "11": 0 # Mexican
+      # "12": 0 # Puerto Rican
+      # "13": 0 # Cuban
+      # "14": 0 # Other Hispanic or Latino
+      # "2": 0 # Not Hispanic or Latino
+      "": 1
+    # correlation: "dependent"
+    # dep_field: ["applicant_ethnicity_1", "applicant_ethnicity_observed"] # May need to take out VOS
+    # dep_values: {"applicant_ethnicity_1": {"1":, "11":, "12":, "13":, "14":, "2":, "3":[""], "4":[""]}, # V628
+    #              "applicant_ethnicity_observed": {"1":[""]}}  # V629
+applicant_ethnicity_5:
+  WeightedDiscrete:
+    population:
+      # "1": 0 # Hispanic or Latino
+      # "11": 0 # Mexican
+      # "12": 0 # Puerto Rican
+      # "13": 0 # Cuban
+      # "14": 0 # Other Hispanic or Latino
+      # "2": 0 # Not Hispanic or Latino
+      "": 1
+    # correlation: "dependent"
+    # dep_field: ["applicant_ethnicity_1", "applicant_ethnicity_observed"] # May need to take out VOS
+    # dep_values: {"applicant_ethnicity_1": {"1":, "11":, "12":, "13":, "14":, "2":, "3":[""], "4":[""]}, # V628
+    #              "applicant_ethnicity_observed": {"1":[""]}}  # V629
+applicant_ethnicity_other_hispanic:
+  WeightedDiscrete: 
+    population:
+      "": 1
+  # LoremIpsumText:
+  #   upper_bound:  300
+  #   correlation: "dependent"
+  #   dep_field: "applicant_ethnicity_1"
+  #   dep_values: {"14":}
+co_applicant_ethnicity_1:
+  WeightedDiscrete:
+    population:
+      # "1": 1 # Hispanic or Latino
+      # "11": 1 # Mexican
+      # "12": 1 # Puerto Rican
+      # "13": 1 # Cuban
+      # "14": 1 # Other Hispanic or Latino
+      # "2": 1 # Not Hispanic or Latino
+      # "3": 1 # Information not provided by applicant in mail, internet, or telephone application
+      # "4": 1 # Not applicable
+      "5": 1 # No co-applicant
+    correlation: "directive"
+    # dep_field: "co_applicant_ethnicity_observed"
+    # dep_values: {"1":["1", "2"], "2":["1", "11", "12", "13", "14", "2", "3"]} # V629
+co_applicant_ethnicity_2:
+  WeightedDiscrete:
+    population:
+      # "1": 1 # Hispanic or Latino
+      # "11": 1 # Mexican
+      # "12": 1 # Puerto Rican
+      # "13": 1 # Cuban
+      # "14": 1 # Other Hispanic or Latino
+      # "2": 1 # Not Hispanic or Latino
+      "": 1
+    # correlation: "dependent"
+    # dep_field: ["co_applicant_ethnicity_1", "co_applicant_ethnicity_observed"] # May need to take out VOS
+    # dep_values: {"co_applicant_ethnicity_1": {"1":, "11":, "12":, "13":, "14":, "2":, "3":[""], "4":[""]}, # V631
+    #              "co_applicant_ethnicity_observed": {"1":["1", "2", ""]}}  # V632
+co_applicant_ethnicity_3:
+  WeightedDiscrete:
+    population:
+      # "1": 1 # Hispanic or Latino
+      # "11": 1 # Mexican
+      # "12": 1 # Puerto Rican
+      # "13": 1 # Cuban
+      # "14": 1 # Other Hispanic or Latino
+      # "2": 1 # Not Hispanic or Latino
+      "": 1
+    # correlation: "dependent"
+    # dep_field: ["co_applicant_ethnicity_1", "co_applicant_ethnicity_observed"] # May need to take out VOS
+    # dep_values: {"co_applicant_ethnicity_1": {"1":, "11":, "12":, "13":, "14":, "2":, "3":[""], "4":[""]}, # V631
+    #              "co_applicant_ethnicity_observed": {"1":["1", "2", ""]}}  # V632
+co_applicant_ethnicity_4:
+  WeightedDiscrete:
+    population:
+      # "1": 1 # Hispanic or Latino
+      # "11": 1 # Mexican
+      # "12": 1 # Puerto Rican
+      # "13": 1 # Cuban
+      # "14": 1 # Other Hispanic or Latino
+      # "2": 1 # Not Hispanic or Latino
+      "": 1
+    # correlation: "dependent"
+    # dep_field: ["co_applicant_ethnicity_1", "co_applicant_ethnicity_observed"] # May need to take out VOS
+    # dep_values: {"co_applicant_ethnicity_1": {"1":, "11":, "12":, "13":, "14":, "2":, "3":[""], "4":[""]}, # V631
+    #              "co_applicant_ethnicity_observed": {"1":["1", "2", ""]}}  # V632
+co_applicant_ethnicity_5:
+  WeightedDiscrete:
+    population:
+      # "1": 1 # Hispanic or Latino
+      # "11": 1 # Mexican
+      # "12": 1 # Puerto Rican
+      # "13": 1 # Cuban
+      # "14": 1 # Other Hispanic or Latino
+      # "2": 1 # Not Hispanic or Latino
+      "": 1
+    # correlation: "dependent"
+    # dep_field: ["co_applicant_ethnicity_1", "co_applicant_ethnicity_observed"] # May need to take out VOS
+    # dep_values: {"co_applicant_ethnicity_1": {"1":, "11":, "12":, "13":, "14":, "2":, "3":[""], "4":[""]}, # V631
+    #              "co_applicant_ethnicity_observed": {"1":["1", "2", ""]}}  # V632
+co_applicant_ethnicity_other_hispanic:
+  WeightedDiscrete: 
+    population:
+      "": 1
+  # LoremIpsumText:
+  #   upper_bound:  300
+  #   correlation: "dependent"
+  #   dep_field: "co_applicant_ethnicity_1"
+  #   dep_values: {"14":}
+applicant_ethnicity_observed:
+  WeightedDiscrete:
+    population:
+      # "1": 1 # Collected on the basis of visual observation or surname
+      "2": 1 # Not collected on the basis of visual observation or surname
+      # "3": 0 # Not applicable
+    # correlation: "dependent"
+    # dep_field: "applicant_ethnicity_1"
+    # dep_values: {"1":, "11":, "12":, "13":, "14":, "2":, "3":, "4":["3"]} # V630
+co_applicant_ethnicity_observed:
+  WeightedDiscrete:
+    population:
+      # "1": 1 # Collected on the basis of visual observation or surname
+      # "2": 1 # Not collected on the basis of visual observation or surname
+      # "3": 1 # Not applicable
+      "4": 1 # No co-applicant
+    # correlation: "dependent"
+    # dep_field: "co_applicant_ethnicity_1"
+    # dep_values: {"1":, "11":, "12":, "13":, "14":, "2":, "3":, "4":["3"], "5":["4"]} # V633 / V634
+applicant_race_1:
+  WeightedDiscrete:
+    population:
+      "1": 1 # American Indian or Alaska Native
+      "2": 1 # Asian
+      "21": 1 # Asian Indian
+      "22": 1 # Chinese
+      "23": 1 # Filipino
+      "24": 1 # Japanese
+      "25": 1 # Korean
+      "26": 1 # Vietnamese
+      "27": 1 # Other Asian
+      "3": 1 # Black or African American
+      "4": 1 # Native Hawaiian or Other Pacific Islander
+      "41": 1 # Native Hawaiian
+      "42": 1 # Guamanian or Chamorro
+      "43": 1 # Samoan
+      "44": 1 # Other Pacific Islander
+      "5": 1 # White
+      # "6": 1 # Information not provided by applicant in mail, internet, or telephone application
+      # "7": 1 # Not applicable
+    correlation: "directive"
+    # dep_field: "applicant_race_observed"
+    # dep_values: {"1":["1", "2", "3", "4", "5"], "2":["1", "2", "21", "22", "23", "24", "25", "26", "27", "3", "4", "41", "42", "43", "44", "5", "6"]} # V636
+applicant_race_2:
+  WeightedDiscrete:
+    population:
+      # "1": 1 # American Indian or Alaska Native
+      # "2": 1 # Asian
+      # "21": 1 # Asian Indian
+      # "22": 1 # Chinese
+      # "23": 1 # Filipino
+      # "24": 1 # Japanese
+      # "25": 1 # Korean
+      # "26": 1 # Vietnamese
+      # "27": 1 # Other Asian
+      # "3": 1 # Black or African American
+      # "4": 1 # Native Hawaiian or Other Pacific Islander
+      # "41": 1 # Native Hawaiian
+      # "42": 1 # Guamanian or Chamorro
+      # "43": 1 # Samoan
+      # "44": 1 # Other Pacific Islander
+      # "5": 1 # White
+      "": 1 
+    # correlation: "dependent"
+    # dep_field: ["applicant_race_1", "applicant_race_observed"]
+    # dep_values: ["applicant_race_1": {"1":, "2":, "21":, "22":, "23":, "24":, "25":, "26":, "27":, "3":, "4":, "41":, "42":, "43":, "44":, "5":, "6":[""], "7":[""]}, # V635
+    #              "applicant_race_observed": {"1":["1", "2", "3", "4", "5"], "2":["1", "2", "21", "22", "23", "24", "25", "26", "27", "3", "4", "41", "42", "43", "44", "5", ""]}] # V636 
+applicant_race_3:
+  WeightedDiscrete:
+    population:
+      # "1": 1 # American Indian or Alaska Native
+      # "2": 1 # Asian
+      # "21": 1 # Asian Indian
+      # "22": 1 # Chinese
+      # "23": 1 # Filipino
+      # "24": 1 # Japanese
+      # "25": 1 # Korean
+      # "26": 1 # Vietnamese
+      # "27": 1 # Other Asian
+      # "3": 1 # Black or African American
+      # "4": 1 # Native Hawaiian or Other Pacific Islander
+      # "41": 1 # Native Hawaiian
+      # "42": 1 # Guamanian or Chamorro
+      # "43": 1 # Samoan
+      # "44": 1 # Other Pacific Islander
+      # "5": 1 # White
+      "": 1 
+    # correlation: "dependent"
+    # dep_field: ["applicant_race_1", "applicant_race_observed"]
+    # dep_values: ["applicant_race_1": {"1":, "2":, "21":, "22":, "23":, "24":, "25":, "26":, "27":, "3":, "4":, "41":, "42":, "43":, "44":, "5":, "6":[""], "7":[""]}, # V635
+    #              "applicant_race_observed": {"1":["1", "2", "3", "4", "5"], "2":["1", "2", "21", "22", "23", "24", "25", "26", "27", "3", "4", "41", "42", "43", "44", "5", ""]}] # V636 
+applicant_race_4:
+  WeightedDiscrete:
+    population:
+      # "1": 1 # American Indian or Alaska Native
+      # "2": 1 # Asian
+      # "21": 1 # Asian Indian
+      # "22": 1 # Chinese
+      # "23": 1 # Filipino
+      # "24": 1 # Japanese
+      # "25": 1 # Korean
+      # "26": 1 # Vietnamese
+      # "27": 1 # Other Asian
+      # "3": 1 # Black or African American
+      # "4": 1 # Native Hawaiian or Other Pacific Islander
+      # "41": 1 # Native Hawaiian
+      # "42": 1 # Guamanian or Chamorro
+      # "43": 1 # Samoan
+      # "44": 1 # Other Pacific Islander
+      # "5": 1 # White
+      "": 1 
+    # correlation: "dependent"
+    # dep_field: ["applicant_race_1", "applicant_race_observed"]
+    # dep_values: ["applicant_race_1": {"1":, "2":, "21":, "22":, "23":, "24":, "25":, "26":, "27":, "3":, "4":, "41":, "42":, "43":, "44":, "5":, "6":[""], "7":[""]}, # V635
+    #              "applicant_race_observed": {"1":["1", "2", "3", "4", "5"], "2":["1", "2", "21", "22", "23", "24", "25", "26", "27", "3", "4", "41", "42", "43", "44", "5", ""]}] # V636 
+applicant_race_5:
+  WeightedDiscrete:
+    population:
+      # "1": 1 # American Indian or Alaska Native
+      # "2": 1 # Asian
+      # "21": 1 # Asian Indian
+      # "22": 1 # Chinese
+      # "23": 1 # Filipino
+      # "24": 1 # Japanese
+      # "25": 1 # Korean
+      # "26": 1 # Vietnamese
+      # "27": 1 # Other Asian
+      # "3": 1 # Black or African American
+      # "4": 1 # Native Hawaiian or Other Pacific Islander
+      # "41": 1 # Native Hawaiian
+      # "42": 1 # Guamanian or Chamorro
+      # "43": 1 # Samoan
+      # "44": 1 # Other Pacific Islander
+      # "5": 1 # White
+      "": 1 
+    # correlation: "dependent"
+    # dep_field: ["applicant_race_1", "applicant_race_observed"]
+    # dep_values: ["applicant_race_1": {"1":, "2":, "21":, "22":, "23":, "24":, "25":, "26":, "27":, "3":, "4":, "41":, "42":, "43":, "44":, "5":, "6":[""], "7":[""]}, # V635
+    #              "applicant_race_observed": {"1":["1", "2", "3", "4", "5"], "2":["1", "2", "21", "22", "23", "24", "25", "26", "27", "3", "4", "41", "42", "43", "44", "5", ""]}] # V636 
+applicant_race_other_native:
+  WeightedDiscrete: 
+    population:
+      "": 1
+  # LoremIpsumText:
+  #   upper_bound:  300
+  #   correlation: "dependent"
+  #   dep_field: "applicant_race_1"
+  #   dep_values: {"1":}
+applicant_race_other_asian:
+  WeightedDiscrete: 
+    population:
+      "": 1
+  # LoremIpsumText:
+  #   upper_bound:  300
+  #   correlation: "dependent"
+  #   dep_field: "applicant_race_1"
+  #   dep_values: {"27":}
+applicant_race_other_pacific:
+  WeightedDiscrete: 
+    population:
+      "": 1
+  # LoremIpsumText:
+  #   upper_bound:  300
+  #   correlation: "dependent"
+  #   dep_field: "applicant_race_1"
+  #   dep_values: {"44":}
+co_applicant_race_1:
+  WeightedDiscrete:
+    population:
+      # "1": 1 # American Indian or Alaska Native
+      # "2": 1 # Asian
+      # "21": 1 # Asian Indian
+      # "22": 1 # Chinese
+      # "23": 1 # Filipino
+      # "24": 1 # Japanese
+      # "25": 1 # Korean
+      # "26": 1 # Vietnamese
+      # "27": 1 # Other Asian
+      # "3": 1 # Black or African American
+      # "4": 1 # Native Hawaiian or Other Pacific Islander
+      # "41": 1 # Native Hawaiian
+      # "42": 1 # Guamanian or Chamorro
+      # "43": 1 # Samoan
+      # "44": 1 # Other Pacific Islander
+      # "5": 1 # White
+      # "6": 1 # Information not provided by applicant in mail, internet, or telephone application
+      # "7": 1 # Not applicable
+      "8": 1 # No co-applicant
+    correlation: "directive"
+    # dep_field: "co_applicant_race_observed"
+    # dep_values: {"1":["1", "2", "3", "4", "5"], "2":["1", "2", "21", "22", "23", "24", "25", "26", "27", "3", "4", "41", "42", "43", "44", "5", "6"], "3":, "4":["8"]} # V6340 / V641
+co_applicant_race_2:
+  WeightedDiscrete:
+    population:
+      # "1": 1 # American Indian or Alaska Native
+      # "2": 1 # Asian
+      # "21": 1 # Asian Indian
+      # "22": 1 # Chinese
+      # "23": 1 # Filipino
+      # "24": 1 # Japanese
+      # "25": 1 # Korean
+      # "26": 1 # Vietnamese
+      # "27": 1 # Other Asian
+      # "3": 1 # Black or African American
+      # "4": 1 # Native Hawaiian or Other Pacific Islander
+      # "41": 1 # Native Hawaiian
+      # "42": 1 # Guamanian or Chamorro
+      # "43": 1 # Samoan
+      # "44": 1 # Other Pacific Islander
+      # "5": 1 # White
+      "": 1
+    # correlation: "dependent"
+    # dep_field: ["co_applicant_race_1", "co_applicant_race_observed"]
+    # dep_values: ["co_applicant_race_1": {"1":, "2":, "21":, "22":, "23":, "24":, "25":, "26":, "27":, "3":, "4":, "41":, "42":, "43":, "44":, "5":, "6":[""], "7":[""], "8":[""]}, # V638
+    #              "co_applicant_race_observed": {"1":["1", "2", "3", "4", "5", ""], "2":["1", "2", "21", "22", "23", "24", "25", "26", "27", "3", "4", "41", "42", "43", "44", "5", "6"], "3":, "4":}] # V639 
+co_applicant_race_3:
+  WeightedDiscrete:
+    population:
+      # "1": 1 # American Indian or Alaska Native
+      # "2": 1 # Asian
+      # "21": 1 # Asian Indian
+      # "22": 1 # Chinese
+      # "23": 1 # Filipino
+      # "24": 1 # Japanese
+      # "25": 1 # Korean
+      # "26": 1 # Vietnamese
+      # "27": 1 # Other Asian
+      # "3": 1 # Black or African American
+      # "4": 1 # Native Hawaiian or Other Pacific Islander
+      # "41": 1 # Native Hawaiian
+      # "42": 1 # Guamanian or Chamorro
+      # "43": 1 # Samoan
+      # "44": 1 # Other Pacific Islander
+      # "5": 1 # White
+      "": 1
+    # dep_field: ["co_applicant_race_1", "co_applicant_race_observed"]
+    # dep_values: ["co_applicant_race_1": {"1":, "2":, "21":, "22":, "23":, "24":, "25":, "26":, "27":, "3":, "4":, "41":, "42":, "43":, "44":, "5":, "6":[""], "7":[""], "8":[""]}, # V638
+    #              "co_applicant_race_observed": {"1":["1", "2", "3", "4", "5"], "2":["1", "2", "21", "22", "23", "24", "25", "26", "27", "3", "4", "41", "42", "43", "44", "5", ""], "3":, "4":}] # V639 
+co_applicant_race_4:
+  WeightedDiscrete:
+    population:
+      # "1": 1 # American Indian or Alaska Native
+      # "2": 1 # Asian
+      # "21": 1 # Asian Indian
+      # "22": 1 # Chinese
+      # "23": 1 # Filipino
+      # "24": 1 # Japanese
+      # "25": 1 # Korean
+      # "26": 1 # Vietnamese
+      # "27": 1 # Other Asian
+      # "3": 1 # Black or African American
+      # "4": 1 # Native Hawaiian or Other Pacific Islander
+      # "41": 1 # Native Hawaiian
+      # "42": 1 # Guamanian or Chamorro
+      # "43": 1 # Samoan
+      # "44": 1 # Other Pacific Islander
+      # "5": 1 # White
+      "": 1
+    # dep_field: ["co_applicant_race_1", "co_applicant_race_observed"]
+    # dep_values: ["co_applicant_race_1": {"1":, "2":, "21":, "22":, "23":, "24":, "25":, "26":, "27":, "3":, "4":, "41":, "42":, "43":, "44":, "5":, "6":[""], "7":[""], "8":[""]}, # V638
+    #              "co_applicant_race_observed": {"1":["1", "2", "3", "4", "5"], "2":["1", "2", "21", "22", "23", "24", "25", "26", "27", "3", "4", "41", "42", "43", "44", "5", ""], "3":, "4":}] # V639 
+co_applicant_race_5:
+  WeightedDiscrete:
+    population:
+      # "1": 1 # American Indian or Alaska Native
+      # "2": 1 # Asian
+      # "21": 1 # Asian Indian
+      # "22": 1 # Chinese
+      # "23": 1 # Filipino
+      # "24": 1 # Japanese
+      # "25": 1 # Korean
+      # "26": 1 # Vietnamese
+      # "27": 1 # Other Asian
+      # "3": 1 # Black or African American
+      # "4": 1 # Native Hawaiian or Other Pacific Islander
+      # "41": 1 # Native Hawaiian
+      # "42": 1 # Guamanian or Chamorro
+      # "43": 1 # Samoan
+      # "44": 1 # Other Pacific Islander
+      # "5": 1 # White
+      "": 1
+    # dep_field: ["co_applicant_race_1", "co_applicant_race_observed"]
+    # dep_values: ["co_applicant_race_1": {"1":, "2":, "21":, "22":, "23":, "24":, "25":, "26":, "27":, "3":, "4":, "41":, "42":, "43":, "44":, "5":, "6":[""], "7":[""], "8":[""]}, # V638
+    #              "co_applicant_race_observed": {"1":["1", "2", "3", "4", "5"], "2":["1", "2", "21", "22", "23", "24", "25", "26", "27", "3", "4", "41", "42", "43", "44", "5", ""], "3":, "4":}] # V639 
+co_applicant_race_other_native:
+  WeightedDiscrete: 
+    population:
+      "": 1
+  # LoremIpsumText:
+  #   upper_bound:  300
+  #   correlation: "dependent"
+  #   dep_field: "co_applicant_race_1"
+  #   dep_values: {"1":}
+co_applicant_race_other_asian:
+  WeightedDiscrete: 
+    population:
+      "": 1
+  # LoremIpsumText:
+  #   upper_bound:  300
+  #   correlation: "dependent"
+  #   dep_field: "co_applicant_race_1"
+  #   dep_values: {"27":}
+co_applicant_race_other_pacific:
+  WeightedDiscrete: 
+    population:
+      "": 1
+  # LoremIpsumText:
+  #   upper_bound:  300
+  #   correlation: "dependent"
+  #   dep_field: "co_applicant_race_1"
+  #   dep_values: {"44":}
+applicant_race_observed:
+  WeightedDiscrete:
+    population:
+      # "1": 1 # Collected on the basis of visual observation or surname
+      "2": 1 # Not collected on the basis of visual observation or surname
+      # "3": 1 # Not applicable
+    # correlation: "directive"
+    # dep_field: "applicant_race_1"
+    # dep_values: {"1":, "2":, "21":, "22":, "23":, "24":, "25":, "26":, "27":, "3":, "4":, "41":, "42":, "43":, "44":, "5":, "6":, "7":["3"]} # V637
+co_applicant_race_observed:
+  WeightedDiscrete:
+    population:
+      # "1": 1 # Collected on the basis of visual observation or surname
+      # "2": 1 # Not collected on the basis of visual observation or surname
+      # "3": 1 # Not applicable
+      "4": 1 # No co-applicant
+    # correlation: "directive"
+    # dep_field: "co_applicant_race_1"
+    # dep_values: {"1":, "2":, "21":, "22":, "23":, "24":, "25":, "26":, "27":, "3":, "4":, "41":, "42":, "43":, "44":, "5":, "6":, "7":["3"], "8":["4"]} # V640 / V641
+applicant_sex:
+  WeightedDiscrete:
+    population:
+      "1": 1 # Male
+      "2": 1 # Female
+      # "3": 1 # Information not provided by applicant in mail, internet, or telephone application
+      # "4": 1 # Not applicable
+      "6": 1 # Applicant selected both male and female
+    # correlation: "dependent"
+    # dep_field: "applicant_sex_observed"
+    # dep_values: {"1":["1", "2"], "2":["1", "2", "3", "6"], "3":} # V643 / V644
+co_applicant_sex:
+  WeightedDiscrete:
+    population:
+      # "1": 1 # Male
+      # "2": 1 # Female
+      # "3": 1 # Information not provided by applicant in mail, internet, or telephone application
+      # "4": 1 # Not applicable
+      "5": 1 # No co-applicant
+      # "6": 1 # Applicant selected both male and female
+    # correlation: "dependent"
+    # dep_field: "co_applicant_sex_observed"
+    # dep_values: {"1":["1", "2"], "2":["1", "2", "3", "6"], "3":, "4":["5"]} # V647 / V648 / V650
+applicant_sex_observed:
+  WeightedDiscrete:
+    population:
+      # "1": 1 # Collected on the basis of visual observation or surname
+      "2": 1 # Not collected on the basis of visual observation or surname
+      # "3": 1 # Not applicable
+    # correlation: "dependent"
+    # dep_field: "applicant_sex"
+    # dep_values: {"1":, "2":, "3":, "4":["3"], "6":["2", "3"]} # V644 / V645
+co_applicant_sex_observed:
+  WeightedDiscrete:
+    population:
+      # "1": 1 # Collected on the basis of visual observation or surname
+      # "2": 1 # Not collected on the basis of visual observation or surname
+      # "3": 1 # Not applicable
+      "4": 1 # No co-applicant
+    # dep_field: "co_applicant_sex"
+    # dep_values: {"1":, "2":, "3":, "4":["3"], "5":["4"], "6":["2", "3"]} # V648 / V649 / V650
+applicant_age:
+  BoundedNumerical:
+    distribution: norm
+    lower_bound:  18
+    upper_bound:  100 
+    coerce_to_int: True
+    # correlation: "dependent"
+    # dep_field: ["applicant_ethnicity_1", "applicant_race_1", "applicant_sex", "action_taken"]
+    # dep_values: ["applicant_ethnicity_1": {"1":, "11":, "12":, "13":, "14":, "2":, "3":, "4":["8888"]}, # V651 - Need to figure out how to do AND not OR 
+    #              "applicant_race_1": {"1":, "2":, "21":, "22":, "23":, "24":, "25":, "26":, "27":, "3":, "4":, "41":, "42":, "43":, "44":, "5":, "6":, "7":["8888"]},
+    #              "applicant_sex": {"1":, "2":, "3":, "4":["8888"], "6":}, 
+    #              "action_taken": {"1":, "2":, "3":, "4":, "5":, "6":[NOT EQUAL], "7":, "8":}] # Figure out NOT EQUAL to 6 with AND condition
+    # Need to figure out how to handle 8888 - not applicable
+co_applicant_age:
+  WeightedDiscrete:
+    population:
+      "9999": 1
+  # BoundedNumerical:
+  #   distribution: norm
+  #   lower_bound:  18
+  #   upper_bound:  100 
+  #   coerce_to_int: True
+    # correlation: "dependent"
+    # dep_field: ["co_applicant_ethnicity_1", "co_applicant_race_1", "co_applicant_sex", "action_taken"]
+    # dep_values: ["co_applicant_ethnicity_1": {"1":, "11":, "12":, "13":, "14":, "2":, "3":, "4":["8888"]}, # V652 - Need to figure out how to do AND not OR 
+    #              "co_applicant_race_1": {"1":, "2":, "21":, "22":, "23":, "24":, "25":, "26":, "27":, "3":, "4":, "41":, "42":, "43":, "44":, "5":, "6":, "7":["8888"]},
+    #              "co_applicant_sex": {"1":, "2":, "3":, "4":["8888"], "6":}, 
+    #              "action_taken": {"1":, "2":, "3":, "4":, "5":, "6":[NOT EQUAL], "7":, "8":}] # Figure out NOT EQUAL to 6 with AND condition
+    # Need to figure out how to handle 8888 - not applicable / 9999 - no co-applicant
+income: 
+  BoundedNumerical:
+    distribution: norm # fix this
+    lower_bound:  -100
+    upper_bound:  400 
+    coerce_to_int: True
+    # correlation: "dependent"
+    # dep_field: "multifamily_affordable_units"
+    # dep_field: ["multifamily_affordable_units", "applicant_ethnicity_1", "applicant_race_1", "applicant_sex", "co_applicant_ethnicity_1", "co_applicant_race_1", "co_applicant_sex", "action_taken"]
+    # dep_values: ["multifamily_affordable_units": {A NUMBER: 'NA'}, # V654
+    #              "applicant_ethnicity_1": {"1":, "11":, "12":, "13":, "14":, "2":, "3":, "4":["8888"]}, # V655 - Need to figure out how to do AND not OR 
+    #              "applicant_race_1": {"1":, "2":, "21":, "22":, "23":, "24":, "25":, "26":, "27":, "3":, "4":, "41":, "42":, "43":, "44":, "5":, "6":, "7":["8888"]},
+    #              "applicant_sex": {"1":, "2":, "3":, "4":["8888"], "6":}
+    #              "co_applicant_ethnicity_1": {"1":, "11":, "12":, "13":, "14":, "2":, "3":, "4":["8888"]}, # V655 - Need to figure out how to do AND not OR 
+    #              "co_applicant_race_1": {"1":, "2":, "21":, "22":, "23":, "24":, "25":, "26":, "27":, "3":, "4":, "41":, "42":, "43":, "44":, "5":, "6":, "7":["8888"]},
+    #              "co_applicant_sex": {"1":, "2":, "3":, "4":["8888"], "6":}, 
+    #              "action_taken": {"1":, "2":, "3":, "4":, "5":, "6":[NOT EQUAL], "7":, "8":}] # Figure out NOT EQUAL to 6 with AND condition
+    # Need to figure out how to handle NA alphanumeric
+purchaser_type:
+  WeightedDiscrete:
+    population:
+      "0": 1 # Not applicable
+      "1": 1 # Fannie Mae
+      "2": 1 # Ginnie Mae
+      "3": 1 # Freddie Mac
+      "4": 1 # Farmer Mac  
+      "5": 1 # Private securitizer
+      "6": 1 # Commercial bank, savings bank, or savings association
+      "71": 1 # Credit union, mortgage company, or finance company
+      "72": 1 # Life insurance company
+      "8": 1 # Affiliate institution
+      "9": 1 # Other type of purchaser 
+    # correlation: "dependent"
+    # dep_field: "action_taken"
+    # dep_values: {"1":, "2":["0"], "3":["0"], "4":["0"], "5":["0"], "6":, "7":["0"], "8":["0"]} # V656
+rate_spread:
+  BoundedNumerical:
+    distribution: norm
+    lower_bound:  -4
+    upper_bound:  3
+    # correlation: "dependent"
+    # dep_field: ["action_taken", "reverse_mortgage"]
+    # dep_values: ["action_taken": {"1":, "2":, "3":["NA"], "4":["NA"], "5":["NA"], "6":["NA"], "7":["NA"], "8":}, # V657
+    #              "reverse_mortgage": {"1":["NA"], "2":, "1111":}]
+    # Figure out NA or Exempt 
+hoepa_status :
+  WeightedDiscrete:
+    population:
+      "1": 1 # High-cost mortgage
+      "2": 1 # Not a high-cost mortgage
+      "3": 1 # Not applicable
+    # correlation: "dependent"
+    # dep_field: "action_taken"
+    # dep_values: {"1":, "2":["3"], "3":["3"], "4":["3"], "5":["3"], "6":, "7":["3"], "8":["3"]} # V658
+lien_status:
+  WeightedDiscrete:
+    population:
+      "1": 1 # Secured by a first lien
+      "2": 1 # Secured by a subordinate lien
+applicant_credit_score:
+  BoundedNumerical:
+    distribution: norm
+    lower_bound:  350
+    upper_bound:  1000 
+    coerce_to_int: True
+    # correlation: "dependent" 
+    # dep_field: ["applicant_credit_scoring_model", "action_taken"] #, "applicant_ethnicity_1", "applicant_race_1", "applicant_sex"] 
+    # dep_values: ["applicant_credit_scoring_model": {"9":["8888"]}, # V661 - do I need to enter all possible values here? Let's find out.  
+    #              "action_taken": {"1":, "2":, "3":, "4":["8888"], "5":["8888"], "6":["8888"], "7":, "8":}] # V663 - should also include "1111", but taken out for now. 
+    #            "applicant_ethnicity_1": {"1":, "11":, "12":, "13":, "14":, "2":, "3":, "4":["8888"]}, # V668 - Need to figure out how to do AND not OR 
+    #            "applicant_race_1": {"1":, "2":, "21":, "22":, "23":, "24":, "25":, "26":, "27":, "3":, "4":, "41":, "42":, "43":, "44":, "5":, "6":, "7":["8888"]},
+    #            "applicant_sex": {"1":, "2":, "3":, "4":["8888"], "6":}]
+    # Need to figure out how to handle 7777 - credit score is not a number / 8888 - not applicable / 1111 - Exempt
+co_applicant_credit_score:
+  WeightedDiscrete:
+    population:
+      "9999": 1 # no co-applicant
+  # BoundedNumerical:
+  #   distribution: norm
+  #   lower_bound:  9999
+  #   upper_bound:  9999 
+  #   coerce_to_int: True
+  #   dep_field: ["co_applicant_credit_scoring_model", "action_taken"] #, "co_applicant_ethnicity_1", "co_applicant_race_1", "co_applicant_sex"] 
+  #   dep_values: ["co_applicant_credit_scoring_model": {"9":["8888"], "10":["9999"]}, # V666 - do I need to enter all possible values here? Let's find out.  
+  #                "action_taken": {"1":, "2":, "3":, "4":["8888"], "5":["8888"], "6":["8888"], "7":, "8":}] # V664 - should also include "1111", but taken out for now. 
+    #            "co_applicant_ethnicity_1": {"1":, "11":, "12":, "13":, "14":, "2":, "3":, "4":["NA"], "5":["NA"]}, # V668 - Need to figure out how to do AND not OR 
+    #            "co_applicant_race_1": {"1":, "2":, "21":, "22":, "23":, "24":, "25":, "26":, "27":, "3":, "4":, "41":, "42":, "43":, "44":, "5":, "6":, "7":["NA"], "8":["NA"]},
+    #            "co_applicant_sex": {"1":, "2":, "3":, "4":["NA"], "5":["NA"], "6":}
+    # Need to figure out how to handle 7777 - credit score is not a number / 8888 - not applicable / 9999 - no co-applicant / 1111 - Exempt
+applicant_credit_scoring_model:
+  WeightedDiscrete:
+    population:
+      "1": 1 # Equifax Beacon 5.0
+      "2": 1 # Experian Fair Isaac Risk Model v2
+      "3": 1 # TransUnion FICO Risk Score Classic 04
+      "4": 1 # TransUnion FICO Risk Score Classic 98
+      "5": 1 # VantageScore 2.0
+      "6": 1 # VantageScore 3.0
+      "7": 1 # More than one credit scoring model
+      # "8": 1 # Other credit scoring model
+      # "9": 1 # Not applicable
+      "11": 1 # FICO Score 9
+      "12": 1 # FICO Score 8
+      "13": 1 # FICO Score 10
+      "14": 1 # FICO Score 10T
+      "15": 1 # VantageScore 4.0
+      # "1111": 1 # Exempt
+    correlation: "directive" #may cause problems later
+    # dep_field: ["applicant_credit_score", "action_taken"]
+    # dep_values: ["applicant_credit_score": {"8888":["9"]}, # V661
+    #              "action_taken": {"1":, "2":, "3":, "4":["9"], "5":["9"], "6":["9"], "7":, "8":}] # V663 - should also include "1111", but taken out for now. 
+applicant_credit_scoring_model_other:
+  WeightedDiscrete: 
+    population:
+      "": 1
+  # LoremIpsumText:
+  #   upper_bound:  300
+  #   correlation: "dependent"
+  #   dep_field: ["applicant_credit_scoring_model", "action_taken"]
+  #   dep_values: ["applicant_credit_scoring_model": {"1":"", "2":"", "3":"", "4":"", "5":"", "6":"", "7":"", "8":, "9":"", "11":"", "12":"", "13":"", "14":"", "15":"", "1111":""}, # V662
+  #                "action_taken": {"1":, "2":, "3":"", "4":"", "5":"", "6":"", "7":, "8":}] # V663
+co_applicant_credit_scoring_model:
+  WeightedDiscrete:
+    population:
+      # "1": 1 # Equifax Beacon 5.0
+      # "2": 1 # Experian Fair Isaac Risk Model v2
+      # "3": 1 # TransUnion FICO Risk Score Classic 04
+      # "4": 1 # TransUnion FICO Risk Score Classic 98
+      # "5": 1 # VantageScore 2.0
+      # "6": 1 # VantageScore 3.0
+      # "7": 1 # More than one credit scoring model
+      # "8": 1 # Other credit scoring model
+      # "9": 1 # Not applicable
+      "10": 1 # No co-applicant
+      # "11": 1 # FICO Score 9
+      # "12": 1 # FICO Score 8
+      # "13": 1 # FICO Score 10
+      # "14": 1 # FICO Score 10T
+      # "15": 1 # VantageScore 4.0
+      # "1111": 1 # Exempt
+    # correlation: "dependent"
+    # dep_field: ["co_applicant_credit_score", "action_taken"]
+    # dep_values: ["co_applicant_credit_score": {"8888":["9"], "9999":["10"]}, # V666
+    #              "action_taken": {"1":, "2":, "3":, "4":["9"], "5":["9"], "6":["9"], "7":, "8":}] # V664 - should also include "1111", but taken out for now. 
+co_applicant_credit_scoring_model_other:
+  WeightedDiscrete: 
+    population:
+      "": 1
+  # LoremIpsumText:
+  #   upper_bound:  300
+  #   correlation: "dependent"
+  #   dep_field: ["co_applicant_credit_scoring_model", "action_taken"]
+  #   dep_values: ["co_applicant_credit_scoring_model": {"1":"", "2":"", "3":"", "4":"", "5":"", "6":"", "7":"", "8":, "9":"", "10":"", "11":"", "12":"", "13":"", "14":"", "15":"", "1111":""}, # V667
+  #                "action_taken": {"1":, "2":, "3":"", "4":"", "5":"", "6":"", "7":, "8":}] # V663
+denial_reason_1:
+  WeightedDiscrete:
+    population:
+      # "1": 1 # Debt-to-income ratio
+      # "2": 1 # Employment history
+      # "3": 1 # Credit history
+      # "4": 1 # Collateral
+      # "5": 1 # Insufficient cash (downpayment, closing costs)
+      # "6": 1 # Unverifiable information
+      # "7": 1 # Credit application incomplete
+      # "8": 1 # Mortgage insurance denied
+      # "9": 1 # Other
+      "10": 1 # Not applicable
+      # "1111": 1 # Exempt
+    correlation: "directive" #may cause problems later
+    # dep_field: "action_taken"
+    # dep_values: {"1":["10"], "2":["10"], "3":["1", "2", "3", "4", "5", "6", "7", "8", "9"], "4":["10"], "5":["10"], "6":["10"], "7":, "8":["10"]} # V670 - Should include 1111 too, but removing for ease right now
+denial_reason_2: # V669 - each code can only be used once - probably need to just block 2/3/4 for now instead of figure out how to generate those. 
+  WeightedDiscrete:
+    population:
+      # "1": 1 # Debt-to-income ratio
+      # "2": 1 # Employment history
+      # "3": 1 # Credit history
+      # "4": 1 # Collateral
+      # "5": 1 # Insufficient cash (downpayment, closing costs)
+      # "6": 1 # Unverifiable information
+      # "7": 1 # Credit application incomplete
+      # "8": 1 # Mortgage insurance denied
+      # "9": 1 # Other
+      "": 1
+    # correlation: "dependent"
+    # dep_field: "denial_reason_1"
+    # dep_values: {"1":, "2":, "3":, "4":, "5":, "6":, "7":, "8":, "9":, "10":[""]} # V669
+denial_reason_3:
+  WeightedDiscrete:
+    population:
+      # "1": 1 # Debt-to-income ratio
+      # "2": 1 # Employment history
+      # "3": 1 # Credit history
+      # "4": 1 # Collateral
+      # "5": 1 # Insufficient cash (downpayment, closing costs)
+      # "6": 1 # Unverifiable information
+      # "7": 1 # Credit application incomplete
+      # "8": 1 # Mortgage insurance denied
+      # "9": 1 # Other
+      "": 1
+    # correlation: "dependent"
+    # dep_field: "denial_reason_1"
+    # dep_values: {"1":, "2":, "3":, "4":, "5":, "6":, "7":, "8":, "9":, "10":[""]} # V669
+denial_reason_4:
+  WeightedDiscrete:
+    population:
+      # "1": 1 # Debt-to-income ratio
+      # "2": 1 # Employment history
+      # "3": 1 # Credit history
+      # "4": 1 # Collateral
+      # "5": 1 # Insufficient cash (downpayment, closing costs)
+      # "6": 1 # Unverifiable information
+      # "7": 1 # Credit application incomplete
+      # "8": 1 # Mortgage insurance denied
+      # "9": 1 # Other
+      "": 1
+    # correlation: "dependent"
+    # dep_field: "denial_reason_1"
+    # dep_values: {"1":, "2":, "3":, "4":, "5":, "6":, "7":, "8":, "9":, "10":[""]} # V669
+denial_reason_other:
+  WeightedDiscrete: 
+    population:
+      "": 1
+  # LoremIpsumText:
+  #   upper_bound:  300
+  #   correlation: "dependent"
+  #   dep_field: ["denial_reason_1"] 
+  #   dep_values: {"9":} # V671
+total_loan_costs:
+  WeightedDiscrete:
+    population:
+      "NA": 1
+  # BoundedNumerical:
+  #   distribution: chi2
+  #   lower_bound:  0
+  #   upper_bound:  30000
+  #   coerce_to_int: False
+  #   df: 10
+    # correlation: "dependent"
+    # dep_field: ["total_points_and_fees", "reverse_mortgage", "open_end_line_of_credit", "business_or_commercial_purpose", "action_taken"] # How to allow for NA or Exempt
+    # dep_values: [ #"total_points_and_fees": {IF A NUMBER:["NA"]}, # V672
+                #  "reverse_mortgage": {"1":["NA"], "2":, "1111":}, # or exempt, but we're ignoring for now. 
+                #  "open_end_line_of_credit": {"1":["NA"], "2":, "1111":},
+                #  "business_or_commercial_purpose": {"1":["NA"], "2":, "3":},
+                #  "action_taken": {"1":, "2":["NA"], "3":["NA"], "4":["NA"], "5":["NA"], "6":, "7":["NA"], "8":["NA"]}]
+total_points_and_fees:
+  BoundedNumerical:
+    distribution: chi2
+    lower_bound:  100
+    upper_bound:  50000
+    coerce_to_int: False
+    df: 10
+    # correlation: "dependent"
+    # dep_field: ["total_loan_costs", "reverse_mortgage", "business_or_commercial_purpose", "action_taken"] # How to allow for NA or Exempt
+    # dep_values: [ #"total_loan_costs": {IF A NUMBER:["NA"]}, # V673
+    #              "reverse_mortgage": {"1":["NA"], "2":, "1111":}, # or exempt, but we're ignoring for now. 
+    #              "business_or_commercial_purpose": {"1":["NA"], "2":, "3":},
+    #              "action_taken": {"1":, "2":["NA"], "3":["NA"], "4":["NA"], "5":["NA"], "6":, "7":["NA"], "8":["NA"]}]
+origination_charges:
+  BoundedNumerical:
+    distribution: chi2
+    lower_bound:  100
+    upper_bound:  25000
+    coerce_to_int: False
+    df: 10
+    # correlation: "dependent"
+    # dep_field: ["reverse_mortgage", "open_end_line_of_credit", "business_or_commercial_purpose", "action_taken"] # How to allow for NA or Exempt
+    # dep_values: ["reverse_mortgage": {"1":["NA"], "2":, "1111":}, # V674 # or exempt, but we're ignoring for now. 
+    #              "open_end_line_of_credit": {"1":["NA"], "2":, "1111":},
+    #              "business_or_commercial_purpose": {"1":["NA"], "2":, "3":},
+    #              "action_taken": {"1":, "2":["NA"], "3":["NA"], "4":["NA"], "5":["NA"], "6":, "7":["NA"], "8":["NA"]}]
+discount_points:
+  BoundedNumerical:
+    distribution: chi2
+    lower_bound:  30
+    upper_bound:  29000
+    coerce_to_int: False
+    df: 10
+    # correlation: "dependent"
+    # dep_field: ["reverse_mortgage", "open_end_line_of_credit", "business_or_commercial_purpose", "action_taken"] # How to allow for NA or Exempt
+    # dep_values: ["reverse_mortgage": {"1":["NA"], "2":, "1111":}, # V675 # or exempt, but we're ignoring for now. 
+    #              "open_end_line_of_credit": {"1":["NA"], "2":, "1111":},
+    #              "business_or_commercial_purpose": {"1":["NA"], "2":, "3":},
+    #              "action_taken": {"1":, "2":["NA"], "3":["NA"], "4":["NA"], "5":["NA"], "6":, "7":["NA"], "8":["NA"]}]
+lender_credits:
+  BoundedNumerical:
+    distribution: chi2
+    lower_bound:  .1
+    upper_bound:  11000
+    coerce_to_int: False
+    df: 10
+    # correlation: "dependent"
+    # dep_field: ["reverse_mortgage", "open_end_line_of_credit", "business_or_commercial_purpose", "action_taken"] # How to allow for NA or Exempt
+    # dep_values: ["reverse_mortgage": {"1":["NA"], "2":, "1111":}, # V676 # or exempt, but we're ignoring for now. 
+    #              "open_end_line_of_credit": {"1":["NA"], "2":, "1111":},
+    #              "business_or_commercial_purpose": {"1":["NA"], "2":, "3":},
+    #              "action_taken": {"1":, "2":["NA"], "3":["NA"], "4":["NA"], "5":["NA"], "6":, "7":["NA"], "8":["NA"]}]
+interest_rate:
+  BoundedNumerical:
+    distribution: chi2
+    lower_bound:  0.1
+    upper_bound:  12.0
+    df: 10
+    # correlation: "dependent" # ? # How to allow for NA or Exempt
+    # dep_field: "action_taken"
+    # dep_values: {"1":, "2":, "3":["NA"], "4":["NA"], "5":["NA"], "6":, "7":["NA"], "8":} # V677
+prepayment_penalty_term: # If unable to do V678 5) If both Prepayment Penalty Term and Loan Term are numbers, then Prepayment Penalty Term must be less than or equal to Loan Term. then just set to NA
+  BoundedNumerical:
+    distribution: chi2
+    lower_bound:  0
+    upper_bound:  59
+    coerce_to_int: True
+    df: 10
+    # correlation: "dependent"
+    # dep_field: ["action_taken", "reverse_mortgage", "business_or_commercial_purpose"] # Figure out V678
+    # dep_values: ["action_taken": {"1":, "2":, "3":, "4":, "5":, "6":["NA"], "7":, "8":},
+    #              "reverse_mortgage": {"1":["NA"], "2":, "1111":}, # V676 # or exempt, but we're ignoring for now. 
+                #  "business_or_commercial_purpose": {"1":["NA"], "2":, "3":}] 
+debt_to_income_ratio:
+  BoundedNumerical:
+    distribution: chi2
+    lower_bound:  0
+    upper_bound:  58
+    df: 10
+    # correlation: "dependent" # ? # How to allow for NA or Exempt
+    # dep_field: ["action_taken"] #, "multifamily_affordable_units"] #, "applicant_ethnicity_1", "applicant_race_1", "applicant_sex", "co_applicant_ethnicity_1", "co_applicant_race_1", "co_applicant_sex"
+    # dep_values: {"1":, "2":, "3":, "4":["NA"], "5":["NA"], "6":["NA"], "7":, "8":} # V679 - Or exempt, but we're ignoring for now. 
+    #             #  "multifamily_affordable_units": {IF A NUMBER":["NA"]}] # Figure this out
+    #            "applicant_ethnicity_1": {"1":, "11":, "12":, "13":, "14":, "2":, "3":, "4":["NA"]}, # V680 - Need to figure out how to do AND not OR 
+    #            "applicant_race_1": {"1":, "2":, "21":, "22":, "23":, "24":, "25":, "26":, "27":, "3":, "4":, "41":, "42":, "43":, "44":, "5":, "6":, "7":["NA"]},
+    #            "applicant_sex": {"1":, "2":, "3":, "4":["NA"], "6":}]
+    #            "co_applicant_ethnicity_1": {"1":, "11":, "12":, "13":, "14":, "2":, "3":, "4":["NA"], "5":["NA"]}, # V680 - Need to figure out how to do AND not OR 
+    #            "co_applicant_race_1": {"1":, "2":, "21":, "22":, "23":, "24":, "25":, "26":, "27":, "3":, "4":, "41":, "42":, "43":, "44":, "5":, "6":, "7":["NA"], "8":["NA"]},
+    #            "co_applicant_sex": {"1":, "2":, "3":, "4":["NA"], "5":["NA"], "6":}
+combined_loan_to_value_ratio:
+  BoundedNumerical:
+    distribution: chi2
+    lower_bound:  17
+    upper_bound:  150
+    df: 10
+    # correlation: "dependent" # ? # How to allow for NA or Exempt
+    # dep_field: "action_taken"
+    # dep_values: {"1":, "2":, "3":, "4":["NA"], "5":["NA"], "6":["NA"], "7":, "8":} # V681
+loan_term:
+  BoundedNumerical:
+    distribution: chi2
+    lower_bound:  60
+    upper_bound:  368
+    coerce_to_int: True
+    df: 10
+    # correlation: "dependent" # ? # How to allow for NA or Exempt
+    # dep_field: "reverse_mortgage"
+    # dep_values: {"1":["NA"], "2":, "1111":} # V682
+intro_rate_period:
+  BoundedNumerical:
+    distribution: chi2
+    lower_bound:  1
+    upper_bound:  180
+    coerce_to_int: True
+    df: 10
+    # correlation: "dependent" # ? # How to allow for NA or Exempt
+balloon_payment:
+  WeightedDiscrete:
+    population:
+      # "1": 1 # Balloon payment
+      "2": 1 # No balloon payment
+      # "1111": 1 # Exempt
+    # correlation: "directive"
+interest_only_payment:
+  WeightedDiscrete:
+    population:
+      # "1": 1 # Interest-only payments
+      "2": 1 # No interest-only payments
+      # "1111": 1 # Exempt
+    # correlation: "directive"
+negative_amortization:
+  WeightedDiscrete:
+    population:
+      # "1": 1 # Negative amortization
+      "2": 1 # No negative amortization
+      # "1111": 1 # Exempt
+    # correlation: "directive"
+other_non_amortizing_features:
+  WeightedDiscrete:
+    population:
+      # "1": 1 # Other non-fully amortizing features
+      "2": 1 # No other non-fully amortizing features
+      # "1111": 1 # Exempt
+    # correlation: "directive"
+property_value:
+  BoundedNumerical:
+    distribution: norm
+    lower_bound:  60000
+    upper_bound:  3000000
+    coerce_to_int: True
+    # correlation: "dependent"
+    # dep_field: "action_taken"
+    # dep_values: {"1":, "2":, "3":, "4":["NA"], "5":["NA"], "6":, "7":, "8":} # V688 - or exempt, but we're ignoring that for now
+manufactured_home_secured_property_type:
+  WeightedDiscrete:
+    population:
+      # "1": 1 # Manufactured home and land
+      # "2": 1 # Manufactured home and not land
+      "3": 1 # Not applicable
+      # "1111": 1 # Exempt
+    # correlation: "dependent"
+    # dep_field: "construction_method" # and multifamily_affordable_units
+    # dep_values: {"1":["3"], "2":}
+    #["multifamily_affordable_units": {IF A NUMBER:["3"]}, # V689 - or exempt, but we're ignoring that for now
+                #  "construction_method": {"1":["3"], "2":}]
+manufactured_home_land_property_interest:
+  WeightedDiscrete:
+    population:
+      # "1": 1 # Direct ownership
+      # "2": 1 # Indirect ownership
+      # "3": 1 # Paid leasehold
+      # "4": 1 # Unpaid leasehold
+      "5": 1 # Not applicable
+      # "1111": 1 # Exempt
+    # correlation: "dependent"
+    # dep_field: "construction_method" # and multifamily_affordable_units
+    # dep_values: {"1":["5"], "2":} 
+    #["multifamily_affordable_units": {IF A NUMBER:["5"]}, # V690
+                #  "construction_method": {"1":["5"], "2":}]
+total_units:
+  WeightedDiscrete:
+    population:
+      "1": 1
+  # BoundedNumerical:
+  #   distribution: chi2
+  #   lower_bound:  1 
+  #   upper_bound:  120 
+  #   coerce_to_int: True
+  #   df: 10
+  #   correlation: "directive"
+multifamily_affordable_units: # For now could just make always NA so Income can be populated - V654
+  WeightedDiscrete:
+    population:
+      "NA": 1
+  # BoundedNumerical:
+  #   distribution: chi2
+  #   lower_bound:  1 
+  #   upper_bound:  120 
+  #   coerce_to_int: True # Figure out NA or Exempt
+  #   df: 10
+  #   correlation: "dependent"
+  #   dep_field: "total_units"
+  #   dep_values: {<5:["NA"], >4:["<=total_units", "NA"]} # V692 - not sure about this one
+submission_of_application:
+  WeightedDiscrete:
+    population:
+      "1": 1 # Submitted directly to your institution
+      "2": 1 # Not submitted directly to your institution
+      # "3": 1 # Not applicable
+      # "1111": 1 # Exempt
+initially_payable_to_institution:
+  WeightedDiscrete:
+    population:
+      "1": 1 # Initially payable to your institution
+      "2": 1 # Not initially payable to your institution
+      # "3": 1 # Not applicable
+      # "1111": 1 # Exempt
+    # correlation: "dependent"
+    # dep_field: "action_taken"
+    # dep_values: {"1":["1", "2"], "2":, "3":, "4":, "5":, "6":["3"], "7":, "8":} # V694 - or 1111, but we're ignoring for now. 
+nmls_id:
+  BoundedNumerical:
+    distribution: chi2
+    lower_bound:  1000
+    upper_bound:  230000
+    coerce_to_int: True # Figure out NA or Exempt
+    df: 10
+#### We are going to completely ignore properly coding the AUS for now.
+aus_1:
+  WeightedDiscrete:
+    population:
+      # "1": 1 # Desktop Underwriter (DU)
+      # "2": 1 # Loan Prospector (LP) or Loan Product Advisor
+      # "3": 1 # Technology Open to Approved Lenders (TOTAL) Scorecard
+      # "4": 1 # Guaranteed Underwriting System (GUS)
+      # "5": 1 # Other
+      "6": 1 # Not applicable ### For now let's just ignore AUS
+      # "7": 1 # Internal proprietary system
+      # "1111": 1 # Exempt
+    correlation: "directive" #may cause problems later
+    # dep_field: "action_taken"
+    # dep_values: {"1":, "2":, "3":, "4":, "5":, "6":["6"], "7":, "8":} # V704
+aus_2:
+  WeightedDiscrete:
+    population:
+      # "1": 1 # Desktop Underwriter (DU)
+      # "2": 1 # Loan Prospector (LP) or Loan Product Advisor
+      # "3": 1 # Technology Open to Approved Lenders (TOTAL) Scorecard
+      # "4": 1 # Guaranteed Underwriting System (GUS)
+      # "5": 1 # Other
+      # "7": 1 # Internal proprietary system
+      # "1111": 1 # Exempt
+      "": 1
+aus_3:
+  WeightedDiscrete:
+    population:
+      # "1": 1 # Desktop Underwriter (DU)
+      # "2": 1 # Loan Prospector (LP) or Loan Product Advisor
+      # "3": 1 # Technology Open to Approved Lenders (TOTAL) Scorecard
+      # "4": 1 # Guaranteed Underwriting System (GUS)
+      # "5": 1 # Other
+      # "7": 1 # Internal proprietary system
+      # "1111": 1 # Exempt
+      "": 1
+aus_4:
+  WeightedDiscrete:
+    population:
+      # "1": 1 # Desktop Underwriter (DU)
+      # "2": 1 # Loan Prospector (LP) or Loan Product Advisor
+      # "3": 1 # Technology Open to Approved Lenders (TOTAL) Scorecard
+      # "4": 1 # Guaranteed Underwriting System (GUS)
+      # "5": 1 # Other
+      # "7": 1 # Internal proprietary system
+      # "1111": 1 # Exempt
+      "": 1
+aus_5:
+  WeightedDiscrete:
+    population:
+      # "1": 1 # Desktop Underwriter (DU)
+      # "2": 1 # Loan Prospector (LP) or Loan Product Advisor
+      # "3": 1 # Technology Open to Approved Lenders (TOTAL) Scorecard
+      # "4": 1 # Guaranteed Underwriting System (GUS)
+      # "5": 1 # Other
+      # "7": 1 # Internal proprietary system
+      # "1111": 1 # Exempt
+      "": 1
+aus_other:
+  WeightedDiscrete: 
+    population:
+      "": 1
+  # LoremIpsumText:
+  #   upper_bound:  300
+    # correlation: "dependent"
+    # dep_field: "aus_1" # Multiple dependents
+    # dep_values: {"5":}
+aus_result_1:
+  WeightedDiscrete:
+    population:
+      # "1": 1 # Approve/Eligible
+      # "2": 1 # Approve/Ineligible
+      # "3": 1 # Refer/Eligible
+      # "4": 1 # Refer/Ineligible
+      # "5": 1 # Refer with caution
+      # "6": 1 # Out of scope
+      # "7": 1 # Error
+      # "8": 1 # Accept
+      # "9": 1 # Caution
+      # "10": 1 # Ineligible
+      # "11": 1 # Incomplete
+      # "12": 1 # Invalid
+      # "13": 1 # Refer
+      # "14": 1 # Eligible
+      # "15": 1 # Unable to Determine or Unknown
+      # "16": 1 # Other
+      "17": 1 # Not applicable
+      # "18": 1 # Accept/Eligible
+      # "19": 1 # Accept/Ineligible
+      # "20": 1 # Accept/Unable to Determine
+      # "21": 1 # Refer with Caution/Eligible
+      # "22": 1 # Refer with Caution/Ineligible
+      # "23": 1 # Refer/Unable to Determine
+      # "24": 1 # Refer with Caution/Unable to Determine
+      # "1111": 1 # Exempt
+      # "": 1
+    correlation: "directive" #may cause problems later
+aus_result_2:
+  WeightedDiscrete:
+    population:
+      # "1": 1 # Approve/Eligible
+      # "2": 1 # Approve/Ineligible
+      # "3": 1 # Refer/Eligible
+      # "4": 1 # Refer/Ineligible
+      # "5": 1 # Refer with caution
+      # "6": 1 # Out of scope
+      # "7": 1 # Error
+      # "8": 1 # Accept
+      # "9": 1 # Caution
+      # "10": 1 # Ineligible
+      # "11": 1 # Incomplete
+      # "12": 1 # Invalid
+      # "13": 1 # Refer
+      # "14": 1 # Eligible
+      # "15": 1 # Unable to Determine or Unknown
+      # "16": 1 # Other
+      # "18": 1 # Accept/Eligible
+      # "19": 1 # Accept/Ineligible
+      # "20": 1 # Accept/Unable to Determine
+      # "21": 1 # Refer with Caution/Eligible
+      # "22": 1 # Refer with Caution/Ineligible
+      # "23": 1 # Refer/Unable to Determine
+      # "24": 1 # Refer with Caution/Unable to Determine
+      "": 1
+aus_result_3:
+  WeightedDiscrete:
+    population:
+      # "1": 1 # Approve/Eligible
+      # "2": 1 # Approve/Ineligible
+      # "3": 1 # Refer/Eligible
+      # "4": 1 # Refer/Ineligible
+      # "5": 1 # Refer with caution
+      # "6": 1 # Out of scope
+      # "7": 1 # Error
+      # "8": 1 # Accept
+      # "9": 1 # Caution
+      # "10": 1 # Ineligible
+      # "11": 1 # Incomplete
+      # "12": 1 # Invalid
+      # "13": 1 # Refer
+      # "14": 1 # Eligible
+      # "15": 1 # Unable to Determine or Unknown
+      # "16": 1 # Other
+      # "18": 1 # Accept/Eligible
+      # "19": 1 # Accept/Ineligible
+      # "20": 1 # Accept/Unable to Determine
+      # "21": 1 # Refer with Caution/Eligible
+      # "22": 1 # Refer with Caution/Ineligible
+      # "23": 1 # Refer/Unable to Determine
+      # "24": 1 # Refer with Caution/Unable to Determine
+      "": 1
+aus_result_4:
+  WeightedDiscrete:
+    population:
+      # "1": 1 # Approve/Eligible
+      # "2": 1 # Approve/Ineligible
+      # "3": 1 # Refer/Eligible
+      # "4": 1 # Refer/Ineligible
+      # "5": 1 # Refer with caution
+      # "6": 1 # Out of scope
+      # "7": 1 # Error
+      # "8": 1 # Accept
+      # "9": 1 # Caution
+      # "10": 1 # Ineligible
+      # "11": 1 # Incomplete
+      # "12": 1 # Invalid
+      # "13": 1 # Refer
+      # "14": 1 # Eligible
+      # "15": 1 # Unable to Determine or Unknown
+      # "16": 1 # Other
+      # "18": 1 # Accept/Eligible
+      # "19": 1 # Accept/Ineligible
+      # "20": 1 # Accept/Unable to Determine
+      # "21": 1 # Refer with Caution/Eligible
+      # "22": 1 # Refer with Caution/Ineligible
+      # "23": 1 # Refer/Unable to Determine
+      # "24": 1 # Refer with Caution/Unable to Determine
+      "": 1
+aus_result_5:
+  WeightedDiscrete:
+    population:
+      # "1": 1 # Approve/Eligible
+      # "2": 1 # Approve/Ineligible
+      # "3": 1 # Refer/Eligible
+      # "4": 1 # Refer/Ineligible
+      # "5": 1 # Refer with caution
+      # "6": 1 # Out of scope
+      # "7": 1 # Error
+      # "8": 1 # Accept
+      # "9": 1 # Caution
+      # "10": 1 # Ineligible
+      # "11": 1 # Incomplete
+      # "12": 1 # Invalid
+      # "13": 1 # Refer
+      # "14": 1 # Eligible
+      # "15": 1 # Unable to Determine or Unknown
+      # "16": 1 # Other
+      # "18": 1 # Accept/Eligible
+      # "19": 1 # Accept/Ineligible
+      # "20": 1 # Accept/Unable to Determine
+      # "21": 1 # Refer with Caution/Eligible
+      # "22": 1 # Refer with Caution/Ineligible
+      # "23": 1 # Refer/Unable to Determine
+      # "24": 1 # Refer with Caution/Unable to Determine
+      "": 1
+aus_result_other:
+  WeightedDiscrete: 
+    population:
+      "": 1
+  # LoremIpsumText:
+  #   upper_bound:  300
+  #   correlation: "dependent"
+  #   dep_field: "aus_1" # Or any of the others
+  #   dep_values: {"16":}
+reverse_mortgage:
+  WeightedDiscrete:
+    population:
+      # "1": 1 # Reverse mortgage
+      "2": 1 # Not a reverse mortgage
+      # "1111": 1 # Exempt
+    # correlation: "directive"
+open_end_line_of_credit:
+  WeightedDiscrete:
+    population:
+      # "1": 1 # Open-end line of credit
+      "2": 1 # Not an open-end line of credit
+      # "1111": 1 # Exempt
+    # correlation: "directive"
+business_or_commercial_purpose:
+  WeightedDiscrete:
+    population:
+      # "1": 1 # Primarily for a business or commercial purpose
+      "2": 1 # Not primarily for a business or commercial purpose
+      # "1111": 1 # Exempt
+    # correlation: "directive"

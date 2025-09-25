@@ -69,7 +69,6 @@ occupancy_type:
       "2": 2 # Second Residence
       "3": 1 # Investment Property
 loan_amount:
-amount_approved:
   BoundedNumerical:
     distribution: chi2
     lower_bound: 10000
