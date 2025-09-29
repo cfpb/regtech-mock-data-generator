@@ -96,7 +96,7 @@ class LoremIpsumText(BoundedNumerical):
                 (random.uniform() < self.blank_probability)):
                 samples.append("")
             elif self.numeric_values:
-                samples.append(str(random.randint(1,50000)) + ' ' + # Append numbers to the lorem ipsum to avoid triggering Q660-4
+                samples.append(str(random.randint(1, 50000)) + ' ' +  # Append numbers to the lorem ipsum to avoid triggering Q660-4
                     LoremIpsumText._generate_lorem_ipsum_text_of_given_length(
                         length=length
                     )
