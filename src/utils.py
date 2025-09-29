@@ -23,6 +23,8 @@ state_codes = {'WA':'53', 'WI':'55', 'WV':'54', 'FL':'12', 'WY':'56',
 
 def write_file(path=None, ts_input=None, lar_input=None, name="test_file.txt"):
 	"""
+	TODO: Fix this - no need for partsdir, can find a better way to write out the files. 
+	
 	Takes a TS row and LAR data as dataframes. Writes LAR data to file and
 	re-reads it to combine with TS data to make a full file.
 
