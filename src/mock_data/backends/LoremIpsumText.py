@@ -34,6 +34,7 @@ class LoremIpsumText(BoundedNumerical):
         distribution: str = "uniform",
         lower_bound: Number = 5,
         upper_bound: Number = 100,
+        numeric_values: bool = False,
         blank_probability: float = 0,
         correlation: str = Correlation.INDEPENDENT.name,
         dep_field: str = None,
@@ -52,6 +53,8 @@ class LoremIpsumText(BoundedNumerical):
                 Defaults to 5.
             upper_bound (Number, optional): Upper bound of sampled text length.
                 Defaults to 100.
+            numeric_values (boolean, optional): Used to flag inclusion of numbers for addresses
+                Defaults to True.
             blank_probability (float, optional): Proportion of sampled text strings
                 equal to a blank string (""). This proportion will converge as the
                 sample size grows. Defaults to 0.
@@ -64,7 +67,8 @@ class LoremIpsumText(BoundedNumerical):
                 "The blank_probability arg must be between 0 and 1, inclusive."
             )
         self.blank_probability = blank_probability
-        super().__init__(distribution, lower_bound, upper_bound, **distribution_kwargs,
+        self.numeric_values = numeric_values
+        super().__init__(distribution, lower_bound, upper_bound, numeric_values, **distribution_kwargs,
                          correlation=correlation, dep_field=dep_field, dep_values=dep_values)
 
     def generate_samples(self, size: int = 1, directive: List = None) -> List[str]:
@@ -91,9 +95,14 @@ class LoremIpsumText(BoundedNumerical):
             if ((directive and not self.directive_requires_value(directive[c])) or
                 (random.uniform() < self.blank_probability)):
                 samples.append("")
-            else:
-                samples.append(
+            elif self.numeric_values:
+                samples.append(str(random.randint(1,50000)) + ' ' + # Append numbers to the lorem ipsum to avoid triggering Q660-4
                     LoremIpsumText._generate_lorem_ipsum_text_of_given_length(
+                        length=length
+                    )
+                )
+            else:
+                samples.append(LoremIpsumText._generate_lorem_ipsum_text_of_given_length(
                         length=length
                     )
                 )
