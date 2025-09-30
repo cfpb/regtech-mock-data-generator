@@ -22,7 +22,7 @@ uli:
 application_date:
   BoundedDatetime:
     min_datetime: "20251001"
-    max_datetime: "20251231"
+    max_datetime: "20251230"
     distribution: norm
     correlation: "directive"
 loan_type:
@@ -46,146 +46,47 @@ preapproval:
   WeightedDiscrete:
     population:
       "1": 1 # Preapproval Requested
-      # "2": 1 # Preapproval Not Requested
-    # correlation: "dependent" #### Maybe cascading because of loan purpose/action taken/ multifamily interact? See V612/613/614
-    # dep_field: ["action_taken", "loan_purpose", "reverse_mortgage", "open_end_line_of_credit"]
-    # dep_values: {"action_taken": {"1":, "2":, "3":["2"], "4":["2"], "5":["2"], "6":["2"], "7":["1"], "8":["1"]}, # V613
-    #              "loan_purpose": {"1":["1"], "2":["2"], "31":["2"], "32":["2"], "4":["2"], "5":["2"]}, # V612 / V614 - Not sure about this - might not be necessary
-    #              "reverse_mortgage": {"1":["2"], "2":, "1111":}, # V614
-    #              "open_end_line_of_credit": {"1":["2"], "2":, "1111":}}  # V614
-    #              #Something about V614.2) If Multifamily Affordable Units is a number, then Preapproval must equal 2.
 construction_method:
   WeightedDiscrete:
     population:
       "1": 1 # Site-Built
-      # "2": 1 # Manufactured-Home
-    # correlation: "dependent"
-    # dep_field: ["manufactured_home_land_property_interest", "manufactured_home_secured_property_type"]
-    # dep_values: {"manufactured_home_land_property_interest": {"1":["1"], "2":["2"], "3":["2"], "4":["2"], "5":, "1111":}, # V615
-    #              "manufactured_home_secured_property_type": {"1":["2"], "2":["2"], "3":, "1111":}} # V615
 occupancy_type:
   WeightedDiscrete:
     population:
       "1": 1 # Principal Residence
-      # "2": 1 # Second Residence
-      # "3": 1 # Investment Property
 loan_amount:
   BoundedNumerical:
     distribution: chi2
     lower_bound:  10000
-    upper_bound:  10000000
+    upper_bound:  1225000
     coerce_to_int: True
     df: 10
-    # correlation: "dependent" # See what needs to be done here if anything
-    # dep_field: "action_taken"
-    # dep_values: {"1":, "2":}
 action_taken:
   WeightedDiscrete:
     population:
       "1": 1 # Loan originated
-      # "2": 1 # Application approved but not accepted
-      # "3": 1 # Application denied
-      # "4": 1 # Application withdrawn by applicant
-      # "5": 1 # File closed for incompleteness
-      # "6": 1 # Purchased loan
-      # "7": 1 # Preapproval request denied
-      # "8": 1 # Preapproval request approved but not accepted
-    # correlation: "directive"
 action_taken_date:
   WeightedDiscrete:
     population:
       "20251231": 1 # Loan originated
-  # MinDirectedDatetime:
-  #   min_datetime: "20241001"
-  #   max_datetime: "20241231"
-  #   correlation: "dependent" # V619
-  #   dep_field: "application_date"
-
 # The address datapoints are complicated and for now we have set a placeholder of a specific state, zip, county, and tract to avoid triggering edits. 
 street:
   LoremIpsumText:
+    lower_bound: 1
     upper_bound:  20
-    # correlation: "dependent"
-    # dep_field: "applicant_ethnicity_1" 
-    # dep_values: {"977":}
+    numeric_values: True
 city:
   LoremIpsumText:
-    upper_bound:  20
-    # correlation: "dependent"
-    # dep_field: "applicant_ethnicity_1" 
-    # dep_values: {"977":}
+    upper_bound: 20
 state_code:
   WeightedDiscrete:
     population:
-      # "AL": 1
-      # "AK": 1
-      # "AZ": 1
-      # "AR": 1
-      # "AS": 1
-      # "CA": 1
-      # "CO": 1
-      # "CT": 1
-      # "DE": 1
-      # "DC": 1
-      # "FL": 1
-      # "GA": 1
-      # "GU": 1
-      # "HI": 1
-      # "ID": 1
-      # "IL": 1
-      # "IN": 1
-      # "IA": 1
-      # "KS": 1
-      # "KY": 1
-      # "LA": 1
-      # "ME": 1
-      # "MD": 1
-      # "MA": 1
-      # "MI": 1
-      # "MN": 1
-      # "MS": 1
-      # "MO": 1
-      # "MT": 1
-      # "NE": 1
-      # "NV": 1
-      # "NJ": 1
-      # "NM": 1
-      # "NY": 1
-      # "NC": 1
-      # "ND": 1
-      # "MP": 1
-      # "OH": 1
       "OK": 1
-      # "OR": 1
-      # "PA": 1
-      # "PR": 1
-      # "RI": 1
-      # "SC": 1
-      # "SD": 1
-      # "TN": 1
-      # "TX": 1
-      # "TT": 1
-      # "UT": 1
-      # "VT": 1
-      # "VA": 1
-      # "VI": 1
-      # "WA": 1
-      # "WV": 1
-      # "WI": 1
-      # "WY": 1
-    # correlation: "dependent"
-    # dep_field: "applicant_ethnicity_1" 
-    # dep_values: {"977":}
 zip_code:
   WeightedDiscrete:
     population:
       "74136": 1
-  # FileRandom:
-    # file: "Census2023.processed.csv" # create ZIP code csv
-    # field: "geoid"
-    # correlation: "dependent"
-    # dep_field: "census_tract_adr_type" # Figure out dependent fields between zip and census tract
-    # dep_values: {"1":,"2":,"3":}
+
 county_code:
   WeightedDiscrete:
     population:
@@ -787,16 +688,16 @@ purchaser_type:
   WeightedDiscrete:
     population:
       "0": 1 # Not applicable
-      "1": 1 # Fannie Mae
-      "2": 1 # Ginnie Mae
-      "3": 1 # Freddie Mac
-      "4": 1 # Farmer Mac  
-      "5": 1 # Private securitizer
-      "6": 1 # Commercial bank, savings bank, or savings association
-      "71": 1 # Credit union, mortgage company, or finance company
-      "72": 1 # Life insurance company
-      "8": 1 # Affiliate institution
-      "9": 1 # Other type of purchaser 
+      # "1": 1 # Fannie Mae
+      # "2": 1 # Ginnie Mae
+      # "3": 1 # Freddie Mac
+      # "4": 1 # Farmer Mac  
+      # "5": 1 # Private securitizer
+      # "6": 1 # Commercial bank, savings bank, or savings association
+      # "71": 1 # Credit union, mortgage company, or finance company
+      # "72": 1 # Life insurance company
+      # "8": 1 # Affiliate institution
+      # "9": 1 # Other type of purchaser 
     # correlation: "dependent"
     # dep_field: "action_taken"
     # dep_values: {"1":, "2":["0"], "3":["0"], "4":["0"], "5":["0"], "6":, "7":["0"], "8":["0"]} # V656
@@ -823,12 +724,12 @@ lien_status:
   WeightedDiscrete:
     population:
       "1": 1 # Secured by a first lien
-      "2": 1 # Secured by a subordinate lien
+      # "2": 1 # Secured by a subordinate lien
 applicant_credit_score:
   BoundedNumerical:
     distribution: norm
     lower_bound:  350
-    upper_bound:  1000 
+    upper_bound:  900 
     coerce_to_int: True
     # correlation: "dependent" 
     # dep_field: ["applicant_credit_scoring_model", "action_taken"] #, "applicant_ethnicity_1", "applicant_race_1", "applicant_sex"] 
@@ -1013,8 +914,8 @@ total_loan_costs:
 total_points_and_fees:
   BoundedNumerical:
     distribution: chi2
-    lower_bound:  100
-    upper_bound:  50000
+    lower_bound:  1000
+    upper_bound:  5000
     coerce_to_int: False
     df: 10
     # correlation: "dependent"
@@ -1027,7 +928,7 @@ origination_charges:
   BoundedNumerical:
     distribution: chi2
     lower_bound:  100
-    upper_bound:  25000
+    upper_bound:  1000
     coerce_to_int: False
     df: 10
     # correlation: "dependent"
@@ -1039,8 +940,8 @@ origination_charges:
 discount_points:
   BoundedNumerical:
     distribution: chi2
-    lower_bound:  30
-    upper_bound:  29000
+    lower_bound:  100
+    upper_bound:  1000
     coerce_to_int: False
     df: 10
     # correlation: "dependent"
@@ -1065,7 +966,7 @@ lender_credits:
 interest_rate:
   BoundedNumerical:
     distribution: chi2
-    lower_bound:  0.1
+    lower_bound:  0.5
     upper_bound:  12.0
     df: 10
     # correlation: "dependent" # ? # How to allow for NA or Exempt
@@ -1086,7 +987,7 @@ prepayment_penalty_term: # If unable to do V678 5) If both Prepayment Penalty Te
 debt_to_income_ratio:
   BoundedNumerical:
     distribution: chi2
-    lower_bound:  0
+    lower_bound:  1
     upper_bound:  58
     df: 10
     # correlation: "dependent" # ? # How to allow for NA or Exempt
@@ -1102,8 +1003,8 @@ debt_to_income_ratio:
 combined_loan_to_value_ratio:
   BoundedNumerical:
     distribution: chi2
-    lower_bound:  17
-    upper_bound:  150
+    lower_bound:  50
+    upper_bound:  140
     df: 10
     # correlation: "dependent" # ? # How to allow for NA or Exempt
     # dep_field: "action_taken"

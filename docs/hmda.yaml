@@ -1,22 +1,26 @@
-#### THIS IS ENTIRELY A WORK IN PROGRESS - Working through it now, it will not run. 
+#### This file is the base HMDA config file that contains every option and every appropriate backend type, 
+#### but it does not run properly because the correlations are not yet correct and the edit logic is not implemented. 
+#### The correlation logic was developed with SBL in mind, and we have yet to adapt the HMDA config to match this logic. That work is forthcoming. 
+#### For now, this is just provided as a courtesy. 
 
 
 id: 
-  UniqueID:
-    value: '2'
-    max_generate: 1 #figure out if I need to add a new backend
+  WeightedDiscrete:
+    population:
+      "2": 1
 lei:
-  UniqueID:
-    lei: 'BANK1LEIFORTEST12345'
-    max_generate: 0
+  WeightedDiscrete:
+    population:
+      "BANK1LEIFORTEST12345": 1
 uli:
   UniqueID:
     lei: 'BANK1LEIFORTEST12345'
-    max_generate: 25 # see if this works
+    min_generate: 15
+    max_generate: 20
 application_date:
   BoundedDatetime:
-    min_datetime: "20241001"
-    max_datetime: "20241231"
+    min_datetime: "20251001"
+    max_datetime: "20251231"
     distribution: norm
     correlation: "directive"
 loan_type:
@@ -36,11 +40,6 @@ loan_purpose:
       "4": 1 # Other purpose
       "5": 1 # Not Applicable
     correlation: "directive" 
-    ## Does this also need to be dependent on preapprovals? See V612 - I don't think so actually (look at action taken in SBL for model)
-    ## Something like: 
-    ## correlation: "dependent"
-    ## dep_field: "preapprovals"
-    ## dep_values: {"1":["1"]}
 preapproval:
   WeightedDiscrete:
     population:
@@ -72,10 +71,10 @@ loan_amount:
   BoundedNumerical:
     distribution: chi2
     lower_bound: 10000
-    upper_bound: 10000000
+    upper_bound: 1225000
     coerce_to_int: True
     df: 10
-    # correlation: "dependent" # See what needs to be done here if anything
+    # correlation: "dependent" 
     # dep_field: "action_taken"
     # dep_values: {"1":, "2":}
 action_taken:
@@ -95,21 +94,20 @@ action_taken_date:
     min_datetime: "20241001"
     max_datetime: "20241231"
     correlation: "dependent" # V619
-    dep_field: "app_date"
+    dep_field: "application_date"
 street:
   LoremIpsumText:
     upper_bound: 300
+    numeric_values: True
     correlation: "dependent"
-    # dep_field: "applicant_ethnicity_1" #figure out address dependencies
+    # dep_field: "applicant_ethnicity_1" 
     # dep_values: {"977":}
-# Figure out how to handle Exempt/NA as text here - how does scala edit handle it? 
 city:
   LoremIpsumText:
     upper_bound: 300
     correlation: "dependent"
-    # dep_field: "applicant_ethnicity_1" #figure out address dependencies
+    # dep_field: "applicant_ethnicity_1" 
     # dep_values: {"977":}
-# Figure out how to handle Exempt/NA as text here - how does scala edit handle it?
 state_code:
   WeightedDiscrete:
     population:
@@ -170,30 +168,24 @@ state_code:
       "WI": 1
       "WY": 1
     correlation: "dependent"
-    # dep_field: "applicant_ethnicity_1" #figure out address dependencies
+    # dep_field: "applicant_ethnicity_1" 
     # dep_values: {"977":}
-# Figure out how to handle NA as text here - how does scala edit handle it?
 zip_code:
   FileRandom:
     file: "Census2023.processed.csv" # create ZIP code csv
-    field: "geoid"
-    correlation: "dependent"
-    # dep_field: "census_tract_adr_type" # Figure out dependent fields between zip and census tract
-    # dep_values: {"1":,"2":,"3":}
+    field: "zip" # placeholder
 county_code:
   FileRandom:
     file: "Census2023.processed.csv" # create list of county codes
-    field: "geoid"
+    field: "county_code" # placeholder
     correlation: "dependent"
-    # dep_field: "census_tract_adr_type" # figure out dependencies
-    # dep_values: {"1":,"2":,"3":}
+    dep_field: "state" # figure out dependencies - correct county in state
 census_tract:
   FileRandom:
     file: "Census2023.processed.csv"
     field: "geoid"
     correlation: "dependent"
-    dep_field: "census_tract_adr_type"
-    dep_values: {"1":,"2":,"3":}
+    dep_field: "state" # figure out dependencies - correct census tract in state
 applicant_ethnicity_1:
   WeightedDiscrete:
     population:
