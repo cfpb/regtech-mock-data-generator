@@ -1,7 +1,7 @@
 #### This file is the base HMDA config file that contains every option and every appropriate backend type, 
 #### but it does not run properly because the correlations are not yet correct and the edit logic is not implemented. 
 #### The correlation logic was developed with SBL in mind, and we have yet to adapt the HMDA config to match this logic. That work is forthcoming. 
-#### For now, this is just provided as a courtesy. 
+#### For now, this is just provided as a courtesy. This should be viewed as a framework and resource rather than for building a complete yaml spec to rule them all
 
 
 id: 
@@ -200,7 +200,6 @@ applicant_ethnicity_1:
     correlation: "directive"
     dep_field: "applicant_ethnicity_observed"
     dep_values: {"1":["1", "2"], "2":["1", "11", "12", "13", "14", "2", "3"]} # V629
-#### Figure out how to leave the following blank: 
 applicant_ethnicity_2:
   WeightedDiscrete:
     population:
@@ -210,11 +209,11 @@ applicant_ethnicity_2:
       "13": 0 # Cuban
       "14": 0 # Other Hispanic or Latino
       "2": 0 # Not Hispanic or Latino
-      NULL: 1 #### Will this work?? Or just "" empty text?
+      "": 1 # NA 
     correlation: "dependent"
     dep_field: ["applicant_ethnicity_1", "applicant_ethnicity_observed"] # May need to take out VOS
-    dep_values: {"applicant_ethnicity_1": {"1":, "11":, "12":, "13":, "14":, "2":, "3":[NULL], "4":[NULL]}, # V628
-                 "applicant_ethnicity_observed": {"1":["1", "2", NULL]}}  # V629
+    dep_values: {"applicant_ethnicity_1": {"1":, "11":, "12":, "13":, "14":, "2":, "3":[""], "4":[""]}, # V628
+                 "applicant_ethnicity_observed": {"1":["1", "2", ""]}}  # V629
 applicant_ethnicity_3:
   WeightedDiscrete:
     population:
@@ -224,11 +223,11 @@ applicant_ethnicity_3:
       "13": 0 # Cuban
       "14": 0 # Other Hispanic or Latino
       "2": 0 # Not Hispanic or Latino
-      NULL: 1 #### Will this work??
+      "": 1 # NA 
     correlation: "dependent"
     dep_field: ["applicant_ethnicity_1", "applicant_ethnicity_observed"] # May need to take out VOS
-    dep_values: {"applicant_ethnicity_1": {"1":, "11":, "12":, "13":, "14":, "2":, "3":[NULL], "4":[NULL]}, # V628
-                 "applicant_ethnicity_observed": {"1":[NULL]}}  # V629
+    dep_values: {"applicant_ethnicity_1": {"1":, "11":, "12":, "13":, "14":, "2":, "3":[""], "4":[""]}, # V628
+                 "applicant_ethnicity_observed": {"1":[""]}}  # V629
 applicant_ethnicity_4:
   WeightedDiscrete:
     population:
@@ -238,11 +237,11 @@ applicant_ethnicity_4:
       "13": 0 # Cuban
       "14": 0 # Other Hispanic or Latino
       "2": 0 # Not Hispanic or Latino
-      NULL: 1 #### Will this work??
+      "": 1 # NA 
     correlation: "dependent"
     dep_field: ["applicant_ethnicity_1", "applicant_ethnicity_observed"] # May need to take out VOS
-    dep_values: {"applicant_ethnicity_1": {"1":, "11":, "12":, "13":, "14":, "2":, "3":[NULL], "4":[NULL]}, # V628
-                 "applicant_ethnicity_observed": {"1":[NULL]}}  # V629
+    dep_values: {"applicant_ethnicity_1": {"1":, "11":, "12":, "13":, "14":, "2":, "3":[""], "4":[""]}, # V628
+                 "applicant_ethnicity_observed": {"1":[""]}}  # V629
 applicant_ethnicity_5:
   WeightedDiscrete:
     population:
@@ -252,14 +251,14 @@ applicant_ethnicity_5:
       "13": 0 # Cuban
       "14": 0 # Other Hispanic or Latino
       "2": 0 # Not Hispanic or Latino
-      NULL: 1 #### Will this work??
+      "": 1 # NA 
     correlation: "dependent"
     dep_field: ["applicant_ethnicity_1", "applicant_ethnicity_observed"] # May need to take out VOS
-    dep_values: {"applicant_ethnicity_1": {"1":, "11":, "12":, "13":, "14":, "2":, "3":[NULL], "4":[NULL]}, # V628
-                 "applicant_ethnicity_observed": {"1":[NULL]}}  # V629
+    dep_values: {"applicant_ethnicity_1": {"1":, "11":, "12":, "13":, "14":, "2":, "3":[""], "4":[""]}, # V628
+                 "applicant_ethnicity_observed": {"1":[""]}}  # V629
 applicant_ethnicity_other_hispanic:
   LoremIpsumText:
-    upper_bound: 300
+    upper_bound: 100
 co_applicant_ethnicity_1:
   WeightedDiscrete:
     population:
@@ -286,8 +285,8 @@ co_applicant_ethnicity_2:
       "2": 1 # Not Hispanic or Latino
     correlation: "dependent"
     dep_field: ["co_applicant_ethnicity_1", "co_applicant_ethnicity_observed"] # May need to take out VOS
-    dep_values: {"co_applicant_ethnicity_1": {"1":, "11":, "12":, "13":, "14":, "2":, "3":[NULL], "4":[NULL]}, # V631
-                 "co_applicant_ethnicity_observed": {"1":["1", "2", NULL]}}  # V632
+    dep_values: {"co_applicant_ethnicity_1": {"1":, "11":, "12":, "13":, "14":, "2":, "3":[""], "4":[""]}, # V631
+                 "co_applicant_ethnicity_observed": {"1":["1", "2", ""]}}  # V632
 co_applicant_ethnicity_3:
   WeightedDiscrete:
     population:
@@ -298,8 +297,8 @@ co_applicant_ethnicity_3:
       "14": 1 # Other Hispanic or Latino
       "2": 1 # Not Hispanic or Latino
     dep_field: ["co_applicant_ethnicity_1", "co_applicant_ethnicity_observed"] # May need to take out VOS
-    dep_values: {"co_applicant_ethnicity_1": {"1":, "11":, "12":, "13":, "14":, "2":, "3":[NULL], "4":[NULL]}, # V631
-                 "co_applicant_ethnicity_observed": {"1":["1", "2", NULL]}}  # V632
+    dep_values: {"co_applicant_ethnicity_1": {"1":, "11":, "12":, "13":, "14":, "2":, "3":[""], "4":[""]}, # V631
+                 "co_applicant_ethnicity_observed": {"1":["1", "2", ""]}}  # V632
 co_applicant_ethnicity_4:
   WeightedDiscrete:
     population:
@@ -310,8 +309,8 @@ co_applicant_ethnicity_4:
       "14": 1 # Other Hispanic or Latino
       "2": 1 # Not Hispanic or Latino
     dep_field: ["co_applicant_ethnicity_1", "co_applicant_ethnicity_observed"] # May need to take out VOS
-    dep_values: {"co_applicant_ethnicity_1": {"1":, "11":, "12":, "13":, "14":, "2":, "3":[NULL], "4":[NULL]}, # V631
-                 "co_applicant_ethnicity_observed": {"1":["1", "2", NULL]}}  # V632
+    dep_values: {"co_applicant_ethnicity_1": {"1":, "11":, "12":, "13":, "14":, "2":, "3":[""], "4":[""]}, # V631
+                 "co_applicant_ethnicity_observed": {"1":["1", "2", ""]}}  # V632
 co_applicant_ethnicity_5:
   WeightedDiscrete:
     population:
@@ -322,8 +321,8 @@ co_applicant_ethnicity_5:
       "14": 1 # Other Hispanic or Latino
       "2": 1 # Not Hispanic or Latino
     dep_field: ["co_applicant_ethnicity_1", "co_applicant_ethnicity_observed"] # May need to take out VOS
-    dep_values: {"co_applicant_ethnicity_1": {"1":, "11":, "12":, "13":, "14":, "2":, "3":[NULL], "4":[NULL]}, # V631
-                 "co_applicant_ethnicity_observed": {"1":["1", "2", NULL]}}  # V632
+    dep_values: {"co_applicant_ethnicity_1": {"1":, "11":, "12":, "13":, "14":, "2":, "3":[""], "4":[""]}, # V631
+                 "co_applicant_ethnicity_observed": {"1":["1", "2", ""]}}  # V632
 co_applicant_ethnicity_other_hispanic:
   LoremIpsumText:
     upper_bound: 300
@@ -331,10 +330,9 @@ co_applicant_ethnicity_other_hispanic:
 applicant_ethnicity_observed:
   WeightedDiscrete:
     population:
-      "1": 1 # Collected on the basis of visual observation or surname
-      "2": 0 # Not collected on the basis of visual observation or surname
+      "1": 0 # Collected on the basis of visual observation or surname
+      "2": 1 # Not collected on the basis of visual observation or surname
       "3": 0 # Not applicable
-      #### Zeroing out probability here to miss hitting V629
     correlation: "directive"
     dep_field: "applicant_ethnicity_1"
     dep_values: {"1":, "11":, "12":, "13":, "14":, "2":, "3":, "4":["3"]} # V630
@@ -393,7 +391,7 @@ applicant_race_2:
       "5": 1 # White
     correlation: "dependent"
     dep_field: ["applicant_race_1", "applicant_race_observed"]
-    dep_values: ["applicant_race_1": {"1":, "2":, "21":, "22":, "23":, "24":, "25":, "26":, "27":, "3":, "4":, "41":, "42":, "43":, "44":, "5":, "6":[NULL], "7":[NULL]}, # V635
+    dep_values: ["applicant_race_1": {"1":, "2":, "21":, "22":, "23":, "24":, "25":, "26":, "27":, "3":, "4":, "41":, "42":, "43":, "44":, "5":, "6":[""], "7":[""]}, # V635
                  "applicant_race_observed": {"1":["1", "2", "3", "4", "5"], "2":["1", "2", "21", "22", "23", "24", "25", "26", "27", "3", "4", "41", "42", "43", "44", "5"]}] # V636 
 applicant_race_3:
   WeightedDiscrete:
@@ -416,7 +414,7 @@ applicant_race_3:
       "5": 1 # White
     correlation: "dependent"
     dep_field: ["applicant_race_1", "applicant_race_observed"]
-    dep_values: ["applicant_race_1": {"1":, "2":, "21":, "22":, "23":, "24":, "25":, "26":, "27":, "3":, "4":, "41":, "42":, "43":, "44":, "5":, "6":[NULL], "7":[NULL]}, # V635
+    dep_values: ["applicant_race_1": {"1":, "2":, "21":, "22":, "23":, "24":, "25":, "26":, "27":, "3":, "4":, "41":, "42":, "43":, "44":, "5":, "6":[""], "7":[""]}, # V635
                  "applicant_race_observed": {"1":["1", "2", "3", "4", "5"], "2":["1", "2", "21", "22", "23", "24", "25", "26", "27", "3", "4", "41", "42", "43", "44", "5"]}] # V636 
 applicant_race_4:
   WeightedDiscrete:
@@ -439,7 +437,7 @@ applicant_race_4:
       "5": 1 # White
     correlation: "dependent"
     dep_field: ["applicant_race_1", "applicant_race_observed"]
-    dep_values: ["applicant_race_1": {"1":, "2":, "21":, "22":, "23":, "24":, "25":, "26":, "27":, "3":, "4":, "41":, "42":, "43":, "44":, "5":, "6":[NULL], "7":[NULL]}, # V635
+    dep_values: ["applicant_race_1": {"1":, "2":, "21":, "22":, "23":, "24":, "25":, "26":, "27":, "3":, "4":, "41":, "42":, "43":, "44":, "5":, "6":[""], "7":[""]}, # V635
                  "applicant_race_observed": {"1":["1", "2", "3", "4", "5"], "2":["1", "2", "21", "22", "23", "24", "25", "26", "27", "3", "4", "41", "42", "43", "44", "5"]}] # V636 
 applicant_race_5:
   WeightedDiscrete:
@@ -462,17 +460,17 @@ applicant_race_5:
       "5": 1 # White
     correlation: "dependent"
     dep_field: ["applicant_race_1", "applicant_race_observed"]
-    dep_values: ["applicant_race_1": {"1":, "2":, "21":, "22":, "23":, "24":, "25":, "26":, "27":, "3":, "4":, "41":, "42":, "43":, "44":, "5":, "6":[NULL], "7":[NULL]}, # V635
+    dep_values: ["applicant_race_1": {"1":, "2":, "21":, "22":, "23":, "24":, "25":, "26":, "27":, "3":, "4":, "41":, "42":, "43":, "44":, "5":, "6":[""], "7":[""]}, # V635
                  "applicant_race_observed": {"1":["1", "2", "3", "4", "5"], "2":["1", "2", "21", "22", "23", "24", "25", "26", "27", "3", "4", "41", "42", "43", "44", "5"]}] # V636 
 applicant_race_other_native:
   LoremIpsumText:
-    upper_bound: 300
+    upper_bound: 100
 applicant_race_other_asian:
   LoremIpsumText:
-    upper_bound: 300
+    upper_bound: 100
 applicant_race_other_pacific:
   LoremIpsumText:
-    upper_bound: 300
+    upper_bound: 100
 co_applicant_race_1:
   WeightedDiscrete:
     population:
@@ -519,8 +517,8 @@ co_applicant_race_2:
       "5": 1 # White
     correlation: "dependent"
     dep_field: ["co_applicant_race_1", "co_applicant_race_observed"]
-    dep_values: ["co_applicant_race_1": {"1":, "2":, "21":, "22":, "23":, "24":, "25":, "26":, "27":, "3":, "4":, "41":, "42":, "43":, "44":, "5":, "6":[NULL], "7":[NULL], "8":[NULL]}, # V638
-                 "co_applicant_race_observed": {"1":["1", "2", "3", "4", "5", NULL], "2":["1", "2", "21", "22", "23", "24", "25", "26", "27", "3", "4", "41", "42", "43", "44", "5", "6"], "3":, "4":}] # V639 
+    dep_values: ["co_applicant_race_1": {"1":, "2":, "21":, "22":, "23":, "24":, "25":, "26":, "27":, "3":, "4":, "41":, "42":, "43":, "44":, "5":, "6":[""], "7":[""], "8":[""]}, # V638
+                 "co_applicant_race_observed": {"1":["1", "2", "3", "4", "5", ""], "2":["1", "2", "21", "22", "23", "24", "25", "26", "27", "3", "4", "41", "42", "43", "44", "5", "6"], "3":, "4":}] # V639 
 co_applicant_race_3:
   WeightedDiscrete:
     population:
@@ -541,7 +539,7 @@ co_applicant_race_3:
       "44": 1 # Other Pacific Islander
       "5": 1 # White
     dep_field: ["co_applicant_race_1", "co_applicant_race_observed"]
-    dep_values: ["co_applicant_race_1": {"1":, "2":, "21":, "22":, "23":, "24":, "25":, "26":, "27":, "3":, "4":, "41":, "42":, "43":, "44":, "5":, "6":[NULL], "7":[NULL], "8":[NULL]}, # V638
+    dep_values: ["co_applicant_race_1": {"1":, "2":, "21":, "22":, "23":, "24":, "25":, "26":, "27":, "3":, "4":, "41":, "42":, "43":, "44":, "5":, "6":[""], "7":[""], "8":[""]}, # V638
                  "co_applicant_race_observed": {"1":["1", "2", "3", "4", "5"], "2":["1", "2", "21", "22", "23", "24", "25", "26", "27", "3", "4", "41", "42", "43", "44", "5"], "3":, "4":}] # V639 
 co_applicant_race_4:
   WeightedDiscrete:
@@ -563,7 +561,7 @@ co_applicant_race_4:
       "44": 1 # Other Pacific Islander
       "5": 1 # White
     dep_field: ["co_applicant_race_1", "co_applicant_race_observed"]
-    dep_values: ["co_applicant_race_1": {"1":, "2":, "21":, "22":, "23":, "24":, "25":, "26":, "27":, "3":, "4":, "41":, "42":, "43":, "44":, "5":, "6":[NULL], "7":[NULL], "8":[NULL]}, # V638
+    dep_values: ["co_applicant_race_1": {"1":, "2":, "21":, "22":, "23":, "24":, "25":, "26":, "27":, "3":, "4":, "41":, "42":, "43":, "44":, "5":, "6":[""], "7":[""], "8":[""]}, # V638
                  "co_applicant_race_observed": {"1":["1", "2", "3", "4", "5"], "2":["1", "2", "21", "22", "23", "24", "25", "26", "27", "3", "4", "41", "42", "43", "44", "5"], "3":, "4":}] # V639 
 co_applicant_race_5:
   WeightedDiscrete:
@@ -585,17 +583,17 @@ co_applicant_race_5:
       "44": 1 # Other Pacific Islander
       "5": 1 # White
     dep_field: ["co_applicant_race_1", "co_applicant_race_observed"]
-    dep_values: ["co_applicant_race_1": {"1":, "2":, "21":, "22":, "23":, "24":, "25":, "26":, "27":, "3":, "4":, "41":, "42":, "43":, "44":, "5":, "6":[NULL], "7":[NULL], "8":[NULL]}, # V638
+    dep_values: ["co_applicant_race_1": {"1":, "2":, "21":, "22":, "23":, "24":, "25":, "26":, "27":, "3":, "4":, "41":, "42":, "43":, "44":, "5":, "6":[""], "7":[""], "8":[""]}, # V638
                  "co_applicant_race_observed": {"1":["1", "2", "3", "4", "5"], "2":["1", "2", "21", "22", "23", "24", "25", "26", "27", "3", "4", "41", "42", "43", "44", "5"], "3":, "4":}] # V639 
 co_applicant_race_other_native:
   LoremIpsumText:
-    upper_bound: 300
+    upper_bound: 100
 co_applicant_race_other_asian:
   LoremIpsumText:
-    upper_bound: 300
+    upper_bound: 100
 co_applicant_race_other_pacific:
   LoremIpsumText:
-    upper_bound: 300
+    upper_bound: 100
 applicant_race_observed:
   WeightedDiscrete:
     population:
@@ -751,7 +749,7 @@ applicant_credit_score:
     coerce_to_int: True
     correlation: "dependent" 
     dep_field: ["applicant_credit_scoring_model", "action_taken"] #, "applicant_ethnicity_1", "applicant_race_1", "applicant_sex"] 
-    dep_values: ["applicant_credit_scoring_model": {"9":["8888"]}, # V661 - do I need to enter all possible values here? Let's find out.  
+    dep_values: ["applicant_credit_scoring_model": {"9":["8888"]}, # V661 
                  "action_taken": {"1":, "2":, "3":, "4":["8888"], "5":["8888"], "6":["8888"], "7":, "8":}] # V663 - should also include "1111", but taken out for now. 
     #            "applicant_ethnicity_1": {"1":, "11":, "12":, "13":, "14":, "2":, "3":, "4":["8888"]}, # V668 - Need to figure out how to do AND not OR 
     #            "applicant_race_1": {"1":, "2":, "21":, "22":, "23":, "24":, "25":, "26":, "27":, "3":, "4":, "41":, "42":, "43":, "44":, "5":, "6":, "7":["8888"]},
@@ -764,7 +762,7 @@ co_applicant_credit_score:
     upper_bound: 1000 
     coerce_to_int: True
     dep_field: ["co_applicant_credit_scoring_model", "action_taken"] #, "co_applicant_ethnicity_1", "co_applicant_race_1", "co_applicant_sex"] 
-    dep_values: ["co_applicant_credit_scoring_model": {"9":["8888"], "10":["9999"]}, # V666 - do I need to enter all possible values here? Let's find out.  
+    dep_values: ["co_applicant_credit_scoring_model": {"9":["8888"], "10":["9999"]}, # V666 
                  "action_taken": {"1":, "2":, "3":, "4":["8888"], "5":["8888"], "6":["8888"], "7":, "8":}] # V664 - should also include "1111", but taken out for now. 
     #            "co_applicant_ethnicity_1": {"1":, "11":, "12":, "13":, "14":, "2":, "3":, "4":["NA"], "5":["NA"]}, # V668 - Need to figure out how to do AND not OR 
     #            "co_applicant_race_1": {"1":, "2":, "21":, "22":, "23":, "24":, "25":, "26":, "27":, "3":, "4":, "41":, "42":, "43":, "44":, "5":, "6":, "7":["NA"], "8":["NA"]},
@@ -797,8 +795,8 @@ applicant_credit_scoring_model_other:
     upper_bound: 300
     correlation: "dependent"
     dep_field: ["applicant_credit_scoring_model", "action_taken"]
-    dep_values: ["applicant_credit_scoring_model": {"1":NULL, "2":NULL, "3":NULL, "4":NULL, "5":NULL, "6":NULL, "7":NULL, "8":, "9":NULL, "11":NULL, "12":NULL, "13":NULL, "14":NULL, "15":NULL, "1111":NULL}, # V662
-                 "action_taken": {"1":, "2":, "3":NULL, "4":NULL, "5":NULL, "6":NULL, "7":, "8":}] # V663
+    dep_values: ["applicant_credit_scoring_model": {"1":"", "2":"", "3":"", "4":"", "5":"", "6":"", "7":"", "8":, "9":"", "11":"", "12":"", "13":"", "14":"", "15":"", "1111":""}, # V662
+                 "action_taken": {"1":, "2":, "3":"", "4":"", "5":"", "6":"", "7":, "8":}] # V663
 co_applicant_credit_scoring_model:
   WeightedDiscrete:
     population:
@@ -827,8 +825,8 @@ co_applicant_credit_scoring_model_other:
     upper_bound: 300
     correlation: "dependent"
     dep_field: ["co_applicant_credit_scoring_model", "action_taken"]
-    dep_values: ["co_applicant_credit_scoring_model": {"1":NULL, "2":NULL, "3":NULL, "4":NULL, "5":NULL, "6":NULL, "7":NULL, "8":, "9":NULL, "11":NULL, "12":NULL, "13":NULL, "14":NULL, "15":NULL, "1111":NULL}, # V667
-                 "action_taken": {"1":, "2":, "3":NULL, "4":NULL, "5":NULL, "6":NULL, "7":, "8":}] # V663
+    dep_values: ["co_applicant_credit_scoring_model": {"1":"", "2":"", "3":"", "4":"", "5":"", "6":"", "7":"", "8":, "9":"", "11":"", "12":"", "13":"", "14":"", "15":"", "1111":""}, # V667
+                 "action_taken": {"1":, "2":, "3":"", "4":"", "5":"", "6":"", "7":, "8":}] # V663
 denial_reason_1:
   WeightedDiscrete:
     population:
@@ -846,7 +844,7 @@ denial_reason_1:
     correlation: "dependent"
     dep_field: "action_taken"
     dep_values: {"1":["10"], "2":["10"], "3":["1", "2", "3", "4", "5", "6", "7", "8", "9"], "4":["10"], "5":["10"], "6":["10"], "7":, "8":["10"]} # V670 - Should include 1111 too, but removing for ease right now
-denial_reason_2: # V669 - each code can only be used once - probably need to just block 2/3/4 for now instead of figure out how to generate those. 
+denial_reason_2: # V669 - each code can only be used once 
   WeightedDiscrete:
     population:
       # "1": 1 # Debt-to-income ratio
@@ -858,10 +856,10 @@ denial_reason_2: # V669 - each code can only be used once - probably need to jus
       # "7": 1 # Credit application incomplete
       # "8": 1 # Mortgage insurance denied
       # "9": 1 # Other
-      NULL:
+      "":
     correlation: "dependent"
     dep_field: "denial_reason_1"
-    dep_values: {"1":, "2":, "3":, "4":, "5":, "6":, "7":, "8":, "9":, "10":[NULL]} # V669
+    dep_values: {"1":, "2":, "3":, "4":, "5":, "6":, "7":, "8":, "9":, "10":[""]} # V669
 denial_reason_3:
   WeightedDiscrete:
     population:
@@ -874,10 +872,10 @@ denial_reason_3:
       # "7": 1 # Credit application incomplete
       # "8": 1 # Mortgage insurance denied
       # "9": 1 # Other
-      NULL:
+      "":
     correlation: "dependent"
     dep_field: "denial_reason_1"
-    dep_values: {"1":, "2":, "3":, "4":, "5":, "6":, "7":, "8":, "9":, "10":[NULL]} # V669
+    dep_values: {"1":, "2":, "3":, "4":, "5":, "6":, "7":, "8":, "9":, "10":[""]} # V669
 denial_reason_4:
   WeightedDiscrete:
     population:
@@ -890,19 +888,19 @@ denial_reason_4:
       # "7": 1 # Credit application incomplete
       # "8": 1 # Mortgage insurance denied
       # "9": 1 # Other
-      NULL:
+      "":
     correlation: "dependent"
     dep_field: "denial_reason_1"
-    dep_values: {"1":, "2":, "3":, "4":, "5":, "6":, "7":, "8":, "9":, "10":[NULL]} # V669
+    dep_values: {"1":, "2":, "3":, "4":, "5":, "6":, "7":, "8":, "9":, "10":[""]} # V669
 denial_reason_other:
   LoremIpsumText:
     upper_bound: 300
     correlation: "dependent"
     dep_field: ["denial_reason_1", "denial_reason_2", "denial_reason_3", "denial_reason_4"] 
-    dep_values: ["denial_reason_1": {"1":, "2":, "3":, "4":, "5":, "6":, "7":, "8":, "9":[NOT NULL], "10":}, # V671
-                 "denial_reason_2": {"1":, "2":, "3":, "4":, "5":, "6":, "7":, "8":, "9":[NOT NULL], "10":}, 
-                 "denial_reason_3": {"1":, "2":, "3":, "4":, "5":, "6":, "7":, "8":, "9":[NOT NULL], "10":}, 
-                 "denial_reason_4": {"1":, "2":, "3":, "4":, "5":, "6":, "7":, "8":, "9":[NOT NULL], "10":}]
+    dep_values: ["denial_reason_1": {"1":, "2":, "3":, "4":, "5":, "6":, "7":, "8":, "9":[NOT ""], "10":}, # V671 - won't work but gotta figure out
+                 "denial_reason_2": {"1":, "2":, "3":, "4":, "5":, "6":, "7":, "8":, "9":[NOT ""], "10":}, 
+                 "denial_reason_3": {"1":, "2":, "3":, "4":, "5":, "6":, "7":, "8":, "9":[NOT ""], "10":}, 
+                 "denial_reason_4": {"1":, "2":, "3":, "4":, "5":, "6":, "7":, "8":, "9":[NOT ""], "10":}]
 total_loan_costs:
   BoundedNumerical:
     distribution: chi2
@@ -1137,7 +1135,6 @@ nmls_id:
     upper_bound: 230000
     coerce_to_int: True # Figure out NA or Exempt
     df: 10
-#### We are going to completely ignore properly coding the AUS for now as it is very complicated and mostly unnecessary. 
 aus_1:
   WeightedDiscrete:
     population:
@@ -1162,7 +1159,7 @@ aus_2:
       # "5": 1 # Other
       # "7": 1 # Internal proprietary system
       # "1111": 1 # Exempt
-      NULL: 1
+      "": 1 # NA
 aus_3:
   WeightedDiscrete:
     population:
@@ -1173,7 +1170,7 @@ aus_3:
       # "5": 1 # Other
       # "7": 1 # Internal proprietary system
       # "1111": 1 # Exempt
-      NULL: 1
+      "": 1 # NA
 aus_4:
   WeightedDiscrete:
     population:
@@ -1184,7 +1181,7 @@ aus_4:
       # "5": 1 # Other
       # "7": 1 # Internal proprietary system
       # "1111": 1 # Exempt
-      NULL: 1
+      "": 1 # NA
 aus_5:
   WeightedDiscrete:
     population:
@@ -1195,7 +1192,7 @@ aus_5:
       # "5": 1 # Other
       # "7": 1 # Internal proprietary system
       # "1111": 1 # Exempt
-      NULL: 1
+      "": 1 # NA
 aus_other:
   LoremIpsumText:
     upper_bound: 300
@@ -1230,7 +1227,7 @@ aus_result_1:
       # "23": 1 # Refer/Unable to Determine
       # "24": 1 # Refer with Caution/Unable to Determine
       # "1111": 1 # Exempt
-      NULL: 1
+      "": 1 # NA
 aus_result_2:
   WeightedDiscrete:
     population:
@@ -1257,7 +1254,7 @@ aus_result_2:
       # "22": 1 # Refer with Caution/Ineligible
       # "23": 1 # Refer/Unable to Determine
       # "24": 1 # Refer with Caution/Unable to Determine
-      NULL: 1
+      "": 1 # NA
 aus_result_3:
   WeightedDiscrete:
     population:
@@ -1284,7 +1281,7 @@ aus_result_3:
       # "22": 1 # Refer with Caution/Ineligible
       # "23": 1 # Refer/Unable to Determine
       # "24": 1 # Refer with Caution/Unable to Determine
-      NULL: 1
+      "": 1 # NA
 aus_result_4:
   WeightedDiscrete:
     population:
@@ -1311,7 +1308,7 @@ aus_result_4:
       # "22": 1 # Refer with Caution/Ineligible
       # "23": 1 # Refer/Unable to Determine
       # "24": 1 # Refer with Caution/Unable to Determine
-      NULL: 1
+      "": 1 # NA
 aus_result_5:
   WeightedDiscrete:
     population:
@@ -1338,7 +1335,7 @@ aus_result_5:
       # "22": 1 # Refer with Caution/Ineligible
       # "23": 1 # Refer/Unable to Determine
       # "24": 1 # Refer with Caution/Unable to Determine
-      NULL: 1
+      "": 1 # NA
 aus_result_other:
   LoremIpsumText:
     upper_bound: 300
