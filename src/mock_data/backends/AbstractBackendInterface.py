@@ -46,7 +46,7 @@ class AbstractBackendInterface(ABC):
                         col_values.append("") #be blank
                     else:
                         col_values.append(vals[i]) #If you do have directive fields with no specific values, then just accept whatever you populated.  
-            else: # Only need special dictionary setup if you've got multiple dependancies.
+            else: # Only need special dictionary setup if you've got multiple dependencies.
                 for i in range(0,len(directive)):#for any given row
                     if (directive[i] in list(self.dep_values.keys())): #If directive value is a key in dictionary,
                         if (self.dep_values[directive[i]] != None): #and non empty direction is given,
