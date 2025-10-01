@@ -4,11 +4,12 @@ import logging
 import os
 import argparse
 import random
-import utils
+# import old_utils
 import yaml
 import pandas as pd
 
 from mock_data import MockDataset
+from mock_data import utils
 
 parser = argparse.ArgumentParser('datagen')
 parser.add_argument('-f', '--yaml_file')
@@ -43,5 +44,5 @@ ts_df = pd.DataFrame(ts)
 
 # Write the file out as a .txt following HMDA file format - TS as first row, LAR as subsequent rows
 utils.write_file(
-    path=args.output_filepath, name=args.output_filename, ts_input=ts_df, lar_input=mock_df
+    outpath=args.output_filepath, ts_input=ts_df, lar_input=mock_df
 )
