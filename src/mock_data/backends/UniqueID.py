@@ -8,7 +8,9 @@ from mock_data.backends.Correlation import Correlation
 class UniqueID(AbstractBackendInterface):
     def __init__(
         self,
+        min_generate: int,
         max_generate: int,
+        lei: str = '',
         lou: int = 4, 
         entity: int = 12,
         verification: int = 2,
@@ -24,18 +26,20 @@ class UniqueID(AbstractBackendInterface):
         self.lou = lou 
         self.entity = entity
         self.verification = verification
+        self.min_generate = min_generate
         self.max_generate = max_generate
-    
+        self.lei = lei
+
     def generate_samples(self, size: int, directive: List = None) -> Iterable:
-        lei_ids = []
+        uids = []
         for i in range(size):
-            n = random.randint(1,self.max_generate)
-            lou = ''.join(random.choices(string.digits, k=self.lou))
-            entity_id = ''.join(random.choices(string.ascii_uppercase + string.digits,k=self.entity))
-            verification_id = ''.join(random.choices(string.digits,k=self.verification))
-            loan_id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=n))
-            lei_ids.append(''.join(lou+'00'+entity_id+verification_id+loan_id))
-        return lei_ids
+            n = random.randint(self.min_generate, self.max_generate)
+            if self.lei != '':
+                uid = self.lei + ''.join(random.choices(string.ascii_uppercase + string.digits, k=n))
+                uids.append(uid)
+            else:
+                uids.append(''.join(random.choices(string.ascii_uppercase + string.digits, k=n)))
+        return uids
     
 
         

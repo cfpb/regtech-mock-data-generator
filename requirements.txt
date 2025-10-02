@@ -1,8 +1,0 @@
-black
-isort
-pandas
-pytest
-matplotlib
-ipykernel
-jupyter
-scipy

@@ -1,0 +1,17 @@
+# The Transmittal Sheet config for use in mock data generation. 
+
+record_identifier: ["1"]
+financial_institution_name: ["Bank1"]
+calendar_year: ["2025"]
+calendar_quarter: ["4"]
+contact_name: ["Mr. Smug Pockets"]
+contact_phone: ["555-555-5555"]
+contact_email: ["pockets@ficus.com"]
+contact_address: ["1234 Hocus Potato Way"]
+contact_city: ["Tatertown"]
+contact_state: ["UT"]
+contact_zip: ["54096"]
+agency_code: ["9"]
+lar_count: ["100"]
+tax_id: ["02-1234567"]
+lei: ["BANK1LEIFORTEST12345"]

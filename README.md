@@ -2,25 +2,34 @@
 
 This repository houses code for the `mock_data` package, a framework for generating mock datasets. Dataset specifics are defined via yaml and dynamically generated using the `read_yaml_spec` method of the `MockDataset` class. More on this below. 
 
-## Installation and Runtime
+## Requirements
 
-Run these commands in the repo root directory using python 3.10 or greater.
+1. [`uv`](https://docs.astral.sh/uv/) Python package and project manager.
 
-```
-$ python3 -m venv .venv
-$ source .venv/bin/activate
-(.venv) $ pip install -r requirements.txt
-Collecting black (from -r requirements.txt (line 1))
-  Using cached black-24.2.0-cp312-cp312-macosx_10_9_x86_64.whl.metadata (74 kB)
-Collecting isort (from -r requirements.txt (line 2))
-  Using cached isort-5.13.2-py3-none-any.whl.metadata (12 kB)
-Collecting pandas (from -r requirements.txt (line 3))
-...
-(.venv) $ export PYTHONPATH=src
-$ python3 src/main_sbl.py
-```
+    ```sh
+    # version 0.8.8 at time of documentation
+    brew install uv
+    ```
 
-This generates the output file **src/sbl.csv**, replacing any pre-existing copy.
+
+## Setup
+
+1. Install Python interpreter and Python packages.
+
+   ```sh
+   # Install uv-managed Python based on project's `.python-version`
+   uv python install --managed-python
+
+   # Create Python virtualenv version based on project's `.python-version`
+   uv venv
+
+   # Activate the project's Python virtualenv
+   source ./.venv/bin/activate
+
+   # Install project's python packages
+   uv sync --all-groups
+   ```
+
 
 ## Architecture
 

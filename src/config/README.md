@@ -1,0 +1,5 @@
+# Configuration Files
+
+There are several config files in this folder. The base `sbl.yaml` config contains everything one would need to generate synthetic passing SBL data. The `hmda_ts.yaml` config contains a mock HMDA Transmittal Sheet that is used as an input in the `main_hmda.py` script. `hmda_simplified_conventional.yaml` is a config file that generates a fully passing HMDA file that has the bare minimum fields populated and only one very simple loan product - all originated standard single-unit single-applicant conventional home purchase loans with no exemptions. For a config file that covers the complete universe of available HMDA field values and more complex logic, though it does not currently run, see the `hmda.yaml` config in the `docs` folder in the root directory. 
+
+More loan product types to come! 

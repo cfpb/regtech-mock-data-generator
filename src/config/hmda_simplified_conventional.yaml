@@ -1,0 +1,544 @@
+#### This is a WIP that will work, but only for very specific cases. 
+# This config will generate the most simple of simple passing LAR 
+# All first lien conventional home purchases with a single owner and all information present.
+# Please compare with the hmda.yaml template for a generic but not-working example
+# I have taken the approach of commenting out the WeightedDiscrete population values that I don't want to consider because it's easier to see, but more properly one should adjust the frequency to 0 instead. 
+# The ranges and distribution of values for BoundedNumerical fields are unrealistic and solely there to generate fake data - play with them yourself if you are interested in making them accurate to your data. 
+# For the most part, this generation config file ignores the possibility of NA or Exempt alphanumeric strings in numeric fields. Those will be implemented further down the line. 
+
+id: 
+  WeightedDiscrete:
+    population:
+      "2": 1
+lei:
+  WeightedDiscrete:
+    population:
+      "BANK1LEIFORTEST12345": 1
+uli:
+  UniqueID:
+    lei: 'BANK1LEIFORTEST12345'
+    min_generate: 15
+    max_generate: 20
+application_date:
+  BoundedDatetime:
+    min_datetime: "20251001"
+    max_datetime: "20251230"
+    distribution: norm
+    correlation: "directive"
+loan_type:
+  WeightedDiscrete:
+    population:
+      "1": 1 # Conventional
+      # "2": 1 # FHA
+      # "3": 1 # VA
+      # "4": 1 # RHS/USDA
+loan_purpose:
+  WeightedDiscrete:
+    population:
+      "1": 1 # Home Purchase
+      # "2": 1 # Home Improvement
+      # "31": 1 # Refinancing
+      # "32": 1 # Cash-Out Refinancing
+      # "4": 1 # Other purpose
+      # "5": 1 # Not Applicable
+    # correlation: "directive" 
+preapproval:
+  WeightedDiscrete:
+    population:
+      "1": 1 # Preapproval Requested
+construction_method:
+  WeightedDiscrete:
+    population:
+      "1": 1 # Site-Built
+occupancy_type:
+  WeightedDiscrete:
+    population:
+      "1": 1 # Principal Residence
+loan_amount:
+  BoundedNumerical:
+    distribution: chi2
+    lower_bound:  10000
+    upper_bound:  1225000
+    coerce_to_int: True
+    df: 10
+action_taken:
+  WeightedDiscrete:
+    population:
+      "1": 1 # Loan originated
+action_taken_date:
+  WeightedDiscrete:
+    population:
+      "20251231": 1 # Loan originated
+# The address datapoints are complicated and for now we have set a placeholder of a specific state, zip, county, and tract to avoid triggering edits. 
+street:
+  LoremIpsumText:
+    lower_bound: 1
+    upper_bound:  20
+    numeric_values: True
+city:
+  LoremIpsumText:
+    upper_bound: 20
+state_code:
+  WeightedDiscrete:
+    population:
+      "OK": 1
+zip_code:
+  WeightedDiscrete:
+    population:
+      "74136": 1
+county_code:
+  WeightedDiscrete:
+    population:
+      "40143": 1
+census_tract:
+  WeightedDiscrete:
+    population:
+      "40143007647": 1
+applicant_ethnicity_1:
+  WeightedDiscrete:
+    population:
+      "1": 1 # Hispanic or Latino
+      "11": 1 # Mexican
+      "12": 1 # Puerto Rican
+      "13": 1 # Cuban
+      "14": 1 # Other Hispanic or Latino
+      "2": 1 # Not Hispanic or Latino
+applicant_ethnicity_2:
+  WeightedDiscrete:
+    population:
+      "": 1 # NA 
+applicant_ethnicity_3:
+  WeightedDiscrete:
+    population:
+      "": 1 # NA
+applicant_ethnicity_4:
+  WeightedDiscrete:
+    population:
+      "": 1 # NA
+applicant_ethnicity_5:
+  WeightedDiscrete:
+    population:
+      "": 1 # NA
+applicant_ethnicity_other_hispanic:
+  WeightedDiscrete: 
+    population:
+      "": 1 # NA
+co_applicant_ethnicity_1:
+  WeightedDiscrete:
+    population:
+      "5": 1 # No co-applicant
+    correlation: "directive"
+co_applicant_ethnicity_2:
+  WeightedDiscrete:
+    population:
+      "": 1 # NA
+co_applicant_ethnicity_3:
+  WeightedDiscrete:
+    population:
+      "": 1 # NA
+co_applicant_ethnicity_4:
+  WeightedDiscrete:
+    population:
+      "": 1 # NA
+co_applicant_ethnicity_5:
+  WeightedDiscrete:
+    population:
+      "": 1 # NA
+co_applicant_ethnicity_other_hispanic:
+  WeightedDiscrete: 
+    population:
+      "": 1 # NA
+applicant_ethnicity_observed:
+  WeightedDiscrete:
+    population:
+      "2": 1 # Not collected on the basis of visual observation or surname
+co_applicant_ethnicity_observed:
+  WeightedDiscrete:
+    population:
+      "4": 1 # No co-applicant
+applicant_race_1:
+  WeightedDiscrete:
+    population:
+      "1": 1 # American Indian or Alaska Native
+      "2": 1 # Asian
+      "21": 1 # Asian Indian
+      "22": 1 # Chinese
+      "23": 1 # Filipino
+      "24": 1 # Japanese
+      "25": 1 # Korean
+      "26": 1 # Vietnamese
+      "27": 1 # Other Asian
+      "3": 1 # Black or African American
+      "4": 1 # Native Hawaiian or Other Pacific Islander
+      "41": 1 # Native Hawaiian
+      "42": 1 # Guamanian or Chamorro
+      "43": 1 # Samoan
+      "44": 1 # Other Pacific Islander
+      "5": 1 # White
+    correlation: "directive"
+applicant_race_2:
+  WeightedDiscrete:
+    population:
+      "": 1 # NA 
+applicant_race_3:
+  WeightedDiscrete:
+    population:
+      "": 1 # NA 
+applicant_race_4:
+  WeightedDiscrete:
+    population:
+      "": 1 # NA 
+applicant_race_5:
+  WeightedDiscrete:
+    population:
+      "": 1 # NA 
+applicant_race_other_native:
+  WeightedDiscrete: 
+    population:
+      "": 1 # NA
+applicant_race_other_asian:
+  WeightedDiscrete: 
+    population:
+      "": 1 # NA
+applicant_race_other_pacific:
+  WeightedDiscrete: 
+    population:
+      "": 1 # NA
+co_applicant_race_1:
+  WeightedDiscrete:
+    population:
+      "8": 1 # No co-applicant
+    correlation: "directive"
+co_applicant_race_2:
+  WeightedDiscrete:
+    population:
+      "": 1 # NA
+co_applicant_race_3:
+  WeightedDiscrete:
+    population:
+      "": 1 # NA
+co_applicant_race_4:
+  WeightedDiscrete:
+    population:
+      "": 1 # NA
+co_applicant_race_5:
+  WeightedDiscrete:
+    population:
+      "": 1 # NA
+co_applicant_race_other_native:
+  WeightedDiscrete: 
+    population:
+      "": 1 # NA
+co_applicant_race_other_asian:
+  WeightedDiscrete: 
+    population:
+      "": 1 # NA
+o_applicant_race_other_pacific:
+  WeightedDiscrete: 
+    population:
+      "": 1 # NA
+pplicant_race_observed:
+  WeightedDiscrete:
+    population:
+      "2": 1 # Not collected on the basis of visual observation or surname
+co_applicant_race_observed:
+  WeightedDiscrete:
+    population:
+      "4": 1 # No co-applicant
+applicant_sex:
+  WeightedDiscrete:
+    population:
+      "1": 1 # Male
+      "2": 1 # Female
+      "6": 1 # Applicant selected both male and female
+co_applicant_sex:
+  WeightedDiscrete:
+    population:
+      "5": 1 # No co-applicant
+applicant_sex_observed:
+  WeightedDiscrete:
+    population:
+      "2": 1 # Not collected on the basis of visual observation or surname
+co_applicant_sex_observed:
+  WeightedDiscrete:
+    population:
+      "4": 1 # No co-applicant
+applicant_age:
+  BoundedNumerical:
+    distribution: norm
+    lower_bound:  18
+    upper_bound:  100 
+    coerce_to_int: True
+co_applicant_age:
+  WeightedDiscrete:
+    population:
+      "9999": 1 # No co-applicant
+income: 
+  BoundedNumerical:
+    distribution: chi2 
+    df: 5
+    lower_bound:  -10
+    upper_bound:  400 
+    coerce_to_int: True
+purchaser_type:
+  WeightedDiscrete:
+    population:
+      "0": 1 # Not applicable
+rate_spread:
+  BoundedNumerical:
+    distribution: norm
+    lower_bound:  -4
+    upper_bound:  3
+hoepa_status :
+  WeightedDiscrete:
+    population:
+      "1": 1 # High-cost mortgage
+      "2": 1 # Not a high-cost mortgage
+      "3": 1 # Not applicable
+lien_status:
+  WeightedDiscrete:
+    population:
+      "1": 1 # Secured by a first lien
+applicant_credit_score:
+  BoundedNumerical:
+    distribution: norm
+    lower_bound:  350
+    upper_bound:  900 
+    coerce_to_int: True
+co_applicant_credit_score:
+  WeightedDiscrete:
+    population:
+      "9999": 1 # No co-applicant
+applicant_credit_scoring_model:
+  WeightedDiscrete:
+    population:
+      "1": 1 # Equifax Beacon 5.0
+      "2": 1 # Experian Fair Isaac Risk Model v2
+      "3": 1 # TransUnion FICO Risk Score Classic 04
+      "4": 1 # TransUnion FICO Risk Score Classic 98
+      "5": 1 # VantageScore 2.0
+      "6": 1 # VantageScore 3.0
+      "7": 1 # More than one credit scoring model
+      "11": 1 # FICO Score 9
+      "12": 1 # FICO Score 8
+      "13": 1 # FICO Score 10
+      "14": 1 # FICO Score 10T
+      "15": 1 # VantageScore 4.0
+pplicant_credit_scoring_model_other:
+  WeightedDiscrete: 
+    population:
+      "": 1 # NA
+co_applicant_credit_scoring_model:
+  WeightedDiscrete:
+    population:
+      "10": 1 # No co-applicant
+co_applicant_credit_scoring_model_other:
+  WeightedDiscrete: 
+    population:
+      "": 1 # NA
+denial_reason_1:
+  WeightedDiscrete:
+    population:
+     "10": 1 # Not applicable
+denial_reason_2: 
+  WeightedDiscrete:
+    population:
+      "": 1 # NA
+denial_reason_3:
+  WeightedDiscrete:
+    population:
+      "": 1 # NA
+denial_reason_4:
+  WeightedDiscrete:
+    population:
+      "": 1 # NA
+denial_reason_other:
+  WeightedDiscrete: 
+    population:
+      "": 1 # NA
+total_loan_costs:
+  WeightedDiscrete:
+    population:
+      "NA": 1
+total_points_and_fees:
+  BoundedNumerical:
+    distribution: chi2
+    lower_bound:  1000
+    upper_bound:  5000
+    coerce_to_int: False
+    df: 10
+origination_charges:
+  BoundedNumerical:
+    distribution: chi2
+    lower_bound:  100
+    upper_bound:  1000
+    coerce_to_int: False
+    df: 10
+discount_points:
+  BoundedNumerical:
+    distribution: chi2
+    lower_bound:  100
+    upper_bound:  1000
+    coerce_to_int: False
+    df: 10
+ender_credits:
+  BoundedNumerical:
+    distribution: chi2
+    lower_bound:  .1
+    upper_bound:  11000
+    coerce_to_int: False
+    df: 10
+interest_rate:
+  BoundedNumerical:
+    distribution: chi2
+    lower_bound:  0.5
+    upper_bound:  12.0
+    df: 10
+prepayment_penalty_term: 
+  BoundedNumerical:
+    distribution: chi2
+    lower_bound:  0
+    upper_bound:  59
+    coerce_to_int: True
+    df: 10
+debt_to_income_ratio:
+  BoundedNumerical:
+    distribution: chi2
+    lower_bound:  1
+    upper_bound:  58
+    df: 10
+combined_loan_to_value_ratio:
+  BoundedNumerical:
+    distribution: chi2
+    lower_bound:  50
+    upper_bound:  140
+    df: 10
+loan_term:
+  BoundedNumerical:
+    distribution: chi2
+    lower_bound:  60
+    upper_bound:  368
+    coerce_to_int: True
+    df: 10
+intro_rate_period:
+  BoundedNumerical:
+    distribution: chi2
+    lower_bound:  1
+    upper_bound:  180
+    coerce_to_int: True
+    df: 10
+balloon_payment:
+  WeightedDiscrete:
+    population:
+       "2": 1 # No balloon payment
+interest_only_payment:
+  WeightedDiscrete:
+    population:
+      "2": 1 # No interest-only payments
+negative_amortization:
+  WeightedDiscrete:
+    population:
+      "2": 1 # No negative amortization
+other_non_amortizing_features:
+  WeightedDiscrete:
+    population:
+      "2": 1 # No other non-fully amortizing features
+property_value:
+  BoundedNumerical:
+    distribution: norm
+    lower_bound:  60000
+    upper_bound:  3000000
+    coerce_to_int: True
+manufactured_home_secured_property_type:
+  WeightedDiscrete:
+    population:
+      "3": 1 # Not applicable
+manufactured_home_land_property_interest:
+  WeightedDiscrete:
+    population:
+      "5": 1 # Not applicable
+total_units:
+  WeightedDiscrete:
+    population:
+      "1": 1
+multifamily_affordable_units: 
+  WeightedDiscrete:
+    population:
+      "NA": 1
+submission_of_application:
+  WeightedDiscrete:
+    population:
+      "1": 1 # Submitted directly to your institution
+      "2": 1 # Not submitted directly to your institution
+initially_payable_to_institution:
+  WeightedDiscrete:
+    population:
+      "1": 1 # Initially payable to your institution
+      "2": 1 # Not initially payable to your institution
+nmls_id:
+  BoundedNumerical:
+    distribution: chi2
+    lower_bound:  1000
+    upper_bound:  230000
+    coerce_to_int: True # Figure out NA or Exempt
+    df: 10
+aus_1:
+  WeightedDiscrete:
+    population:
+      "6": 1 # Not applicable 
+aus_2:
+  WeightedDiscrete:
+    population:
+      "": 1 # NA
+aus_3:
+  WeightedDiscrete:
+    population:
+      "": 1 # NA
+aus_4:
+  WeightedDiscrete:
+    population:
+      "": 1 # NA
+aus_5:
+  WeightedDiscrete:
+    population:
+      "": 1 # NA
+aus_other:
+  WeightedDiscrete: 
+    population:
+      "": 1 # NA
+aus_result_1:
+  WeightedDiscrete:
+    population:
+      "17": 1 # Not applicable
+aus_result_2:
+  WeightedDiscrete:
+    population:
+      "": 1 # NA
+aus_result_3:
+  WeightedDiscrete:
+    population:
+      "": 1 # NA
+aus_result_4:
+  WeightedDiscrete:
+    population:
+      "": 1 # NA
+aus_result_5:
+  WeightedDiscrete:
+    population:
+      "": 1 # NA
+aus_result_other:
+  WeightedDiscrete: 
+    population:
+      "": 1 # NA
+reverse_mortgage:
+  WeightedDiscrete:
+    population:
+      "2": 1 # Not a reverse mortgage
+open_end_line_of_credit:
+  WeightedDiscrete:
+    population:
+      "2": 1 # Not an open-end line of credit
+business_or_commercial_purpose:
+  WeightedDiscrete:
+    population:
+      "2": 1 # Not primarily for a business or commercial purpose
