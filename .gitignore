@@ -3,7 +3,5 @@
 .venv/**
 .vscode/**
 notes.txt
-ct_boundaries
 *.egg-info
 .DS_Store
-edits_files
