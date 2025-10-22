@@ -12,10 +12,9 @@ from mock_data import MockDataset
 from mock_data import utils
 
 parser = argparse.ArgumentParser('datagen')
-parser.add_argument('-f', '--yaml_file')
-parser.add_argument('-ts', '--transmittal_sheet')
+parser.add_argument('-f', '--lar_yaml_config')
+parser.add_argument('-ts', '--transmittal_sheet_yaml_config')
 parser.add_argument('-op', '--output_filepath')
-parser.add_argument('-of', '--output_filename')
 parser.add_argument('-n', '--nrows', type=int, default=100)
 parser.add_argument('-v', '--verbose', action='store_true')
 args = parser.parse_args()
@@ -28,7 +27,7 @@ os.chdir(os.path.dirname(__file__))
 
 random.seed()
 
-mock = MockDataset.read_yaml_spec(args.yaml_file)
+mock = MockDataset.read_yaml_spec(args.lar_yaml_config)
 
 mock_df = mock.generate_mock_data(args.nrows)
 
@@ -38,7 +37,7 @@ mock_df["uli"] = mock_df["uli"] + mock_df["uli"].apply(
 )
 
 # Read in the transmittal sheet
-with open(args.transmittal_sheet, "r") as file:
+with open(args.transmittal_sheet_yaml_config, "r") as file:
     ts = yaml.safe_load(file)
 ts_df = pd.DataFrame(ts)
 
