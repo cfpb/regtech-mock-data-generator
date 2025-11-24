@@ -131,7 +131,7 @@ options:
 
 Example: ```python src/main_hmda.py -f "config/hmda_simplified_conventional.yaml" -ts "config/hmda_ts.yaml" -op "output/hmda_simplified_conventional_100.txt" -n 100 -v ```
 
-Note that the number of LAR rows generated (`-n` argument) must match the `lar_count` field in the `hmda_ts.yaml` file or the generated file will be rejected by the platform. 
+The `hmda_ts.yaml` config file generates the first row transmittal sheet of the final submission file. The `lar_count` field is set to empty by default in the config file, but is set to equal the nrows value supplied in the argument options. This is to avoid triggering edit S304. 
 
 ## How to Use the Mock Data Generator for SBL
 The [`main_sbl.py`](https://github.com/cfpb/regtech-mock-data-generator/blob/main/src/main_sbl.py) script will generate mock HMDA data according to supplied a SBLAR YAML config file. It will output a .csv that is appropriately formed to be uploadable to the SBL beta platform for testing. 

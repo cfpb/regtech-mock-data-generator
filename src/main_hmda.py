@@ -40,6 +40,7 @@ mock_df["uli"] = mock_df["uli"] + mock_df["uli"].apply(
 with open(args.transmittal_sheet_yaml_config, "r") as file:
     ts = yaml.safe_load(file)
 ts_df = pd.DataFrame(ts)
+ts_df['lar_count'] = args.nrows
 
 # Write the file out as a .txt following HMDA file format - TS as first row, LAR as subsequent rows
 utils.write_file(
