@@ -3,6 +3,7 @@
 uid: 
   UniqueID:
     lei: 'BANK1LEIFORTEST12345'
+    min_generate: 1
     max_generate: 25
 app_date:
   BoundedDatetime:

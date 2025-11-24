@@ -115,7 +115,7 @@ class MockDataset:
         with open(path, "r") as f:
             raw_spec = yaml.safe_load(f)
 
-        logger.info(f"Dataset will have the following ields: {list(raw_spec.keys())}")
+        logger.info(f"Dataset will have the following fields: {list(raw_spec.keys())}")
 
         # this will be populated as the yaml is parsed. Maps field to Backend object
         spec_dict = {}

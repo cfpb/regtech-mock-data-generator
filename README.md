@@ -90,6 +90,7 @@ _employer_ is generated using random strings of Lorem Ipsum between the supplied
 The last field, *hispanic_or_latino*, illustrates how `WeightedDiscrete` can be leveraged to sample arbitrary values from a set with specificied relative frequency. Here we're telling the backend to sample from the set {Yes, No} with Yes appearing 5 times more frequently than No. 
 
 Generating a mock dataset with 100 rows can be accomplished using just four lines of code. 
+
 ```python
 from mock_data import MockDataset
 
@@ -108,3 +109,43 @@ The beauty of this is that your data generation script is completely separate fr
 ## Custom Data Backends
 
 todo: illustrate how a custom sublcass could be used to produce instances of Multiple Response for SBL. 
+
+# Generating data
+
+## How to Use the Mock Data Generator for HMDA
+
+The [`main_hmda.py`](https://github.com/cfpb/regtech-mock-data-generator/blob/main/src/main_hmda.py) script will generate mock HMDA data according to supplied LAR YAML config file and transmittal sheet YAML config files. It will output the data as a pipe-separated .txt file with transmittal sheet values as the header followed by the LAR values in a fully-formed file that can be submitted to the beta platform for testing.  
+
+```python
+> python src/main_hmda.py -h
+usage: datagen [-h] [-f LAR_YAML_CONFIG] [-ts TRANSMITTAL_SHEET_YAML_CONFIG] [-op OUTPUT_FILEPATH] [-n NROWS] [-v]
+
+options:
+  -h, --help            show this help message and exit
+  -f, --lar_yaml_config LAR_YAML_CONFIG
+  -ts, --transmittal_sheet_yaml_config TRANSMITTAL_SHEET_YAML_CONFIG
+  -op, --output_filepath OUTPUT_FILEPATH
+  -n, --nrows NROWS
+  -v, --verbose
+```
+
+Example: ```python src/main_hmda.py -f "config/hmda_simplified_conventional.yaml" -ts "config/hmda_ts.yaml" -op "output/hmda_simplified_conventional_100.txt" -n 100 -v ```
+
+The `hmda_ts.yaml` config file generates the first row transmittal sheet of the final submission file. The `lar_count` field is set to empty by default in the config file, but is set to equal the nrows value supplied in the argument options. This is to avoid triggering edit S304. 
+
+## How to Use the Mock Data Generator for SBL
+The [`main_sbl.py`](https://github.com/cfpb/regtech-mock-data-generator/blob/main/src/main_sbl.py) script will generate mock HMDA data according to supplied a SBLAR YAML config file. It will output a .csv that is appropriately formed to be uploadable to the SBL beta platform for testing. 
+
+```python
+> python src/main_sbl.py -h                                                  
+usage: datagen [-h] [-f SBLAR_YAML_CONFIG] [-n NROWS] [-op OUTPUT_FILEPATH] [-v]
+
+options:
+  -h, --help            show this help message and exit
+  -f, --sblar_yaml_config SBLAR_YAML_CONFIG
+  -n, --nrows NROWS
+  -op, --output_filepath OUTPUT_FILEPATH
+  -v, --verbose
+```
+
+Example: ```python src/main_sbl.py -f "config/sbl.yaml" -op "output/sbl_100.csv" -n 100```
